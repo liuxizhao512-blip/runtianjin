@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="See route details, distance, surface, and city running notes for each Tianjin route."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Route Details | Run Tianjin" />
+    <meta
+      property="og:description"
+      content="See route details, distance, surface, and city running notes for each Tianjin route."
+    />
+    <meta property="og:image" content="run-tianjin-share-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Route Details | Run Tianjin" />
+    <meta
+      name="twitter:description"
+      content="See route details, distance, surface, and city running notes for each Tianjin route."
+    />
+    <meta name="twitter:image" content="run-tianjin-share-card.jpg" />
+    <title>Route Details | Run Tianjin</title>
+    <link rel="icon" href="favicon-32x32.png" type="image/png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header id="site-header"></header>
+
+    <main class="page-shell detail-page">
+      <article id="route-detail" class="detail-card" aria-live="polite"></article>
+    </main>
+
+    <div id="image-modal" class="image-modal" aria-hidden="true">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div class="modal-content">
+        <button class="modal-close" type="button" aria-label="Close image">×</button>
+        <div id="modal-image" class="modal-image"></div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <p>© 2026 Run Tianjin · Tianjin running route guide</p>
+    </footer>
+
+    <script src="nav.js"></script>
+    <script>
+      const routes = {
+        haihe: {
+          id: 'haihe',
+          name: 'Haihe Riverside Run',
+          distance: '8 km',
+          tag: 'Scenic night run',
+          imageClass: 'thumb-haihe',
+          image: 'haihe-riverside-run.jpg',
+          description: 'From Tianjin Eye along the Haihe riverside toward Jinwan Plaza, this route offers broad city views and a relaxed urban running experience.',
+          surface: 'Flat asphalt road with stable footing and easy pacing.',
+          bestTime: 'Evening, 18:30–20:30, when the city lights are most beautiful.',
+          supplies: 'Water stations and rest points are available near Tianjin Eye and Jinwan Plaza.',
+          notes: 'The wind is stronger at night, so a light windbreaker is useful. If you want photos, choose a wide view spot.'
+        },
+        nancui: {
+          id: 'nancui',
+          name: 'South Cuiping Park Loop',
+          distance: '3 km',
+          tag: 'Beginner-friendly',
+          imageClass: 'thumb-nancui',
+          image: 'south-cuiping-park-loop.jpg',
+          description: 'This loop uses the park’s rubberized track, which is comfortable for beginners and ideal for short interval practice.',
+          surface: 'Rubber track with good elasticity and a soft landing feel.',
+          bestTime: 'Morning, 7:00–9:00, when the air feels fresher and cooler.',
+          supplies: 'There are basic rest and water facilities near the park entrance and service area.',
+          notes: 'For interval training, control your stride and breathing rhythm to avoid early fatigue.'
+        },
+        shuishang: {
+          id: 'shuishang',
+          name: 'Water Park Lakeside Loop',
+          distance: '5 km',
+          tag: 'Daily easy run',
+          imageClass: 'thumb-shuishang',
+          image: 'water-park-lakeside-loop.jpg',
+          description: 'This lakeside route is relaxed, shaded, and scenic—perfect for regular runs and low-stress training days.',
+          surface: 'A mix of pedestrian paths and park trails, generally smooth and comfortable.',
+          bestTime: 'Morning 8:00–10:00 or evening 17:30–19:00.',
+          supplies: 'Rest areas and drinking points are available around the lake and park service zone.',
+          notes: 'In summer, choose early or late hours and keep a safe distance from the lake edge when running.'
+        },
+        taida: {
+          id: 'taida',
+          name: 'Binhai TEDA Coastal Path',
+          distance: '7 km',
+          tag: 'Long-distance training',
+          imageClass: 'thumb-taida',
+          image: 'binhai-teda-coastal-path.jpg',
+          description: 'The wide coastal path offers a spacious environment for long, steady runs and rhythm-based training.',
+          surface: 'Wide paved walkway with consistent footing and easy access.',
+          bestTime: 'Early morning 6:30–8:00 or evening 18:00–19:30.',
+          supplies: 'Rest areas, public utilities, and convenience points are available along the route.',
+          notes: 'For longer sessions, hydrate early, wear breathable shoes, and keep your pace steady.'
+        }
+      };
+
+      const detailRoot = document.getElementById('route-detail');
+      const modal = document.getElementById('image-modal');
+      const modalImage = document.getElementById('modal-image');
+      const closeBtn = document.querySelector('.modal-close');
+      const routeKey = new URLSearchParams(window.location.search).get('route') || 'haihe';
+      const route = routes[routeKey] || routes.haihe;
+
+      detailRoot.innerHTML = `
+        <div class="detail-visual">
+          <div class="route-visual" role="button" tabindex="0" aria-label="View ${route.name} image">
+            <img src="${route.image || ''}" alt="${route.name}" class="route-photo" />
+          </div>
+        </div>
+        <div class="detail-copy">
+          <p class="eyebrow">Route details</p>
+          <h1>${route.name}</h1>
+          <div class="detail-badges">
+            <span>${route.distance}</span>
+            <span>${route.tag}</span>
+          </div>
+          <p>${route.description}</p>
+
+          <div class="detail-info-box">
+            <h2>Route information</h2>
+            <ul>
+              <li><strong>Surface:</strong> ${route.surface}</li>
+              <li><strong>Best time:</strong> ${route.bestTime}</li>
+              <li><strong>Water / rest points:</strong> ${route.supplies}</li>
+              <li><strong>Notes:</strong> ${route.notes}</li>
+            </ul>
+          </div>
+
+          <div class="detail-actions">
+            <a class="primary-btn" href="routes.html">Back to routes</a>
+          </div>
+        </div>
+      `;
+
+      const visual = document.querySelector('.route-visual');
+      if (visual) {
+        const openModal = () => {
+          modal.classList.add('show');
+          modal.setAttribute('aria-hidden', 'false');
+          modalImage.innerHTML = `<img src="${route.image || ''}" alt="${route.name}" />`;
+        };
+
+        visual.addEventListener('click', openModal);
+        visual.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openModal();
+          }
+        });
+      }
+
+      const closeModal = () => {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+      };
+
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (event) => {
+        if (event.target.dataset.close === 'true') {
+          closeModal();
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.classList.contains('show')) {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html>
