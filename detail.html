@@ -53,53 +53,93 @@
           id: 'haihe',
           name: 'Haihe Riverside Run',
           distance: '8 km',
+          duration: '35–50 minutes',
+          start: 'Tianjin Eye riverside path',
+          end: 'Jinwan Plaza riverside section',
           tag: 'Scenic night run',
           imageClass: 'thumb-haihe',
           image: 'haihe-riverside-run.jpg',
           description: 'From Tianjin Eye along the Haihe riverside toward Jinwan Plaza, this route offers broad city views and a relaxed urban running experience.',
+          routeType: 'Urban riverside run',
+          suitableFor: 'Beginners, easy runners, night runners, city-view lovers',
           surface: 'Flat asphalt road with stable footing and easy pacing.',
           bestTime: 'Evening, 18:30–20:30, when the city lights are most beautiful.',
           supplies: 'Water stations and rest points are available near Tianjin Eye and Jinwan Plaza.',
-          notes: 'The wind is stronger at night, so a light windbreaker is useful. If you want photos, choose a wide view spot.'
+          lighting: 'Moderate lighting along the riverside; some sections remain darker after sunset.',
+          pace: 'Easy run, steady rhythm, relaxed cadence work',
+          notes: 'The wind is stronger at night, so a light windbreaker is useful. If you want photos, choose a wide view spot.',
+          strengths: 'Night scenery, broad city skyline, stable road surface',
+          avoid: 'Extreme heat at midday and very dark sections without reflective gear',
+          recommendation: 'Best for 35–50 minute easy sessions and light stride practice.'
         },
         nancui: {
           id: 'nancui',
           name: 'South Cuiping Park Loop',
           distance: '3 km',
+          duration: '15–25 minutes',
+          start: 'South Cuiping Park entrance',
+          end: 'Same park loop return',
           tag: 'Beginner-friendly',
           imageClass: 'thumb-nancui',
           image: 'south-cuiping-park-loop.jpg',
           description: 'This loop uses the park’s rubberized track, which is comfortable for beginners and ideal for short interval practice.',
+          routeType: 'Park loop',
+          suitableFor: 'New runners, first-time joggers, interval practice',
           surface: 'Rubber track with good elasticity and a soft landing feel.',
           bestTime: 'Morning, 7:00–9:00, when the air feels fresher and cooler.',
           supplies: 'There are basic rest and water facilities near the park entrance and service area.',
-          notes: 'For interval training, control your stride and breathing rhythm to avoid early fatigue.'
+          lighting: 'Good daylight conditions; well-lit around the main track and park path.',
+          pace: 'Easy run, short intervals, light tempo',
+          notes: 'For interval training, control your stride and breathing rhythm to avoid early fatigue.',
+          strengths: 'Soft landing surface, short distance, beginner-friendly loops',
+          avoid: 'Crowded hours and overly intense interval blocks for new runners',
+          recommendation: 'Ideal for short, confidence-building sessions and simple form work.'
         },
         shuishang: {
           id: 'shuishang',
           name: 'Water Park Lakeside Loop',
           distance: '5 km',
+          duration: '25–35 minutes',
+          start: 'Water Park main gate',
+          end: 'Lakeside loop return',
           tag: 'Daily easy run',
           imageClass: 'thumb-shuishang',
           image: 'water-park-lakeside-loop.jpg',
           description: 'This lakeside route is relaxed, shaded, and scenic—perfect for regular runs and low-stress training days.',
+          routeType: 'Lakefront circuit',
+          suitableFor: 'Daily runners, easy mileage, relaxed training',
           surface: 'A mix of pedestrian paths and park trails, generally smooth and comfortable.',
           bestTime: 'Morning 8:00–10:00 or evening 17:30–19:00.',
           supplies: 'Rest areas and drinking points are available around the lake and park service zone.',
-          notes: 'In summer, choose early or late hours and keep a safe distance from the lake edge when running.'
+          lighting: 'Good visibility in daytime; evening sections are comfortable but still need basic awareness.',
+          pace: 'Easy aerobic run, recovery day, steady mileage',
+          notes: 'In summer, choose early or late hours and keep a safe distance from the lake edge when running.',
+          strengths: 'Shade, calm atmosphere, comfortable for routine training',
+          avoid: 'Strong midday heat and slippery edges after rain',
+          recommendation: 'A low-pressure choice for habit-building and daily aerobic running.'
         },
         taida: {
           id: 'taida',
           name: 'Binhai TEDA Coastal Path',
           distance: '7 km',
+          duration: '30–45 minutes',
+          start: 'Coastal path entrance near family recreation area',
+          end: 'Long coastal return point',
           tag: 'Long-distance training',
           imageClass: 'thumb-taida',
           image: 'binhai-teda-coastal-path.jpg',
           description: 'The wide coastal path offers a spacious environment for long, steady runs and rhythm-based training.',
+          routeType: 'Coastal distance route',
+          suitableFor: 'Intermediate runners, long-distance training, steady pacing',
           surface: 'Wide paved walkway with consistent footing and easy access.',
           bestTime: 'Early morning 6:30–8:00 or evening 18:00–19:30.',
           supplies: 'Rest areas, public utilities, and convenience points are available along the route.',
-          notes: 'For longer sessions, hydrate early, wear breathable shoes, and keep your pace steady.'
+          lighting: 'Open coastal setting with decent visibility; wind can be stronger near the water.',
+          pace: 'Steady state, long run, rhythm-based training',
+          notes: 'For longer sessions, hydrate early, wear breathable shoes, and keep your pace steady.',
+          strengths: 'Wide route, open air, excellent for aerobic mileage',
+          avoid: 'Strong coastal wind and very hot midday conditions',
+          recommendation: 'Best for longer sessions and rhythm work when you want open space.'
         }
       };
 
@@ -115,6 +155,28 @@
           <div class="route-visual" role="button" tabindex="0" aria-label="View ${route.name} image">
             <img src="${route.image || ''}" alt="${route.name}" class="route-photo" />
           </div>
+
+          <div class="route-visual-card">
+            <h2>Quick route summary</h2>
+            <div class="route-visual-grid">
+              <div>
+                <span>Start</span>
+                <strong>${route.start}</strong>
+              </div>
+              <div>
+                <span>Finish</span>
+                <strong>${route.end}</strong>
+              </div>
+              <div>
+                <span>Distance</span>
+                <strong>${route.distance}</strong>
+              </div>
+              <div>
+                <span>Duration</span>
+                <strong>${route.duration}</strong>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="detail-copy">
           <p class="eyebrow">Route details</p>
@@ -122,16 +184,22 @@
           <div class="detail-badges">
             <span>${route.distance}</span>
             <span>${route.tag}</span>
+            <span>${route.routeType}</span>
           </div>
           <p>${route.description}</p>
 
           <div class="detail-info-box">
             <h2>Route information</h2>
             <ul>
+              <li><strong>Suitable for:</strong> ${route.suitableFor}</li>
+              <li><strong>Best running style:</strong> ${route.pace}</li>
               <li><strong>Surface:</strong> ${route.surface}</li>
               <li><strong>Best time:</strong> ${route.bestTime}</li>
+              <li><strong>Lighting / safety:</strong> ${route.lighting}</li>
               <li><strong>Water / rest points:</strong> ${route.supplies}</li>
-              <li><strong>Notes:</strong> ${route.notes}</li>
+              <li><strong>What stands out:</strong> ${route.strengths}</li>
+              <li><strong>Key caution:</strong> ${route.avoid}</li>
+              <li><strong>Recommended use:</strong> ${route.recommendation}</li>
             </ul>
           </div>
 

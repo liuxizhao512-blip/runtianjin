@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Run Tianjin">
+  <trk>
+    <name>Haihe Riverside</name>
+    <trkseg>
+      <trkpt lat="39.1388" lon="117.1754"/>
+      <trkpt lat="39.1405" lon="117.1841"/>
+      <trkpt lat="39.1432" lon="117.1957"/>
+      <trkpt lat="39.1453" lon="117.2078"/>
+      <trkpt lat="39.1439" lon="117.2209"/>
+      <trkpt lat="39.1414" lon="117.2342"/>
+      <trkpt lat="39.1387" lon="117.2481"/>
+    </trkseg>
+  </trk>
+</gpx>

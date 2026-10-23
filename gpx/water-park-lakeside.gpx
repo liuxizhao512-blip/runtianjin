@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Run Tianjin">
+  <trk>
+    <name>Water Park Lakeside</name>
+    <trkseg>
+      <trkpt lat="39.0921" lon="117.2954"/>
+      <trkpt lat="39.0986" lon="117.3042"/>
+      <trkpt lat="39.1065" lon="117.3134"/>
+      <trkpt lat="39.1144" lon="117.3233"/>
+      <trkpt lat="39.1201" lon="117.3368"/>
+      <trkpt lat="39.1238" lon="117.3494"/>
+      <trkpt lat="39.1209" lon="117.3614"/>
+      <trkpt lat="39.1132" lon="117.3661"/>
+      <trkpt lat="39.1038" lon="117.3587"/>
+    </trkseg>
+  </trk>
+</gpx>

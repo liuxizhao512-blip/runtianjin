@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Run Tianjin">
+  <trk>
+    <name>South Cuiping Park</name>
+    <trkseg>
+      <trkpt lat="39.1039" lon="117.1758"/>
+      <trkpt lat="39.1081" lon="117.1835"/>
+      <trkpt lat="39.1118" lon="117.1947"/>
+      <trkpt lat="39.1145" lon="117.2061"/>
+      <trkpt lat="39.1183" lon="117.2188"/>
+      <trkpt lat="39.1166" lon="117.2297"/>
+      <trkpt lat="39.1108" lon="117.2256"/>
+      <trkpt lat="39.1062" lon="117.2108"/>
+    </trkseg>
+  </trk>
+</gpx>

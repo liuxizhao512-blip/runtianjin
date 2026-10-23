@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Run Tianjin">
+  <trk>
+    <name>Binhai TEDA Coastal</name>
+    <trkseg>
+      <trkpt lat="39.0192" lon="117.6718"/>
+      <trkpt lat="39.0268" lon="117.6593"/>
+      <trkpt lat="39.0354" lon="117.6461"/>
+      <trkpt lat="39.0446" lon="117.6324"/>
+      <trkpt lat="39.0561" lon="117.6189"/>
+      <trkpt lat="39.0667" lon="117.6038"/>
+      <trkpt lat="39.0749" lon="117.5891"/>
+      <trkpt lat="39.0824" lon="117.5752"/>
+    </trkseg>
+  </trk>
+</gpx>

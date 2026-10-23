@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Visualize Tianjin running routes on a city map and compare route zones by location, surface, and best running time."
+    />
+    <title>Map | Run Tianjin</title>
+    <link rel="icon" href="favicon-32x32.png" type="image/png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header id="site-header"></header>
+
+    <main class="page-shell">
+      <section class="section-block map-page">
+        <div class="section-title-row">
+          <h1>Interactive route map</h1>
+        </div>
+
+        <div class="map-toolbar" aria-label="Route filter buttons">
+          <button class="map-filter-btn active" data-filter="all" type="button">All</button>
+          <button class="map-filter-btn" data-filter="night" type="button">Night run</button>
+          <button class="map-filter-btn" data-filter="beginner" type="button">Beginner</button>
+          <button class="map-filter-btn" data-filter="distance" type="button">Long distance</button>
+          <button class="map-filter-btn" data-filter="river" type="button">River</button>
+          <button class="map-filter-btn" data-filter="park" type="button">Park</button>
+        </div>
+
+        <div class="recommendation-panel">
+          <div class="recommendation-header">
+            <p class="eyebrow">Smart recommendation</p>
+            <h2>Choose your running style</h2>
+          </div>
+
+          <div class="recommendation-form">
+            <label>
+              <span>Experience</span>
+              <select id="runner-level">
+                <option value="beginner">Beginner</option>
+                <option value="steady" selected>Steady runner</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Time</span>
+              <select id="runner-time">
+                <option value="dusk" selected>Evening / dusk</option>
+                <option value="morning">Morning</option>
+                <option value="weekend">Weekend long run</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Goal</span>
+              <select id="runner-goal">
+                <option value="easy" selected>Easy + relaxed</option>
+                <option value="distance">Long distance</option>
+                <option value="night">Night run</option>
+                <option value="park">Park + calm pace</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Distance</span>
+              <select id="runner-distance">
+                <option value="short">Under 30 min</option>
+                <option value="medium" selected>30–45 min</option>
+                <option value="long">45+ min</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Training target</span>
+              <select id="training-target">
+                <option value="fatloss" selected>Fat loss</option>
+                <option value="speed">Speed</option>
+                <option value="race">Race prep</option>
+                <option value="recovery">Recovery / easy</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="dashboard-summary" class="dashboard-summary" aria-live="polite">
+            <div class="dashboard-pill">Current target</div>
+            <div class="dashboard-main">
+              <strong id="dashboard-target-label">Fat loss</strong>
+              <span id="dashboard-route-label">Haihe Riverside</span>
+            </div>
+          </div>
+
+          <button id="recommend-btn" class="map-recommend-btn" type="button">Recommend my route</button>
+
+          <div id="recommend-result" class="recommend-result" aria-live="polite">
+            <div class="result-header">
+              <span>Recommended</span>
+              <strong id="result-name">Haihe Riverside</strong>
+            </div>
+            <p id="result-summary">Best for a city evening run with a relaxed tempo and easy navigation.</p>
+            <ul id="result-tags" class="result-tags"></ul>
+          </div>
+
+          <div id="route-insight" class="route-insight" aria-live="polite">
+            <div class="insight-header">
+              <span>Route insight</span>
+              <strong id="insight-name">Haihe Riverside</strong>
+            </div>
+            <div class="insight-grid">
+              <div>
+                <label>Terrain</label>
+                <strong id="insight-terrain">Flat river path</strong>
+              </div>
+              <div>
+                <label>Surface</label>
+                <strong id="insight-surface">Paved</strong>
+              </div>
+              <div>
+                <label>Lighting</label>
+                <strong id="insight-lighting">Dusk friendly</strong>
+              </div>
+              <div>
+                <label>Difficulty</label>
+                <strong id="insight-difficulty">Easy</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-layout">
+          <div id="route-map" aria-label="Tianjin running route map"></div>
+
+          <aside class="map-sidebar">
+            <div class="side-panel">
+              <p class="eyebrow">City view</p>
+              <h2>Pick a route by distance and mood</h2>
+              <ul class="map-legend">
+                <li><span class="dot dot-blue"></span> Haihe riverside</li>
+                <li><span class="dot dot-green"></span> Park loops</li>
+                <li><span class="dot dot-orange"></span> Lakeside and coastal runs</li>
+                <li><span class="dot dot-purple"></span> Long-form training routes</li>
+              </ul>
+            </div>
+
+            <div class="side-panel">
+              <p class="eyebrow">Quick picks</p>
+              <div class="mini-list">
+                <div class="mini-item">
+                  <strong>Night run</strong>
+                  <span>Haihe Riverside</span>
+                </div>
+                <div class="mini-item">
+                  <strong>Beginner</strong>
+                  <span>South Cuiping</span>
+                </div>
+                <div class="mini-item">
+                  <strong>Long distance</strong>
+                  <span>Binhai TEDA</span>
+                </div>
+                <div class="mini-item">
+                  <strong>Best for calm pace</strong>
+                  <span>Water Park</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="side-panel">
+              <p class="eyebrow">Route detail</p>
+              <div id="active-route-card" class="route-detail-card">
+                <h3>Haihe Riverside</h3>
+                <div class="detail-metrics">
+                  <span>8 km</span>
+                  <span>City center</span>
+                </div>
+                <p>Flat city waterfront route great for dusk runs and easy mileage.</p>
+                <ul class="detail-tags">
+                  <li>Dusk friendly</li>
+                  <li>Easy pace</li>
+                  <li>Urban access</li>
+                </ul>
+                <div id="route-breakdown" class="route-breakdown"></div>
+                <div class="risk-grid">
+                  <div>
+                    <small>Difficulty</small>
+                    <strong id="route-difficulty">Easy</strong>
+                  </div>
+                  <div>
+                    <small>Suitable for</small>
+                    <strong id="route-audience">Beginner and steady runners</strong>
+                  </div>
+                  <div>
+                    <small>Risk</small>
+                    <strong id="route-risk">Low</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="side-panel upload-panel">
+              <p class="eyebrow">Upload your GPX</p>
+              <label class="upload-label" for="gpx-upload-input">
+                <input id="gpx-upload-input" type="file" accept=".gpx,application/gpx+xml" />
+              </label>
+              <button id="gpx-upload-btn" class="save-plan-btn" type="button">Load route on map</button>
+              <small class="upload-hint">Use your own GPX track to see a custom route on the map.</small>
+            </div>
+
+            <div class="side-panel comparison-panel">
+              <p class="eyebrow">Route comparison</p>
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Route</th>
+                    <th>Km</th>
+                    <th>Best</th>
+                    <th>Fit</th>
+                  </tr>
+                </thead>
+                <tbody id="route-comparison-body"></tbody>
+              </table>
+            </div>
+
+            <div class="side-panel suggestion-panel">
+              <p class="eyebrow">Training suggestion</p>
+              <div id="training-suggestion-card" class="training-suggestion-card"></div>
+            </div>
+
+            <div class="side-panel plan-panel">
+              <p class="eyebrow">Training plan</p>
+              <div id="training-plan-card" class="training-plan-card"></div>
+            </div>
+
+            <div class="side-panel training-panel">
+              <p class="eyebrow">Weekly plan</p>
+              <div id="weekly-plan" class="weekly-plan"></div>
+            </div>
+
+            <div class="side-panel save-panel">
+              <p class="eyebrow">Run status</p>
+              <div class="plan-form">
+                <label>
+                  <span>Status</span>
+                  <select id="plan-status">
+                    <option value="planned">Planned</option>
+                    <option value="done">Completed</option>
+                    <option value="recovery">Recovery</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>Target distance</span>
+                  <input id="plan-distance" type="number" min="1" value="8" />
+                </label>
+
+                <label>
+                  <span>Notes</span>
+                  <textarea id="plan-notes" rows="3" placeholder="Easy run, keep steady pace."></textarea>
+                </label>
+
+                <button id="save-plan-btn" class="save-plan-btn" type="button">Save my plan</button>
+              </div>
+            </div>
+
+            <div class="side-panel history-panel">
+              <p class="eyebrow">Performance dashboard</p>
+              <div id="history-dashboard" class="history-dashboard"></div>
+            </div>
+
+            <div class="side-panel">
+              <p class="eyebrow">Saved plans</p>
+              <ul id="saved-plans" class="saved-plans"></ul>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 Run Tianjin · Tianjin running route guide</p>
+    </footer>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="nav.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+      const routeConfigs = [
+        {
+          id: 'haihe',
+          name: 'Haihe Riverside',
+          color: '#2d76d7',
+          tags: ['night', 'river'],
+          distance: 8,
+          nearCenter: true,
+          bestTime: 'dusk',
+          score: 92,
+          heat: 'high',
+          terrain: 'Flat river path',
+          surface: 'Paved',
+          lighting: 'Dusk friendly',
+          difficulty: 'Easy',
+          audience: 'Beginner and steady runners',
+          risk: 'Low',
+          summary: 'Flat city waterfront route great for dusk runs and easy mileage.',
+          sections: [
+            { label: 'South riverfront', distance: '2.6 km', note: 'Smooth start beside the river' },
+            { label: 'Midway bend', distance: '2.9 km', note: 'Flat and easy to maintain rhythm' },
+            { label: 'Finish stretch', distance: '2.5 km', note: 'Straight run back with clear lanes' }
+          ],
+          gpxFile: 'gpx/haihe-riverside.gpx'
+        },
+        {
+          id: 'park',
+          name: 'South Cuiping Park',
+          color: '#3e9d74',
+          tags: ['beginner', 'park'],
+          distance: 3,
+          nearCenter: true,
+          bestTime: 'morning',
+          score: 88,
+          heat: 'steady',
+          terrain: 'Park loop',
+          surface: 'Packed earth',
+          lighting: 'Morning calm',
+          difficulty: 'Easy',
+          audience: 'New runners and recovery days',
+          risk: 'Low',
+          summary: 'Short and controlled loop with easy surface and lower stress.',
+          sections: [
+            { label: 'North park entry', distance: '1.1 km', note: 'Gentle warm-up section' },
+            { label: 'Center loop', distance: '1.2 km', note: 'Relaxed loop with low traffic' },
+            { label: 'South return', distance: '0.7 km', note: 'Easy finish and cool-down' }
+          ],
+          gpxFile: 'gpx/south-cuiping-park.gpx'
+        },
+        {
+          id: 'water',
+          name: 'Water Park Lakeside',
+          color: '#e48848',
+          tags: ['park', 'beginner'],
+          distance: 5,
+          nearCenter: true,
+          bestTime: 'morning',
+          score: 84,
+          heat: 'moderate',
+          terrain: 'Lakefront track',
+          surface: 'Smooth path',
+          lighting: 'Shady morning',
+          difficulty: 'Easy-medium',
+          audience: 'Steady runners and easy mileage',
+          risk: 'Low-medium',
+          summary: 'Comfortable pace around the lake with shade and calm conditions.',
+          sections: [
+            { label: 'Lake inlet', distance: '1.6 km', note: 'Shaded and cool early in the day' },
+            { label: 'Water edge', distance: '2.0 km', note: 'Longer continuous running section' },
+            { label: 'Finish loop', distance: '1.4 km', note: 'Gentle return with clear sight lines' }
+          ],
+          gpxFile: 'gpx/water-park-lakeside.gpx'
+        },
+        {
+          id: 'coastal',
+          name: 'Binhai TEDA Coastal',
+          color: '#8f5edc',
+          tags: ['distance', 'river'],
+          distance: 7,
+          nearCenter: false,
+          bestTime: 'weekend',
+          score: 90,
+          heat: 'high',
+          terrain: 'Open coast path',
+          surface: 'Paved and wide',
+          lighting: 'Weekend breeze',
+          difficulty: 'Moderate',
+          audience: 'Intermediate to advanced endurance runners',
+          risk: 'Moderate',
+          summary: 'Long and steady coastal route for aerobic work and weekend mileage.',
+          sections: [
+            { label: 'Coastal start', distance: '2.2 km', note: 'Wide start with strong open-air conditions' },
+            { label: 'Long stretch', distance: '3.1 km', note: 'Steady endurance section with flat ground' },
+            { label: 'Return run', distance: '1.7 km', note: 'Final push before the finish' }
+          ],
+          gpxFile: 'gpx/binhai-teda-coastal.gpx'
+        }
+      ];
+
+      const savedPlansKey = 'run-tianjin-saved-plans';
+      const map = L.map('route-map', {
+        zoomControl: true,
+        scrollWheelZoom: true
+      }).setView([39.115, 117.29], 10);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      const routeLayer = L.layerGroup().addTo(map);
+      let currentFilter = 'all';
+      let recommendedRouteId = 'haihe';
+      let uploadedRoute = null;
+
+      function formatPaceFromSeconds(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}:${String(seconds).padStart(2, '0')}`;
+      }
+
+      function getAveragePaceFromCoords(coords, route) {
+        if (!coords || coords.length < 2) return '5:30 / km';
+
+        const estimatedDurationMinutes = Math.max(15, (route.distance || calculateRouteDistance(coords)) * 5.5);
+        const totalSeconds = estimatedDurationMinutes * 60;
+        const paceSecondsPerKm = totalSeconds / Math.max(1, route.distance || calculateRouteDistance(coords));
+        const minutes = Math.floor(paceSecondsPerKm / 60);
+        const seconds = Math.round(paceSecondsPerKm % 60);
+        return `${minutes}:${String(seconds).padStart(2, '0')} / km`;
+      }
+
+      function getGpxStats(gpxText) {
+        const pointMatches = [...gpxText.matchAll(/<trkpt\s+lat="([^"]+)"\s+lon="([^"]+)"[^>]*>([\s\S]*?)<\/trkpt>/g)];
+        const timestamps = pointMatches
+          .map(match => {
+            const body = match[3] || '';
+            const timeMatch = body.match(/<time>([^<]+)<\/time>/i);
+            return timeMatch ? new Date(timeMatch[1]).getTime() : null;
+          })
+          .filter(value => Number.isFinite(value));
+
+        const durationMinutes = timestamps.length >= 2
+          ? ((timestamps[timestamps.length - 1] - timestamps[0]) / 60000)
+          : null;
+
+        const coords = pointMatches.map(match => [Number(match[1]), Number(match[2])]);
+
+        return { coords, durationMinutes };
+      }
+
+      function getRouteSegments(route, distance) {
+        if (!route.coords || route.coords.length < 2) {
+          return [
+            { title: 'Start', detail: 'Warm up calmly and settle into a relaxed rhythm.' },
+            { title: 'Middle', detail: 'Hold an even effort and stay smooth through the core section.' },
+            { title: 'Finish', detail: 'Finish with a controlled push, not a hard sprint.' }
+          ];
+        }
+
+        const startLabel = distance >= 7 ? 'Start: 0–35%' : 'Start: 0–30%';
+        const midLabel = distance >= 7 ? 'Middle: 35–70%' : 'Middle: 30–65%';
+        const finishLabel = distance >= 7 ? 'Finish: 70–100%' : 'Finish: 65–100%';
+
+        return [
+          { title: startLabel, detail: 'Take the first section easy and build rhythm without forcing speed.' },
+          { title: midLabel, detail: 'Settle into a smoother, controlled effort and keep form stable.' },
+          { title: finishLabel, detail: 'Finish strong but controlled; use the final section to sharpen focus.' }
+        ];
+      }
+
+      function getSuitability(route) {
+        const distance = Number(route.distance || 0);
+        const tags = route.tags || [];
+        const weekLong = distance >= 7 || tags.includes('distance');
+        const beginner = distance <= 5 && (tags.includes('beginner') || route.nearCenter || tags.includes('park'));
+        const nightRun = tags.includes('night') || (distance <= 8 && route.nearCenter && route.bestTime === 'dusk');
+
+        return {
+          beginner,
+          weekendLongRun: weekLong,
+          nightRun,
+          beginnerText: beginner ? 'Yes — suitable for beginners' : 'Better for steady runners',
+          weekendText: weekLong ? 'Yes — a good weekend long run' : 'Better as a shorter weekday session',
+          nightText: nightRun ? 'Yes — night-friendly route' : 'Avoid late-night use if you prefer lighted streets'
+        };
+      }
+
+      function buildRouteAnalysis(route) {
+        const distance = Number(route.distance || calculateRouteDistance(route.coords || []));
+        const safeDistance = Number.isFinite(distance) ? distance : 0;
+
+        let difficulty = 'Easy';
+        if (safeDistance >= 8) {
+          difficulty = 'Moderate';
+        } else if (safeDistance >= 5) {
+          difficulty = 'Easy-medium';
+        }
+
+        let paceRange = '5:15–6:45 / km';
+        if (safeDistance >= 8) {
+          paceRange = '4:00–5:20 / km';
+        } else if (safeDistance >= 5) {
+          paceRange = '4:30–5:50 / km';
+        }
+
+        const gpxStats = route.rawGpxText ? getGpxStats(route.rawGpxText) : null;
+        const estimatedPace = getAveragePaceFromCoords(route.coords || [], route);
+        const averagePace = gpxStats && gpxStats.durationMinutes
+          ? (() => {
+              const paceSeconds = (gpxStats.durationMinutes * 60) / Math.max(1, safeDistance || 1);
+              return `${formatPaceFromSeconds(Math.round(paceSeconds))} / km`;
+            })()
+          : estimatedPace;
+
+        const audience = safeDistance >= 8
+          ? 'Intermediate and endurance runners'
+          : safeDistance >= 4
+            ? 'Steady runners and active beginners'
+            : 'Beginner and recovery runners';
+
+        const bestTime = safeDistance >= 8
+          ? 'Early morning or weekend'
+          : route.bestTime === 'dusk'
+            ? 'Dusk run'
+            : route.bestTime === 'morning'
+              ? 'Morning run'
+              : 'Flexible';
+
+        const riskText = safeDistance >= 8
+          ? 'Moderate risk: watch heat, hydration, and fatigue near the final 2 km.'
+          : safeDistance >= 4
+            ? 'Low-medium risk: pay attention to traffic crossing points and heat.'
+            : 'Low risk: good for short runs, but still check traffic and lighting.';
+
+        const suitability = getSuitability(route);
+        route.analysis = {
+          distance: safeDistance,
+          paceRange,
+          averagePace,
+          difficulty,
+          audience,
+          bestTime,
+          riskText,
+          segments: getRouteSegments(route, safeDistance),
+          suitability
+        };
+
+        route.distance = safeDistance;
+        route.difficulty = route.difficulty || difficulty;
+        route.audience = route.audience || audience;
+        route.risk = route.risk || riskText;
+
+        return route.analysis;
+      }
+
+      function formatRouteDetail(route) {
+        const analysis = route.analysis || buildRouteAnalysis(route);
+        const routeTags = [
+          analysis.bestTime || route.bestTime === 'dusk' ? 'Dusk friendly' : route.bestTime === 'morning' ? 'Morning fit' : 'Weekend rhythm',
+          route.distance >= 6 ? 'Distance ready' : 'Short loop',
+          route.nearCenter ? 'City access' : 'Open space'
+        ];
+
+        const card = document.getElementById('active-route-card');
+        if (!card) return;
+
+        const detailText = `
+          <h3>${route.name}</h3>
+          <div class="detail-metrics">
+            <span>${analysis.distance.toFixed(1)} km</span>
+            <span>${route.nearCenter ? 'City center' : 'Outer city'}</span>
+          </div>
+          <p>${route.summary}</p>
+          <div class="detail-status-row">
+            <span>Heat: ${route.heat}</span>
+            <span>Score: ${route.score}</span>
+          </div>
+          <ul class="detail-tags">
+            ${routeTags.map(tag => `<li>${tag}</li>`).join('')}
+          </ul>
+          <div class="route-analysis-box">
+            <div class="analysis-row">
+              <span>Distance</span>
+              <strong>${analysis.distance.toFixed(1)} km</strong>
+            </div>
+            <div class="analysis-row">
+              <span>Pace</span>
+              <strong>${analysis.paceRange}</strong>
+            </div>
+            <div class="analysis-row">
+              <span>Best time</span>
+              <strong>${analysis.bestTime}</strong>
+            </div>
+            <div class="analysis-row">
+              <span>Risk</span>
+              <strong>${analysis.riskText}</strong>
+            </div>
+          </div>
+        `;
+
+        card.innerHTML = detailText;
+      }
+
+      function parseGpxTrack(gpxText) {
+        const matches = [...gpxText.matchAll(/<trkpt\s+lat="([^"]+)"\s+lon="([^"]+)"\s*\/?>/g)];
+        return matches.map((match) => [Number(match[1]), Number(match[2])]);
+      }
+
+      function getAllRoutes() {
+        return uploadedRoute ? [...routeConfigs, uploadedRoute] : routeConfigs;
+      }
+
+      function calculateRouteDistance(coords) {
+        if (coords.length < 2) return 0;
+        let total = 0;
+        for (let i = 1; i < coords.length; i += 1) {
+          const prev = coords[i - 1];
+          const curr = coords[i];
+          const earthRadiusKm = 6371;
+          const dLat = ((curr[0] - prev[0]) * Math.PI) / 180;
+          const dLon = ((curr[1] - prev[1]) * Math.PI) / 180;
+          const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((prev[0] * Math.PI) / 180) * Math.cos((curr[0] * Math.PI) / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          total += earthRadiusKm * c;
+        }
+        return Number(total.toFixed(1));
+      }
+
+      async function loadRouteGeometry() {
+        for (const route of routeConfigs) {
+          try {
+            const response = await fetch(route.gpxFile, { cache: 'no-store' });
+            const text = await response.text();
+            route.coords = parseGpxTrack(text);
+            if (!route.coords.length) {
+              route.coords = [[39.115, 117.29]];
+            }
+          } catch (error) {
+            route.coords = [[39.115, 117.29]];
+          }
+
+          buildRouteAnalysis(route);
+        }
+
+        renderRoutes();
+        updateRecommendation();
+      }
+
+      function renderRouteBreakdown(route) {
+        const breakdownRoot = document.getElementById('route-breakdown');
+        if (!breakdownRoot) return;
+
+        const analysis = route.analysis || buildRouteAnalysis(route);
+        const sections = route.sections || [
+          { label: 'Main section', distance: `${analysis.distance.toFixed(1)} km`, note: 'Core running area' }
+        ];
+
+        breakdownRoot.innerHTML = sections
+          .map((section) => `
+            <div class="breakdown-item">
+              <strong>${section.label}</strong>
+              <span>${section.distance}</span>
+              <small>${section.note}</small>
+            </div>
+          `)
+          .join('');
+
+        document.getElementById('route-difficulty').textContent = analysis.difficulty || route.difficulty || 'Easy';
+        document.getElementById('route-audience').textContent = analysis.audience || route.audience || 'General runners';
+        document.getElementById('route-risk').textContent = analysis.riskText || route.risk || 'Low';
+      }
+
+      function getSavedPlans() {
+        try {
+          return JSON.parse(localStorage.getItem(savedPlansKey)) || [];
+        } catch {
+          return [];
+        }
+      }
+
+      function getTrainingHistory() {
+        try {
+          return JSON.parse(localStorage.getItem('run-tianjin-training-history')) || [];
+        } catch {
+          return [];
+        }
+      }
+
+      function buildSmartRecommendation(history) {
+        const recent = history.slice(0, 4);
+        const avgDistance = recent.length
+          ? recent.reduce((total, record) => total + Number(record.distance || 0), 0) / recent.length
+          : 0;
+
+        const mixed = avgDistance >= 4 && avgDistance <= 10;
+        const race = avgDistance >= 7 || recent.some(record => (record.goal || '').includes('Race'));
+        const fatLoss = avgDistance >= 3 && avgDistance <= 8 && recent.some(record => (record.goal || '').includes('Fat loss'));
+
+        return {
+          mixed: {
+            label: 'Mixed run',
+            ok: mixed,
+            detail: mixed ? 'Suitable for balanced endurance and rhythm work, giving a more even training load.' : 'Current volume is too one-dimensional; add a wider mix of intensities.'
+          },
+          race: {
+            label: 'Race prep',
+            ok: race,
+            detail: race ? 'Your current load is a good match for race pacing and finishing strength work.' : 'You are not yet in a race-prep phase; build endurance first.'
+          },
+          fatLoss: {
+            label: 'Fat loss',
+            ok: fatLoss,
+            detail: fatLoss ? 'This suits calorie-burning work while keeping effort smooth enough to avoid unnecessary fatigue.' : 'The current structure leans more toward intensity; add more low-intensity aerobic work.'
+          }
+        };
+      }
+
+      function renderHistoryDashboard() {
+        const host = document.getElementById('history-dashboard');
+        if (!host) return;
+
+        const history = getTrainingHistory();
+        if (!history.length) {
+          host.innerHTML = `
+            <div class="history-stats">
+              <div class="history-stat"><small>Sessions</small><strong>0</strong></div>
+              <div class="history-stat"><small>Avg km</small><strong>0.0</strong></div>
+              <div class="history-stat"><small>Longest</small><strong>0.0 km</strong></div>
+              <div class="history-stat"><small>Goal</small><strong>—</strong></div>
+            </div>
+            <div class="history-list"><div class="history-item"><strong>No records yet</strong><span>Save your next run to activate personal stats.</span></div></div>
+          `;
+          return;
+        }
+
+        const totalDistance = history.reduce((sum, record) => sum + Number(record.distance || 0), 0);
+        const avgDistance = history.length ? (totalDistance / history.length).toFixed(1) : '0.0';
+        const longestRun = Math.max(...history.map(record => Number(record.distance || 0))).toFixed(1);
+        const mostRecent = history[0];
+        const recentRuns = history.slice(0, 4);
+        const maxTrendValue = Math.max(...recentRuns.map(record => Number(record.distance || 0)), 8);
+        const smartSummary = buildSmartRecommendation(history);
+
+        host.innerHTML = `
+          <div class="history-stats">
+            <div class="history-stat"><small>Sessions</small><strong>${history.length}</strong></div>
+            <div class="history-stat"><small>Avg km</small><strong>${avgDistance} km</strong></div>
+            <div class="history-stat"><small>Longest</small><strong>${longestRun} km</strong></div>
+            <div class="history-stat"><small>Last goal</small><strong>${mostRecent.goal || 'General'}</strong></div>
+          </div>
+
+          <div class="trend-card">
+            <div class="trend-header">
+              <strong>Recent 4 runs</strong>
+              <span>Distance trend</span>
+            </div>
+            <div class="trend-chart">
+              ${recentRuns.map((record) => `
+                <div class="trend-bar-wrap">
+                  <div class="trend-bar" style="height: ${(Number(record.distance || 0) / maxTrendValue) * 100}%"></div>
+                  <small>${Number(record.distance || 0).toFixed(0)}km</small>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="smart-summary-card">
+            <div class="smart-summary-header">
+              <strong>Training fit</strong>
+              <span>AI summary</span>
+            </div>
+            <div class="smart-ops">
+              ${Object.values(smartSummary).map((item) => `
+                <div class="smart-item ${item.ok ? 'is-good' : 'is-warn'}">
+                  <strong>${item.label}</strong>
+                  <span>${item.detail}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="history-list">
+            ${recentRuns.map((record) => `
+              <div class="history-item">
+                <strong>${record.route}</strong>
+                <span>${record.distance} km · ${record.status}</span>
+                <small>${record.savedAt} · ${record.goal || 'General'}</small>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      function savePlan() {
+        const selected = routeConfigs.find(route => route.id === recommendedRouteId) || routeConfigs[0];
+        const plans = getSavedPlans();
+        const history = getTrainingHistory();
+        const target = document.getElementById('training-target')?.value || 'fatloss';
+        const note = document.getElementById('plan-notes').value.trim() || 'Keep a steady pace';
+        const savedDistance = Number(document.getElementById('plan-distance').value) || selected.distance;
+        const savedAt = new Date().toLocaleDateString();
+        const record = {
+          id: Date.now(),
+          route: selected.name,
+          status: document.getElementById('plan-status').value,
+          distance: savedDistance,
+          note,
+          goal: getTrainingTargetConfig(target).label,
+          savedAt
+        };
+
+        plans.unshift(record);
+        history.unshift(record);
+        localStorage.setItem(savedPlansKey, JSON.stringify(plans.slice(0, 5)));
+        localStorage.setItem('run-tianjin-training-history', JSON.stringify(history.slice(0, 10)));
+        renderSavedPlans();
+        renderHistoryDashboard();
+      }
+
+      function renderSavedPlans() {
+        const list = document.getElementById('saved-plans');
+        if (!list) return;
+
+        const plans = getSavedPlans();
+        if (!plans.length) {
+          list.innerHTML = '<li class="empty-plan">No saved plans yet.</li>';
+          return;
+        }
+
+        list.innerHTML = plans
+          .map((plan) => `
+            <li class="saved-plan-item">
+              <strong>${plan.route}</strong>
+              <span>${plan.status} · ${plan.distance} km</span>
+              <small>${plan.note}</small>
+            </li>
+          `)
+          .join('');
+      }
+
+      function getTrainingTargetConfig(target = 'fatloss') {
+        const configs = {
+          fatloss: {
+            label: 'Fat loss',
+            workoutType: 'Fat-loss aerobic run',
+            focus: 'Keep the effort controlled and stay consistent enough to accumulate mileage without burnout.',
+            targetPace: 'Easy to moderate pace',
+            weeklyGoal: 'Build weekly consistency and keep your effort sustainable.',
+            paceOffset: 1.12,
+            hr: ['60-68%', '65-72%', '68-75%']
+          },
+          speed: {
+            label: 'Speed',
+            workoutType: 'Speed-focused session',
+            focus: 'Drive turnover and increase rhythm while preserving relaxed form through the middle.',
+            targetPace: 'Tempo to threshold pace',
+            weeklyGoal: 'Shorter repetitions, quicker turnover, and stronger final acceleration.',
+            paceOffset: 0.92,
+            hr: ['70-76%', '75-82%', '82-88%']
+          },
+          race: {
+            label: 'Race prep',
+            workoutType: 'Race-prep long run',
+            focus: 'Hold pacing discipline and finish strong without drifting into uncontrolled fatigue.',
+            targetPace: 'Race rhythm pace',
+            weeklyGoal: 'Build confidence for long blocks, strong finishes, and controlled pace management.',
+            paceOffset: 0.88,
+            hr: ['72-78%', '78-84%', '82-88%']
+          },
+          recovery: {
+            label: 'Recovery / easy',
+            workoutType: 'Recovery rhythm run',
+            focus: 'Prioritize form, low effort, and easy recovery to lower stress and improve consistency.',
+            targetPace: 'Recovery pace',
+            weeklyGoal: 'Keep movement high while leaving enough energy for the next training block.',
+            paceOffset: 1.2,
+            hr: ['55-64%', '60-68%', '62-70%']
+          }
+        };
+
+        return configs[target] || configs.fatloss;
+      }
+
+      function generateTrainingSuggestion(route) {
+        const analysis = route.analysis || buildRouteAnalysis(route);
+        const distance = analysis.distance || route.distance || 0;
+        const level = document.getElementById('runner-level')?.value || 'steady';
+        const target = document.getElementById('training-target')?.value || 'fatloss';
+        const paceBand = getPaceBand(route, level, target);
+        const audience = analysis.audience || 'General runners';
+        const timeWindow = analysis.bestTime || route.bestTime || 'Flexible';
+        const suitability = analysis.suitability || getSuitability(route);
+        const goalConfig = getTrainingTargetConfig(target);
+
+        let workoutType = goalConfig.workoutType;
+        let focus = goalConfig.focus;
+        let targetPace = goalConfig.targetPace;
+        let watch = 'Keep the effort smooth and do not chase pace in the first third.';
+
+        if (distance >= 8) {
+          workoutType = goalConfig.label === 'Race prep' ? 'Race-prep endurance block' : goalConfig.label === 'Speed' ? 'Long speed endurance block' : 'Long aerobic block';
+          focus = goalConfig.focus;
+          targetPace = goalConfig.targetPace;
+          watch = 'Hydrate early and protect form through the final 2 km.';
+        } else if (distance >= 5) {
+          workoutType = goalConfig.label === 'Speed' ? 'Threshold rhythm block' : 'Steady aerobic block';
+          focus = goalConfig.focus;
+          targetPace = goalConfig.targetPace;
+          watch = 'Keep the effort honest and resist the temptation to surge early.';
+        }
+
+        const suggestion = {
+          workoutType,
+          focus,
+          targetPace,
+          pace: paceBand.label,
+          paceIdeal: paceBand.idealLabel,
+          audience,
+          timeWindow,
+          watch,
+          suitability,
+          goalConfig,
+          segments: analysis.segments || getRouteSegments(route, distance),
+          summary: `${workoutType} for ${distance.toFixed(1)} km with a target pace around ${paceBand.idealLabel} based on your route.`
+        };
+
+        route.trainingSuggestion = suggestion;
+        return suggestion;
+      }
+
+      function renderTrainingSuggestion(route) {
+        const card = document.getElementById('training-suggestion-card');
+        if (!card) return;
+
+        const target = document.getElementById('training-target')?.value || 'fatloss';
+        const suggestion = generateTrainingSuggestion(route);
+        const dashboardTarget = getTrainingTargetConfig(target).label;
+        card.innerHTML = `
+          <div class="suggestion-header">
+            <span class="goal-badge">Goal · ${dashboardTarget}</span>
+            <span class="suggestion-pill">${suggestion.workoutType}</span>
+            <strong>${route.name}</strong>
+          </div>
+          <p class="suggestion-summary">${suggestion.summary}</p>
+          <div class="suggestion-grid">
+            <div>
+              <small>Pace band</small>
+              <strong>${suggestion.pace}</strong>
+            </div>
+            <div>
+              <small>Target pace</small>
+              <strong>${suggestion.paceIdeal}</strong>
+            </div>
+            <div>
+              <small>Ideal time</small>
+              <strong>${suggestion.timeWindow}</strong>
+            </div>
+            <div>
+              <small>Runner fit</small>
+              <strong>${suggestion.audience}</strong>
+            </div>
+          </div>
+          <div class="segment-card">
+            ${suggestion.segments.map((segment) => `
+              <div class="segment-row">
+                <strong>${segment.title}</strong>
+                <span>${segment.detail}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="suitability-card">
+            <div><strong>Beginner</strong><span>${suggestion.suitability.beginnerText}</span></div>
+            <div><strong>Weekend long run</strong><span>${suggestion.suitability.weekendText}</span></div>
+            <div><strong>Night run</strong><span>${suggestion.suitability.nightText}</span></div>
+          </div>
+          <div class="suggestion-note">
+            <strong>Watch for:</strong>
+            <span>${suggestion.watch}</span>
+          </div>
+        `;
+      }
+
+      function getPaceBand(route, level = 'steady', target = 'fatloss') {
+        const distance = Number(route.distance || 0) || 5;
+        const basePace = level === 'advanced' ? 4.5 : level === 'beginner' ? 6.2 : 5.3;
+        const factor = {
+          fatloss: 1.18,
+          speed: 0.9,
+          race: 0.84,
+          recovery: 1.28
+        }[target] || 1;
+
+        const minPace = (basePace * factor) * 0.96;
+        const maxPace = (basePace * factor) * 1.12;
+        const targetPace = distance >= 8 ? minPace * 1.04 : minPace;
+
+        return {
+          min: Number(minPace.toFixed(1)),
+          ideal: Number(targetPace.toFixed(1)),
+          max: Number(maxPace.toFixed(1)),
+          label: `${Number(minPace.toFixed(1))}–${Number(maxPace.toFixed(1))} min/km`,
+          idealLabel: `${Number(targetPace.toFixed(1))} min/km`
+        };
+      }
+
+      function getLevelPlan(level) {
+        const baseLevel = level || 'steady';
+        const settings = {
+          beginner: {
+            label: 'Beginner plan',
+            summary: 'Start controlled, build rhythm, and finish relaxed without pushing the final kilometers.',
+            paceMultiplier: 1.2,
+            effort: ['Easy', 'Easy-moderate', 'Steady'],
+            hr: ['60-68%', '65-72%', '68-75%'],
+            feel: ['RPE 2-3', 'RPE 3-4', 'RPE 4-5'],
+            priority: 'Consistency and confidence',
+            focus: 'Keep the effort sustainable and avoid an aggressive first push.'
+          },
+          steady: {
+            label: 'Steady runner plan',
+            summary: 'Use a smooth aerobic base and keep your effort stable through the middle section.',
+            paceMultiplier: 1,
+            effort: ['Smooth', 'Comfortable', 'Strong but controlled'],
+            hr: ['65-72%', '70-78%', '75-82%'],
+            feel: ['RPE 3', 'RPE 4', 'RPE 5-6'],
+            priority: 'Build aerobic durability',
+            focus: 'Hold rhythm over the middle, then finish with a controlled lift.'
+          },
+          advanced: {
+            label: 'Advanced plan',
+            summary: 'Hold a precise rhythm and push the final section with a strong but sustainable finish.',
+            paceMultiplier: 0.82,
+            effort: ['Controlled', 'Strong', 'Fast finish'],
+            hr: ['70-76%', '78-85%', '82-90%'],
+            feel: ['RPE 4', 'RPE 6', 'RPE 7-8'],
+            priority: 'Efficiency and late-race strength',
+            focus: 'Balance early control with an efficient final surge.'
+          }
+        };
+
+        return settings[baseLevel] || settings.steady;
+      }
+
+      function estimateFatigue(route) {
+        const distance = Number(route.distance || 0);
+        const intensity = route.tags && route.tags.includes('distance') ? 18 : 10;
+        const terrainPenalty = route.nearCenter ? 6 : 12;
+        const total = distance * 4 + intensity + terrainPenalty;
+
+        if (total >= 60) {
+          return { label: 'High fatigue risk', detail: 'This route is demanding enough to need careful pacing and a smoother end.' };
+        }
+        if (total >= 35) {
+          return { label: 'Moderate fatigue risk', detail: 'A steady rhythm will keep you fresh and reduce late-session fatigue.' };
+        }
+        return { label: 'Low fatigue risk', detail: 'This route is suitable for a relaxed effort and easier pacing.' };
+      }
+
+      function generateTrainingPlan(route) {
+        const level = document.getElementById('runner-level')?.value || 'steady';
+        const target = document.getElementById('training-target')?.value || 'fatloss';
+        const config = getLevelPlan(level);
+        const goalConfig = getTrainingTargetConfig(target);
+        const paceBand = getPaceBand(route, level, target);
+        const distance = Number(route.distance || 0) || 5;
+        const fatigue = estimateFatigue(route);
+
+        const blockOne = Number((distance * 0.3).toFixed(1));
+        const blockTwo = Number((distance * 0.4).toFixed(1));
+        const blockThree = Number((distance - blockOne - blockTwo).toFixed(1));
+
+        const paceBase = level === 'advanced' ? 4.6 : level === 'beginner' ? 6.1 : 5.2;
+        const targetOffset = goalConfig.paceOffset || 1;
+        const paceStart = (paceBase * config.paceMultiplier * targetOffset) * 1.08;
+        const paceMid = (paceBase * 0.94) * config.paceMultiplier * targetOffset;
+        const paceFinish = (paceBase * 0.88) * config.paceMultiplier * targetOffset * 0.97;
+
+        const segments = [
+          {
+            label: 'Start steady',
+            distance: `${blockOne} km`,
+            pace: `${paceStart.toFixed(1)} min/km`,
+            hr: goalConfig.hr[0],
+            feel: config.feel[0],
+            note: goalConfig.label === 'Speed'
+              ? 'Settle your cadence first, then open rhythm and stride smoothly before the pace gets sharper.'
+              : goalConfig.label === 'Race prep'
+                ? 'Keep the first section controlled and avoid letting the finish begin too early.'
+                : goalConfig.label === 'Recovery / easy'
+                  ? 'Use an easy cadence to keep fatigue low and preserve recovery capacity for later.'
+                  : 'Use a relaxed cadence and smooth breathing to warm up the body and settle into rhythm.'
+          },
+          {
+            label: 'Middle rhythm',
+            distance: `${blockTwo} km`,
+            pace: `${paceMid.toFixed(1)} min/km`,
+            hr: goalConfig.hr[1],
+            feel: config.feel[1],
+            note: goalConfig.label === 'Speed'
+              ? 'Keep turnover high while staying grounded with a smooth, efficient stride and breathing pattern.'
+              : goalConfig.label === 'Race prep'
+                ? 'Hold a stable rhythm with a focus on efficiency and continuity rather than early acceleration.'
+                : goalConfig.label === 'Recovery / easy'
+                  ? 'Stay comfortable in the middle and monitor whether the body can remain relaxed under low pressure.'
+                  : 'Keep the middle steady and avoid letting the first block run too hard.'
+          },
+          {
+            label: 'Finish push',
+            distance: `${blockThree} km`,
+            pace: `${paceFinish.toFixed(1)} min/km`,
+            hr: goalConfig.hr[2],
+            feel: config.feel[2],
+            note: goalConfig.label === 'Speed'
+              ? 'Use the final section to sharpen rhythm and efficiency without forcing a chaotic sprint.'
+              : goalConfig.label === 'Race prep'
+                ? 'The last block should feel strong and controlled, with power at the finish rather than a sudden surge.'
+                : goalConfig.label === 'Recovery / easy'
+                  ? 'Stay relaxed through the final section and do not force speed; recovery is the key goal.'
+                  : 'Increase effort in the final section, but keep the middle as the foundation for a strong finish.'
+          }
+        ];
+
+        const weekly = [
+          { day: 'Mon', type: 'Recovery', km: Math.max(3, Math.round(distance * 0.4)), goal: goalConfig.label === 'Speed' ? 'Recover actively and reduce accumulated fatigue.' : 'Easy recovery and stable breathing.' },
+          { day: 'Tue', type: goalConfig.label === 'Speed' ? 'Speed work' : 'Aerobic', km: goalConfig.label === 'Speed' ? Math.max(4, Math.round(distance * 0.7)) : Math.max(4, Math.round(distance * 0.8)), goal: goalConfig.label === 'Speed' ? 'Improve cadence and power transfer.' : 'Control rhythm and build aerobic base.' },
+          { day: 'Wed', type: goalConfig.label === 'Race prep' ? 'Race rhythm' : goalConfig.label === 'Fat loss' ? 'Tempo' : 'Tempo / threshold', km: Math.max(5, Math.round(distance * 0.9)), goal: goalConfig.label === 'Race prep' ? 'Keep a stable rhythm and finish with control.' : 'Keep the middle strong and the stride even.' },
+          { day: 'Thu', type: 'Rest', km: 0, goal: 'Recovery and mobility to reduce fatigue buildup.' },
+          { day: 'Fri', type: goalConfig.label === 'Fat loss' ? 'Easy build' : goalConfig.label === 'Race prep' ? 'Long aerobic' : 'Tempo', km: Math.max(6, Math.round(distance * 1.1)), goal: goalConfig.label === 'Fat loss' ? 'Stay relaxed and build aerobic continuity.' : goalConfig.label === 'Race prep' ? 'Hold a strong long distance rhythm and improve endurance tolerance.' : 'Stay smooth in pace and turnover.' },
+          { day: 'Sat', type: 'Main route', km: distance, goal: `Follow the rhythm of ${route.name} for your main training block.` },
+          { day: 'Sun', type: 'Recovery walk', km: 2, goal: 'Low-intensity recovery to help the body reset.' }
+        ];
+
+        return {
+          level: config.label,
+          summary: `${config.summary} ${goalConfig.weeklyGoal}`,
+          priority: goalConfig.label,
+          focus: goalConfig.focus,
+          fatigue,
+          segments,
+          weekly,
+          goal: goalConfig.label === 'Speed'
+            ? 'Goal: improve cadence efficiency while keeping a steady middle section and a strong final third.'
+            : goalConfig.label === 'Race prep'
+              ? 'Goal: maintain a stable rhythm, improve endurance, and finish the last section with control.'
+              : goalConfig.label === 'Recovery / easy'
+                ? 'Goal: lower intensity, rebuild recovery, and make the next block more sustainable.'
+                : 'Goal: improve sustained running capacity while preserving rhythm and stability.'
+        };
+      }
+
+      function renderTrainingPlan(route) {
+        const container = document.getElementById('training-plan-card');
+        if (!container) return;
+
+        const plan = generateTrainingPlan(route);
+        const targetLabel = document.getElementById('training-target')?.value || 'fatloss';
+        const targetInfo = getTrainingTargetConfig(targetLabel).label;
+
+        container.innerHTML = `
+          <div class="plan-header">
+            <span class="goal-badge">Goal · ${targetInfo}</span>
+            <span class="plan-badge">${plan.level}</span>
+            <strong>${route.name}</strong>
+          </div>
+          <div class="plan-meta">
+            <div>
+              <small>Priority</small>
+              <strong>${plan.priority}</strong>
+            </div>
+            <div>
+              <small>Fatigue</small>
+              <strong>${plan.fatigue.label}</strong>
+            </div>
+            <div>
+              <small>Pace band</small>
+              <strong>${getPaceBand(route, document.getElementById('runner-level')?.value || 'steady', document.getElementById('training-target')?.value || 'fatloss').label}</strong>
+            </div>
+            <div>
+              <small>Goal</small>
+              <strong>${document.getElementById('training-target')?.value === 'race' ? 'Race prep' : document.getElementById('training-target')?.value === 'speed' ? 'Speed' : document.getElementById('training-target')?.value === 'recovery' ? 'Recovery' : 'Fat loss'}</strong>
+            </div>
+          </div>
+          <p class="plan-summary">${plan.summary}</p>
+          <p class="plan-goal">${plan.goal}</p>
+          <div class="plan-focus">
+            <strong>Focus</strong>
+            <span>${plan.focus}</span>
+          </div>
+          <div class="plan-segments">
+            ${plan.segments.map((segment) => `
+              <div class="plan-segment">
+                <div class="plan-segment-header">
+                  <strong>${segment.label}</strong>
+                  <span>${segment.distance}</span>
+                </div>
+                <div class="plan-mini-grid">
+                  <div><small>Pace</small><strong>${segment.pace}</strong></div>
+                  <div><small>Heart rate</small><strong>${segment.hr}</strong></div>
+                  <div><small>Feeling</small><strong>${segment.feel}</strong></div>
+                </div>
+                <p>${segment.note}</p>
+              </div>
+            `).join('')}
+          </div>
+          <div class="weekly-plan-compact">
+            ${plan.weekly.map((day) => `
+              <div class="weekly-mini-item">
+                <strong>${day.day}</strong>
+                <span>${day.type}</span>
+                <small>${day.km ? `${day.km} km` : 'Rest'}</small>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      function generateWeeklyPlan(route) {
+        const baseDistance = route.distance || 5;
+        const focus = route.tags.includes('distance') ? 'Endurance' : 'Smooth rhythm';
+        const days = [
+          { day: 'Mon', title: 'Recovery run', metric: `${Math.max(3, Math.round(baseDistance * 0.5))} km`, detail: 'Easy effort, forget pace.' },
+          { day: 'Tue', title: 'Stride work', metric: `${Math.max(4, Math.round(baseDistance * 0.7))} km`, detail: 'Controlled rhythm with light acceleration.' },
+          { day: 'Wed', title: 'Tempo session', metric: `${Math.max(5, Math.round(baseDistance * 0.85))} km`, detail: 'Steady middle effort and smooth breathing.' },
+          { day: 'Thu', title: 'Rest + mobility', metric: '30-40 min', detail: 'Recovery, stretching, and easy activation.' },
+          { day: 'Fri', title: 'Easy aerobic run', metric: `${Math.max(6, Math.round(baseDistance * 1.1))} km`, detail: 'Keep it relaxed and keep the route easy.' },
+          { day: 'Sat', title: `${focus} route`, metric: `${baseDistance} km`, detail: `Use ${route.name} for your long, comfortable block.` },
+          { day: 'Sun', title: 'Recovery walk', metric: '20-30 min', detail: 'Light movement and mobility before next week.' }
+        ];
+
+        return days;
+      }
+
+      function renderWeeklyPlan(route) {
+        const container = document.getElementById('weekly-plan');
+        if (!container) return;
+
+        const plan = generateWeeklyPlan(route);
+        container.innerHTML = plan
+          .map((day) => `
+            <div class="weekly-day">
+              <strong>${day.day} · ${day.title}</strong>
+              <span>${day.metric}</span>
+              <small>${day.detail}</small>
+            </div>
+          `)
+          .join('');
+      }
+
+      function renderComparisonTable(routeId = recommendedRouteId) {
+        const tableBody = document.getElementById('route-comparison-body');
+        if (!tableBody) return;
+
+        const routes = getAllRoutes();
+        tableBody.innerHTML = routes
+          .map((route) => `
+            <tr class="${route.id === routeId ? 'is-selected' : ''}">
+              <td>${route.name}</td>
+              <td>${route.distance || Math.round(calculateRouteDistance(route.coords || []))} km</td>
+              <td>${route.bestTime || 'Flexible'}</td>
+              <td>${route.difficulty || 'Easy'}</td>
+            </tr>
+          `)
+          .join('');
+      }
+
+      function getRecommendation() {
+        const level = document.getElementById('runner-level').value;
+        const time = document.getElementById('runner-time').value;
+        const goal = document.getElementById('runner-goal').value;
+        const duration = document.getElementById('runner-distance').value;
+
+        return routeConfigs
+          .map((route) => {
+            let score = 0;
+            const reasons = [];
+
+            if (goal === 'night' && route.tags.includes('night')) {
+              score += 5;
+              reasons.push('night-friendly');
+            }
+            if (goal === 'distance' && route.tags.includes('distance')) {
+              score += 5;
+              reasons.push('good for long runs');
+            }
+            if (goal === 'park' && route.tags.includes('park')) {
+              score += 5;
+              reasons.push('calm park feel');
+            }
+            if (goal === 'easy' && route.tags.includes('beginner')) {
+              score += 4;
+              reasons.push('easy pace');
+            }
+            if (goal === 'river' && route.tags.includes('river')) {
+              score += 4;
+              reasons.push('river route');
+            }
+
+            if (level === 'beginner' && route.tags.includes('beginner')) {
+              score += 5;
+              reasons.push('beginner friendly');
+            }
+            if (level === 'advanced' && route.tags.includes('distance')) {
+              score += 5;
+              reasons.push('higher endurance');
+            }
+            if (level === 'steady' && route.distance >= 5 && route.distance <= 8) {
+              score += 3;
+              reasons.push('comfortable steady pace');
+            }
+
+            if (time === 'dusk' && route.bestTime === 'dusk') {
+              score += 4;
+              reasons.push('best at dusk');
+            }
+            if (time === 'morning' && route.bestTime === 'morning') {
+              score += 4;
+              reasons.push('best in morning');
+            }
+            if (time === 'weekend' && route.bestTime === 'weekend') {
+              score += 4;
+              reasons.push('weekend rhythm');
+            }
+
+            if (duration === 'short' && route.distance <= 5) {
+              score += 4;
+              reasons.push('short session fit');
+            }
+            if (duration === 'medium' && route.distance >= 3 && route.distance <= 8) {
+              score += 4;
+              reasons.push('mid-length fit');
+            }
+            if (duration === 'long' && route.distance >= 5) {
+              score += 5;
+              reasons.push('longer session fit');
+            }
+
+            if (route.nearCenter) {
+              score += 2;
+            }
+
+            return { route, score, reasons };
+          })
+          .sort((a, b) => b.score - a.score);
+      }
+
+      function updateInsight(route) {
+        const analysis = route.analysis || buildRouteAnalysis(route);
+        document.getElementById('insight-name').textContent = route.name;
+        document.getElementById('insight-terrain').textContent = route.terrain || 'Balanced route';
+        document.getElementById('insight-surface').textContent = route.surface || 'Paved';
+        document.getElementById('insight-lighting').textContent = analysis.bestTime || route.lighting || 'Flexible';
+        document.getElementById('insight-difficulty').textContent = analysis.difficulty || route.difficulty || 'Easy';
+      }
+
+      function updateDashboardSummary(routeName) {
+        const target = document.getElementById('training-target')?.value || 'fatloss';
+        const targetLabel = getTrainingTargetConfig(target).label;
+        const summary = document.getElementById('dashboard-target-label');
+        const routeLabel = document.getElementById('dashboard-route-label');
+        if (summary) summary.textContent = targetLabel;
+        if (routeLabel) routeLabel.textContent = routeName || 'Selected route';
+      }
+
+      function updateSelectedRoute(route) {
+        recommendedRouteId = route.id;
+        updateInsight(route);
+        updateDashboardSummary(route.name);
+        renderRouteBreakdown(route);
+        formatRouteDetail(route);
+        renderTrainingSuggestion(route);
+        renderTrainingPlan(route);
+        renderComparisonTable(route.id);
+        renderWeeklyPlan(route);
+        renderRoutes(currentFilter, route.id);
+      }
+
+      function updateRecommendation() {
+        const ranked = getRecommendation();
+        const featured = ranked[0];
+        const route = featured.route;
+
+        document.getElementById('result-name').textContent = route.name;
+        document.getElementById('result-summary').textContent = route.summary;
+
+        const tagList = document.getElementById('result-tags');
+        tagList.innerHTML = '';
+        featured.reasons.slice(0, 3).forEach((reason) => {
+          const item = document.createElement('li');
+          item.textContent = reason;
+          tagList.appendChild(item);
+        });
+
+        updateSelectedRoute(route);
+      }
+
+      function renderRoutes(filter = 'all', selectedId = recommendedRouteId) {
+        routeLayer.clearLayers();
+        currentFilter = filter;
+
+        const routes = getAllRoutes();
+        const visibleRoutes = filter === 'all'
+          ? routes
+          : routes.filter(route => route.tags && route.tags.includes(filter));
+
+        visibleRoutes.forEach((route) => {
+          const isSelected = route.id === selectedId;
+          const polyline = L.polyline(route.coords, {
+            color: route.color,
+            weight: isSelected ? 8 : 6,
+            opacity: isSelected ? 1 : 0.82,
+            lineCap: 'round',
+            lineJoin: 'round'
+          }).addTo(routeLayer);
+
+          const startMarker = L.circleMarker(route.coords[0], {
+            radius: isSelected ? 8 : 6,
+            color: route.color,
+            fillColor: route.color,
+            fillOpacity: 1,
+            weight: 2
+          }).addTo(routeLayer);
+
+          const popupHtml = `
+            <div class="route-popup">
+              <strong>${route.name}</strong>
+              <p>${route.summary}</p>
+              <small>${route.distance} km · ${route.bestTime}</small>
+            </div>
+          `;
+
+          polyline.bindPopup(popupHtml);
+          startMarker.bindPopup(popupHtml);
+
+          polyline.on('click', () => {
+            updateSelectedRoute(route);
+          });
+
+          startMarker.on('click', () => {
+            updateSelectedRoute(route);
+          });
+        });
+
+        if (visibleRoutes.length > 0) {
+          const bounds = L.latLngBounds(visibleRoutes.flatMap(route => route.coords));
+          map.fitBounds(bounds.pad(0.25));
+        }
+      }
+
+      document.querySelectorAll('.map-filter-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.map-filter-btn').forEach((item) => item.classList.toggle('active', item === button));
+          renderRoutes(button.dataset.filter, recommendedRouteId);
+        });
+      });
+
+      document.getElementById('recommend-btn').addEventListener('click', updateRecommendation);
+      document.getElementById('save-plan-btn').addEventListener('click', savePlan);
+
+      document.getElementById('gpx-upload-btn').addEventListener('click', async () => {
+        const input = document.getElementById('gpx-upload-input');
+        const file = input.files && input.files[0];
+        if (!file) return;
+
+        const text = await file.text();
+        const coords = parseGpxTrack(text);
+        if (!coords.length) {
+          alert('This GPX file does not contain a valid track.');
+          return;
+        }
+
+        const distance = Number(calculateRouteDistance(coords).toFixed(1)) || 5;
+        const summary = distance >= 8
+          ? 'Long user-uploaded route for endurance work with a stronger aerobic focus.'
+          : distance >= 4
+            ? 'Balanced route for steady effort and comfortable city or park running.'
+            : 'Shorter route suitable for easy recovery, warm-up, or relaxed pace work.';
+
+        uploadedRoute = {
+          id: 'custom-route',
+          name: file.name.replace(/\.gpx$/i, '') || 'My route',
+          color: '#d86b39',
+          tags: distance >= 7 ? ['custom', 'distance'] : ['custom', 'beginner'],
+          distance,
+          nearCenter: true,
+          bestTime: distance >= 8 ? 'weekend' : 'dusk',
+          score: 88,
+          heat: 'custom',
+          terrain: 'User uploaded route',
+          surface: 'Dependent on track',
+          lighting: 'Flexible',
+          difficulty: 'Custom',
+          audience: 'Any runner',
+          risk: 'Check route safety',
+          summary,
+          sections: [
+            { label: 'Start section', distance: `${Number((distance / 3).toFixed(1))} km`, note: 'Warm-up and settle into rhythm' },
+            { label: 'Main block', distance: `${Number(((distance / 3) * 2).toFixed(1))} km`, note: 'Main effort section from the uploaded route' },
+            { label: 'Finish stretch', distance: `${Number(distance.toFixed(1))} km`, note: 'Final section used to finish strong' }
+          ],
+          coords,
+          rawGpxText: text,
+          custom: true
+        };
+
+        buildRouteAnalysis(uploadedRoute);
+        updateSelectedRoute(uploadedRoute);
+        document.getElementById('gpx-upload-input').value = '';
+      });
+
+      ['runner-level', 'runner-time', 'runner-goal', 'runner-distance', 'training-target'].forEach((fieldId) => {
+        document.getElementById(fieldId).addEventListener('change', () => {
+          updateDashboardSummary(document.getElementById('result-name').textContent || recommendedRouteId);
+          updateRecommendation();
+        });
+      });
+
+      renderSavedPlans();
+      renderHistoryDashboard();
+      renderComparisonTable();
+      renderTrainingSuggestion(routeConfigs[0]);
+      renderWeeklyPlan(routeConfigs[0]);
+      renderRouteBreakdown(routeConfigs[0]);
+      updateDashboardSummary(routeConfigs[0].name);
+      loadRouteGeometry();
+    </script>
+  </body>
+</html>
