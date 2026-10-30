@@ -10,9 +10,6 @@ const fallbackNav = `
       <a href="index.html">Home</a>
       <a href="routes.html">Routes</a>
       <a href="map.html">Map</a>
-      <a href="filter.html">Find route</a>
-      <a href="planner.html">Plan</a>
-      <a href="achievements.html">Progress</a>
       <a href="tips.html">Tips</a>
       <a href="about.html">About</a>
     </div>
@@ -30,7 +27,7 @@ fetch('nav.html?v=' + Date.now(), { cache: 'no-store' })
     return response.text();
   })
   .then(html => {
-    if (target && html.includes('Map') && html.includes('Find route')) {
+    if (target && html.includes('Map') && html.includes('Routes')) {
       target.innerHTML = html;
     }
   })
