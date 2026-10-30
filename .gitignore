@@ -1,0 +1,7 @@
+# Local API credentials — never commit this file
+config.js
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
