@@ -143,6 +143,63 @@
         }
       };
 
+      /* Extra depth per route: what you run past, how to split the effort,
+         and what to actually do with the session. Kept in the same shape as
+         the map page so the two pages tell the same story. */
+      const routeDepth = {
+        haihe: {
+          scenery: [
+            { name: 'Tianjin Eye', note: 'A 120 m Ferris wheel built over the Yongle Bridge. The loop starts directly beneath it, and the wheel is lit after dark.' },
+            { name: 'Jiefang Bridge', note: 'A 1927 steel truss bridge that still opens for boats. Flat deck and a wide footway make it the smoothest crossing on the river.' },
+            { name: 'Jinwan Plaza riverbank', note: 'The far bank opens up here — skyline on one side, water on the other. Best light is about 30 minutes before sunset.' }
+          ],
+          splits: [
+            { label: '0–2 km', focus: 'Settle in', detail: 'Start under the Eye and let the crowd thin out. Keep it conversational; this stretch is the busiest.' },
+            { label: '2–5 km', focus: 'Steady middle', detail: 'The riverside straightens out past Jiefang Bridge. This is where rhythm work feels easiest.' },
+            { label: '5–8 km', focus: 'Bring it home', detail: 'Skyline section toward Jinwan Plaza. Hold the pace rather than pushing — the wind picks up here.' }
+          ],
+          session: 'Run it as an easy 40-minute aerobic session with four 20-second strides in the last kilometre. The flat deck makes it a good place to practise cadence without worrying about footing.'
+        },
+        nancui: {
+          scenery: [
+            { name: 'Cuiping Hill', note: 'The park is built around a low wooded hill, so the loop rolls gently instead of staying dead flat. Shaded almost the whole way in summer.' },
+            { name: 'Ski slope', note: 'A dry ski slope sits inside the park. Busiest corner in winter; a quiet landmark to run past the rest of the year.' }
+          ],
+          splits: [
+            { label: '0–1 km', focus: 'Warm up', detail: 'Easy lap on the rubber track. Let the surface do the work — it is forgiving, so resist overstriding.' },
+            { label: '1–2.5 km', focus: 'Intervals', detail: 'Four rounds of 1 minute quick / 1 minute easy. The short loop means you are never far from the start.' },
+            { label: '2.5–3 km', focus: 'Cool down', detail: 'Walk-jog the last half kilometre. Good place to check form in the park mirrors by the entrance.' }
+          ],
+          session: 'Best used for a first interval session: 4 × 1 minute at a comfortably hard effort with equal easy jogging between. The soft track keeps the impact low while you learn pacing.'
+        },
+        shuishang: {
+          scenery: [
+            { name: 'West Lake', note: 'The calmer of the two lakes. The path hugs the shore, so you get a continuous water line on your left for most of this stretch.' },
+            { name: 'Tianjin Zoo', note: 'The zoo entrance sits at the south end of the loop. Expect families and strollers at weekends — the one section worth slowing down for.' },
+            { name: 'East Lake dock', note: 'Small boat dock on the east lake. Open sight lines and a wide paved apron make it a natural turnaround point.' }
+          ],
+          splits: [
+            { label: '0–1.5 km', focus: 'Find a rhythm', detail: 'West Lake shoreline. Flat and shaded — use it to lock into an easy cadence.' },
+            { label: '1.5–3.5 km', focus: 'Watch your footing', detail: 'The path narrows near the zoo entrance. Slow down here on weekends and after rain.' },
+            { label: '3.5–5 km', focus: 'Finish relaxed', detail: 'East Lake dock to the gate. Keep the effort easy; this is a recovery route, not a tempo route.' }
+          ],
+          session: 'Treat it as a recovery run: 25–35 minutes at a pace where you could hold a conversation. If you are adding mileage, this is the route to add it on, not the park loop.'
+        },
+        taida: {
+          scenery: [
+            { name: 'TEDA Football Stadium', note: 'Home ground of Tianjin Jinmen Tiger. On match days the surrounding roads close to traffic, turning the approach into a wide open running lane.' },
+            { name: 'TEDA MSD circle', note: 'The modern business district: glass towers, wide empty pavements, almost no pedestrians at weekends. This is where the route feels fastest.' },
+            { name: 'Beihai Road interchange', note: 'The one real junction on the route. Cross under the flyover rather than over it — the underpass keeps you off the traffic lights.' }
+          ],
+          splits: [
+            { label: '0–2 km', focus: 'Ease out', detail: 'Wide coastal walkway. Resist starting too fast just because the path is open.' },
+            { label: '2–5 km', focus: 'Steady state', detail: 'The long straight past MSD. This is the block to hold goal pace — flat, uninterrupted, easy to measure.' },
+            { label: '5–7 km', focus: 'Hold form', detail: 'Back toward the stadium. Coastal wind usually hits here, so shorten your stride and keep cadence up.' }
+          ],
+          session: 'Use it for a steady-state block: 20 minutes at a pace slightly faster than easy, sandwiched between 10-minute warm-up and cool-down. The open path makes pacing honest.'
+        }
+      };
+
       const detailRoot = document.getElementById('route-detail');
       const modal = document.getElementById('image-modal');
       const modalImage = document.getElementById('modal-image');
@@ -208,6 +265,50 @@
           </div>
         </div>
       `;
+
+      const depth = routeDepth[route.id];
+      if (depth) {
+        const depthHost = document.createElement('div');
+        depthHost.className = 'detail-depth';
+        depthHost.innerHTML = `
+          <section class="detail-block" aria-labelledby="scenery-heading">
+            <p class="eyebrow">Along the way</p>
+            <h2 id="scenery-heading">What you run past</h2>
+            <ul class="detail-scenery-list">
+              ${depth.scenery.map((spot, i) => `
+                <li class="detail-scenery-item">
+                  <span class="detail-scenery-index">${String(i + 1).padStart(2, '0')}</span>
+                  <div>
+                    <strong>${spot.name}</strong>
+                    <p>${spot.note}</p>
+                  </div>
+                </li>
+              `).join('')}
+            </ul>
+          </section>
+
+          <section class="detail-block" aria-labelledby="splits-heading">
+            <p class="eyebrow">How to run it</p>
+            <h2 id="splits-heading">Splitting the distance</h2>
+            <ol class="detail-splits">
+              ${depth.splits.map((split) => `
+                <li class="detail-split">
+                  <span class="detail-split-range">${split.label}</span>
+                  <strong>${split.focus}</strong>
+                  <p>${split.detail}</p>
+                </li>
+              `).join('')}
+            </ol>
+          </section>
+
+          <section class="detail-block detail-block--session" aria-labelledby="session-heading">
+            <p class="eyebrow">Suggested session</p>
+            <h2 id="session-heading">What to do with it</h2>
+            <p>${depth.session}</p>
+          </section>
+        `;
+        detailRoot.appendChild(depthHost);
+      }
 
       const visual = document.querySelector('.route-visual');
       if (visual) {
