@@ -32,64 +32,74 @@
         <details class="recommendation-panel" id="recommendation-panel">
           <summary class="recommendation-summary">
             <span class="recommendation-summary-text">
-              <span class="eyebrow">Smart recommendation</span>
-              <strong>Choose your running style</strong>
+              <span class="eyebrow">Run match</span>
+              <strong>Tell us the run you want — we rank all four routes live</strong>
             </span>
             <span class="recommendation-summary-hint">Tap to open</span>
           </summary>
 
           <div class="recommendation-header">
-            <p class="eyebrow">Smart recommendation</p>
-            <h2>Choose your running style</h2>
+            <p class="eyebrow">Run match</p>
+            <h2>Tell us the run you want</h2>
           </div>
 
-          <div class="recommendation-form">
-            <label>
-              <span>Experience</span>
-              <select id="runner-level">
-                <option value="beginner">Beginner</option>
-                <option value="steady" selected>Steady runner</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </label>
+          <!-- Chip-based intent picker: every chip is a live filter, no submit needed. -->
+          <div class="match-chips" role="group" aria-label="Running intent">
+            <div class="match-chip-row">
+              <span class="match-chip-label">Experience</span>
+              <div class="match-chip-set" data-field="runner-level">
+                <button class="match-chip" type="button" data-value="beginner">Beginner</button>
+                <button class="match-chip is-active" type="button" data-value="steady">Steady</button>
+                <button class="match-chip" type="button" data-value="advanced">Advanced</button>
+              </div>
+            </div>
 
-            <label>
-              <span>Time</span>
-              <select id="runner-time">
-                <option value="dusk" selected>Evening / dusk</option>
-                <option value="morning">Morning</option>
-                <option value="weekend">Weekend long run</option>
-              </select>
-            </label>
+            <div class="match-chip-row">
+              <span class="match-chip-label">When</span>
+              <div class="match-chip-set" data-field="runner-time">
+                <button class="match-chip" type="button" data-value="morning">Morning</button>
+                <button class="match-chip is-active" type="button" data-value="dusk">Dusk</button>
+                <button class="match-chip" type="button" data-value="weekend">Weekend</button>
+              </div>
+            </div>
 
-            <label>
-              <span>Goal</span>
-              <select id="runner-goal">
-                <option value="easy" selected>Easy + relaxed</option>
-                <option value="distance">Long distance</option>
-                <option value="night">Night run</option>
-                <option value="park">Park + calm pace</option>
-              </select>
-            </label>
+            <div class="match-chip-row">
+              <span class="match-chip-label">Mood</span>
+              <div class="match-chip-set" data-field="runner-goal">
+                <button class="match-chip is-active" type="button" data-value="easy">Easy</button>
+                <button class="match-chip" type="button" data-value="distance">Long</button>
+                <button class="match-chip" type="button" data-value="night">Night</button>
+                <button class="match-chip" type="button" data-value="park">Calm</button>
+              </div>
+            </div>
 
-            <label>
-              <span>Distance</span>
-              <select id="runner-distance">
-                <option value="short">Under 30 min</option>
-                <option value="medium" selected>30–45 min</option>
-                <option value="long">45+ min</option>
-              </select>
-            </label>
+            <div class="match-chip-row">
+              <span class="match-chip-label">Length</span>
+              <div class="match-chip-set" data-field="runner-distance">
+                <button class="match-chip" type="button" data-value="short">Under 30 min</button>
+                <button class="match-chip is-active" type="button" data-value="medium">30–45 min</button>
+                <button class="match-chip" type="button" data-value="long">45+ min</button>
+              </div>
+            </div>
 
-            <label>
-              <span>Training target</span>
-              <select id="training-target">
-                <option value="fatloss" selected>Fat loss</option>
-                <option value="speed">Speed</option>
-                <option value="race">Race prep</option>
-                <option value="recovery">Recovery / easy</option>
-              </select>
-            </label>
+            <div class="match-chip-row">
+              <span class="match-chip-label">Target</span>
+              <div class="match-chip-set" data-field="training-target">
+                <button class="match-chip is-active" type="button" data-value="fatloss">Fat loss</button>
+                <button class="match-chip" type="button" data-value="speed">Speed</button>
+                <button class="match-chip" type="button" data-value="race">Race prep</button>
+                <button class="match-chip" type="button" data-value="recovery">Recovery</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hidden native selects keep the existing scoring code working unchanged. -->
+          <div class="match-native" aria-hidden="true">
+            <select id="runner-level"><option value="beginner">Beginner</option><option value="steady" selected>Steady runner</option><option value="advanced">Advanced</option></select>
+            <select id="runner-time"><option value="dusk" selected>Evening / dusk</option><option value="morning">Morning</option><option value="weekend">Weekend long run</option></select>
+            <select id="runner-goal"><option value="easy" selected>Easy + relaxed</option><option value="distance">Long distance</option><option value="night">Night run</option><option value="park">Park + calm pace</option></select>
+            <select id="runner-distance"><option value="short">Under 30 min</option><option value="medium" selected>30–45 min</option><option value="long">45+ min</option></select>
+            <select id="training-target"><option value="fatloss" selected>Fat loss</option><option value="speed">Speed</option><option value="race">Race prep</option><option value="recovery">Recovery / easy</option></select>
           </div>
 
           <div id="dashboard-summary" class="dashboard-summary" aria-live="polite">
@@ -100,11 +110,18 @@
             </div>
           </div>
 
-          <button id="recommend-btn" class="map-recommend-btn" type="button">Recommend my route</button>
+          <!-- Ranked shortlist: all four routes scored, not just the winner. -->
+          <div class="match-board">
+            <div class="match-board-head">
+              <strong>Route match ranking</strong>
+              <span id="match-board-note">Live scoring · updates as you tap</span>
+            </div>
+            <ol id="match-ranking" class="match-ranking" aria-live="polite"></ol>
+          </div>
 
           <div id="recommend-result" class="recommend-result" aria-live="polite">
             <div class="result-header">
-              <span>Recommended</span>
+              <span>Top match</span>
               <strong id="result-name">Haihe Riverside</strong>
             </div>
             <p id="result-summary">Best for a city evening run with a relaxed tempo and easy navigation.</p>
@@ -250,20 +267,6 @@
                     <li>Urban access</li>
                   </ul>
                   <div id="route-breakdown" class="route-breakdown"></div>
-                  <div class="risk-grid">
-                    <div>
-                      <small>Difficulty</small>
-                      <strong id="route-difficulty">Easy</strong>
-                    </div>
-                    <div>
-                      <small>Suitable for</small>
-                      <strong id="route-audience">Beginner and steady runners</strong>
-                    </div>
-                    <div>
-                      <small>Risk</small>
-                      <strong id="route-risk">Low</strong>
-                    </div>
-                  </div>
                 </div>
                 <div id="route-profile" class="route-profile"></div>
                 <div class="route-actions">
@@ -303,47 +306,6 @@
                     <span>Water Park</span>
                   </div>
                 </div>
-              </div>
-            </details>
-
-            <details class="side-group">
-              <summary>
-                <span class="side-group-title">Compare routes</span>
-                <span class="side-group-hint">Side by side</span>
-              </summary>
-              <div class="side-group-body">
-                <div class="overlay-toggle-row">
-                  <label class="overlay-toggle">
-                    <input id="overlay-all" type="checkbox" />
-                    <span>Show all routes on map</span>
-                  </label>
-                </div>
-                <table class="comparison-table">
-                  <thead>
-                    <tr>
-                      <th>Route</th>
-                      <th>Km</th>
-                      <th>Best</th>
-                      <th>Surface</th>
-                      <th>Light</th>
-                      <th>Fit</th>
-                      <th>Score</th>
-                    </tr>
-                  </thead>
-                  <tbody id="route-comparison-body"></tbody>
-                </table>
-              </div>
-            </details>
-
-            <details class="side-group">
-              <summary>
-                <span class="side-group-title">Training</span>
-                <span class="side-group-hint">Suggestion and plan</span>
-              </summary>
-              <div class="side-group-body">
-                <div id="training-suggestion-card" class="training-suggestion-card"></div>
-                <div id="training-plan-card" class="training-plan-card"></div>
-                <div id="weekly-plan" class="weekly-plan"></div>
               </div>
             </details>
 
@@ -395,6 +357,50 @@
               </div>
             </details>
           </aside>
+        </div>
+
+        <!-- Full-width band: these two panels need horizontal room, so they
+             live below the map instead of being squeezed into the sidebar. -->
+        <div class="map-wide-band">
+          <section class="map-wide-panel" aria-labelledby="compare-heading">
+            <div class="map-wide-head">
+              <h2 id="compare-heading">Compare routes</h2>
+              <label class="overlay-toggle">
+                <input id="overlay-all" type="checkbox" />
+                <span>Show all routes on map</span>
+              </label>
+            </div>
+            <div class="comparison-scroll">
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Route</th>
+                    <th>Km</th>
+                    <th>Best time</th>
+                    <th>Surface</th>
+                    <th>Lighting</th>
+                    <th>Difficulty</th>
+                    <th>Score</th>
+                  </tr>
+                </thead>
+                <tbody id="route-comparison-body"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="map-wide-panel" aria-labelledby="training-heading">
+            <div class="map-wide-head">
+              <h2 id="training-heading">Training</h2>
+              <span class="map-wide-hint">Suggestion and weekly plan</span>
+            </div>
+            <div class="training-columns">
+              <div id="training-suggestion-card" class="training-suggestion-card"></div>
+              <div class="training-columns-side">
+                <div id="training-plan-card" class="training-plan-card"></div>
+                <div id="weekly-plan" class="weekly-plan"></div>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
     </main>
@@ -1320,10 +1326,6 @@
           </ul>
           <div class="route-analysis-box">
             <div class="analysis-row">
-              <span>Distance</span>
-              <strong>${analysis.distance.toFixed(1)} km</strong>
-            </div>
-            <div class="analysis-row">
               <span>Pace</span>
               <strong>${analysis.paceRange}</strong>
             </div>
@@ -1332,25 +1334,19 @@
               <strong>${analysis.bestTime}</strong>
             </div>
             <div class="analysis-row">
-              <span>Risk</span>
-              <strong>${analysis.riskText}</strong>
-            </div>
-          </div>
-          <div id="route-breakdown" class="route-breakdown">${breakdownHtml}</div>
-          <div class="risk-grid">
-            <div>
-              <small>Difficulty</small>
+              <span>Difficulty</span>
               <strong id="route-difficulty">${analysis.difficulty || route.difficulty || 'Easy'}</strong>
             </div>
-            <div>
-              <small>Suitable for</small>
+            <div class="analysis-row">
+              <span>Suitable for</span>
               <strong id="route-audience">${analysis.audience || route.audience || 'General runners'}</strong>
             </div>
-            <div>
-              <small>Risk</small>
+            <div class="analysis-row analysis-row--wide">
+              <span>Risk</span>
               <strong id="route-risk">${analysis.riskText || route.risk || 'Low'}</strong>
             </div>
           </div>
+          <div id="route-breakdown" class="route-breakdown">${breakdownHtml}</div>
         `;
 
         card.innerHTML = detailText;
@@ -2168,8 +2164,80 @@
           tagList.appendChild(item);
         });
 
+        renderMatchRanking(ranked);
         updateSelectedRoute(route);
       }
+
+      /* ---------- Run match: ranked shortlist ---------- */
+      function renderMatchRanking(ranked) {
+        const host = document.getElementById('match-ranking');
+        if (!host) return;
+
+        const top = ranked[0] ? ranked[0].score : 0;
+        const maxScore = Math.max(top, 1);
+
+        host.innerHTML = ranked
+          .map((entry, index) => {
+            const route = entry.route;
+            const pct = Math.round((entry.score / maxScore) * 100);
+            const isTop = index === 0;
+            const reason = entry.reasons.length
+              ? entry.reasons.slice(0, 2).join(' · ')
+              : 'no strong signal yet — try another chip';
+            return `
+              <li class="match-rank-item ${isTop ? 'is-top' : ''}" data-route-id="${route.id}">
+                <span class="match-rank-index">${String(index + 1).padStart(2, '0')}</span>
+                <div class="match-rank-body">
+                  <div class="match-rank-head">
+                    <strong>${route.name}</strong>
+                    <span class="match-rank-score">${entry.score}</span>
+                  </div>
+                  <div class="match-rank-bar"><span style="width:${pct}%"></span></div>
+                  <small>${reason}</small>
+                </div>
+              </li>
+            `;
+          })
+          .join('');
+
+        host.querySelectorAll('.match-rank-item').forEach((item) => {
+          item.addEventListener('click', () => {
+            const route = getAllRoutes().find(entry => entry.id === item.dataset.routeId);
+            if (route) updateSelectedRoute(route);
+          });
+        });
+
+        const note = document.getElementById('match-board-note');
+        if (note) {
+          const gap = ranked.length > 1 ? ranked[0].score - ranked[1].score : 0;
+          note.textContent = gap >= 4
+            ? `Clear winner · ${gap} points ahead`
+            : gap > 0
+              ? `Close call · ${gap} point${gap === 1 ? '' : 's'} ahead`
+              : 'Tie — pick either route';
+        }
+      }
+
+      /* ---------- Run match: chip picker drives the hidden selects ---------- */
+      function initMatchChips() {
+        document.querySelectorAll('.match-chip-set').forEach((set) => {
+          const fieldId = set.dataset.field;
+          const select = document.getElementById(fieldId);
+          if (!select) return;
+
+          set.querySelectorAll('.match-chip').forEach((chip) => {
+            chip.addEventListener('click', () => {
+              set.querySelectorAll('.match-chip').forEach((item) => {
+                item.classList.toggle('is-active', item === chip);
+              });
+              select.value = chip.dataset.value;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+          });
+        });
+      }
+
+      initMatchChips();
 
       function renderRoutes(filter = 'all', selectedId = recommendedRouteId) {
         currentFilter = filter;
@@ -2308,7 +2376,6 @@
       const shareDownloadBtn = document.getElementById('share-download-btn');
       if (shareDownloadBtn) shareDownloadBtn.addEventListener('click', downloadShareCard);
 
-      document.getElementById('recommend-btn').addEventListener('click', updateRecommendation);
       document.getElementById('save-plan-btn').addEventListener('click', savePlan);
 
       document.getElementById('gpx-upload-btn').addEventListener('click', async () => {

@@ -234,16 +234,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="detail-copy">
-          <p class="eyebrow">Route details</p>
-          <h1>${route.name}</h1>
-          <div class="detail-badges">
-            <span>${route.distance}</span>
-            <span>${route.tag}</span>
-            <span>${route.routeType}</span>
-          </div>
-          <p>${route.description}</p>
 
           <div class="detail-info-box">
             <h2>Route information</h2>
@@ -259,6 +249,16 @@
               <li><strong>Recommended use:</strong> ${route.recommendation}</li>
             </ul>
           </div>
+        </div>
+        <div class="detail-copy">
+          <p class="eyebrow">Route details</p>
+          <h1>${route.name}</h1>
+          <div class="detail-badges">
+            <span>${route.distance}</span>
+            <span>${route.tag}</span>
+            <span>${route.routeType}</span>
+          </div>
+          <p>${route.description}</p>
 
           <div class="detail-actions">
             <a class="primary-btn" href="routes.html">Back to routes</a>
@@ -300,14 +300,25 @@
               `).join('')}
             </ol>
           </section>
-
-          <section class="detail-block detail-block--session" aria-labelledby="session-heading">
-            <p class="eyebrow">Suggested session</p>
-            <h2 id="session-heading">What to do with it</h2>
-            <p>${depth.session}</p>
-          </section>
         `;
         detailRoot.appendChild(depthHost);
+
+        // "What to do with it" lives in the left-hand detail column, under Route information
+        const sessionHost = document.createElement('section');
+        sessionHost.className = 'detail-block detail-block--session';
+        sessionHost.setAttribute('aria-labelledby', 'session-heading');
+        sessionHost.innerHTML = `
+          <p class="eyebrow">Suggested session</p>
+          <h2 id="session-heading">What to do with it</h2>
+          <p>${depth.session}</p>
+        `;
+        const copyColumn = detailRoot.querySelector('.detail-copy');
+        const actions = copyColumn && copyColumn.querySelector('.detail-actions');
+        if (copyColumn && actions) {
+          copyColumn.insertBefore(sessionHost, actions);
+        } else if (copyColumn) {
+          copyColumn.appendChild(sessionHost);
+        }
       }
 
       const visual = document.querySelector('.route-visual');
