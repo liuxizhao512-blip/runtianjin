@@ -538,8 +538,8 @@
             when: 'After dark',
             note: 'A 120 m Ferris wheel built over the Yongle Bridge. The loop starts right under it — the wheel is lit after dark, which is why this route is the night-run pick.',
             art: 'ferris',
-            photo: 'imagestianjin-night.jpg.jpg',
-            photoPos: 'center 42%',
+            photo: 'images/landmarks/tianjin-eye.png',
+            photoPos: 'center 45%',
             facts: [
               ['Built', '2008'],
               ['Height', '120 m'],
@@ -556,8 +556,8 @@
             when: 'Any time',
             note: 'A 1927 steel truss bridge that opens to let boats through. Flat deck, wide footway — the smoothest crossing on the whole riverside.',
             art: 'bridge',
-            photo: 'haihe-riverside-run.jpg',
-            photoPos: 'center 55%',
+            photo: 'images/landmarks/jiefang-bridge.jpg',
+            photoPos: 'center 50%',
             facts: [
               ['Opened', '1927'],
               ['Type', 'Steel truss'],
@@ -574,8 +574,8 @@
             when: 'Sunset −30 min',
             note: 'The far bank opens up here: skyline on one side, water on the other. Best light is roughly 30 minutes before sunset.',
             art: 'skyline',
-            photo: 'imagestianjin-day.jpg.jpg',
-            photoPos: 'center 38%',
+            photo: 'images/landmarks/jinwan-plaza.jpg',
+            photoPos: 'center 45%',
             facts: [
               ['Best light', 'Sunset −30 min'],
               ['View', 'Skyline + water'],
@@ -594,8 +594,8 @@
             when: 'Morning shade',
             note: 'The park is built around a low wooded hill, so the loop rolls gently instead of staying dead flat. Shaded almost the whole way in summer.',
             art: 'hill',
-            photo: 'south-cuiping-park-loop.jpg',
-            photoPos: 'center 45%',
+            photo: 'images/landmarks/cuiping-hill.jpg',
+            photoPos: 'center 50%',
             facts: [
               ['Terrain', 'Low wooded hill'],
               ['Profile', 'Rolling, not flat'],
@@ -612,8 +612,8 @@
             when: 'Winter',
             note: 'A dry ski slope sits inside the park. In winter it is the busiest corner; the rest of the year it is a quiet landmark to run past.',
             art: 'slope',
-            photo: 'south-cuiping-park-loop.jpg',
-            photoPos: 'center 70%',
+            photo: 'images/landmarks/cuiping-ski.jpg',
+            photoPos: 'center 50%',
             facts: [
               ['Type', 'Dry ski slope'],
               ['Busiest', 'Winter'],
@@ -632,8 +632,8 @@
             when: 'Early morning',
             note: 'The calmer of the two lakes. The path hugs the shore, so you get a continuous water line on your left for most of this stretch.',
             art: 'lake',
-            photo: 'water-park-lakeside-loop.jpg',
-            photoPos: 'center 40%',
+            photo: 'images/landmarks/water-park-westlake.jpg',
+            photoPos: 'center 50%',
             facts: [
               ['Water', 'Calm, sheltered'],
               ['Path', 'Hugs the shore'],
@@ -650,8 +650,8 @@
             when: 'Weekday mornings',
             note: 'The zoo entrance sits at the south end of the loop. Expect families and strollers here on weekends — the one section worth slowing down for.',
             art: 'zoo',
-            photo: 'water-park-lakeside-loop.jpg',
-            photoPos: 'center 62%',
+            photo: 'images/landmarks/tianjin-zoo.png',
+            photoPos: 'center 50%',
             facts: [
               ['Position', 'South end of loop'],
               ['Busiest', 'Weekends'],
@@ -668,8 +668,8 @@
             when: 'Golden hour',
             note: 'Small boat dock on the east lake. Open sight lines and a wide paved apron make it a natural turnaround point.',
             art: 'dock',
-            photo: 'water-park-lakeside-loop.jpg',
-            photoPos: 'center 25%',
+            photo: 'images/landmarks/water-park-eastdock.png',
+            photoPos: 'center 50%',
             facts: [
               ['Type', 'Small boat dock'],
               ['Surface', 'Wide paved apron'],
@@ -688,8 +688,8 @@
             when: 'Match days',
             note: 'Home ground of Tianjin Jinmen Tiger. On match days the surrounding roads close to traffic, which turns the approach into a wide open running lane.',
             art: 'stadium',
-            photo: 'binhai-teda-coastal-path.jpg',
-            photoPos: 'center 45%',
+            photo: 'images/landmarks/teda-stadium.jpg',
+            photoPos: 'center 50%',
             facts: [
               ['Home of', 'Tianjin Jinmen Tiger'],
               ['Match days', 'Roads close'],
@@ -706,8 +706,8 @@
             when: 'Weekends',
             note: 'The modern business district: glass towers, wide empty pavements, and almost no pedestrians at weekends. This is where the route feels fastest.',
             art: 'towers',
-            photo: 'binhai-teda-coastal-path.jpg',
-            photoPos: 'center 30%',
+            photo: 'images/landmarks/teda-msd.jpg',
+            photoPos: 'center 50%',
             facts: [
               ['Type', 'Business district'],
               ['Pavements', 'Wide, empty'],
@@ -724,8 +724,8 @@
             when: 'Any time',
             note: 'The one real junction on the route. Cross under the flyover rather than over it — the underpass keeps you off the traffic lights.',
             art: 'road',
-            photo: 'binhai-teda-coastal-path.jpg',
-            photoPos: 'center 60%',
+            photo: 'images/landmarks/beihai-road.jpg',
+            photoPos: 'center 50%',
             facts: [
               ['Type', 'Flyover junction'],
               ['Crossing', 'Underpass'],
@@ -855,14 +855,19 @@
       function closeLandmarkDrawer() {
         const drawer = getDrawer();
         if (!drawer) return;
+        // Move focus out before hiding the drawer, otherwise the browser warns
+        // about aria-hidden being applied to an ancestor of the focused node.
+        const trigger = lastDrawerTrigger;
+        lastDrawerTrigger = null;
+        if (trigger && typeof trigger.focus === 'function') {
+          trigger.focus();
+        } else if (drawer.contains(document.activeElement)) {
+          document.activeElement.blur();
+        }
         drawer.classList.remove('is-open');
         drawer.setAttribute('aria-hidden', 'true');
         const scrim = getScrim();
         if (scrim) scrim.classList.remove('is-open');
-        if (lastDrawerTrigger && typeof lastDrawerTrigger.focus === 'function') {
-          lastDrawerTrigger.focus();
-        }
-        lastDrawerTrigger = null;
       }
 
       document.addEventListener('click', (event) => {

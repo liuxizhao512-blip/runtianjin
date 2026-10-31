@@ -1,0 +1,24 @@
+absent  probe2.txt
+absent  probe3.txt
+absent  probe_out.txt
+absent  probe_err.txt
+absent  probe_result.txt
+absent  run_out.txt
+absent  fetch_log.txt
+absent  ls.txt
+removed _ls.txt
+absent  cleanup_report.txt
+absent  images/landmarks/water-park-westlake.jpg
+
+--- images/landmarks ---
+beihai-road.jpg                366774 bytes
+cuiping-hill.jpg               108571 bytes
+cuiping-ski.png                 28607 bytes
+jiefang-bridge.jpg             253012 bytes
+jinwan-plaza.png               339628 bytes
+teda-msd.jpg                   701395 bytes
+teda-stadium.jpg               190373 bytes
+tianjin-eye.jpg                124918 bytes
+tianjin-zoo.jpg                388252 bytes
+water-park-eastdock.jpg         85896 bytes
+water-park-westlake.png        339628 bytes
