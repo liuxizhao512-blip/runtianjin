@@ -1,0 +1,8 @@
+source: 1290x1576 -> square crop 1290x1290
+favicon-32x32.png (2702 bytes)
+favicon-180x180.png (59797 bytes)
+favicon-192x192.png (67336 bytes)
+favicon-512x512.png (389931 bytes)
+favicon-maskable-512x512.png (266862 bytes)
+run-tianjin-brand-mark-square.png (389931 bytes)
+favicon.ico (125164 bytes)
