@@ -2448,6 +2448,235 @@ img {
   line-height: 1.5;
 }
 
+/* Button inside the Leaflet popup that opens the full photo card. */
+.scenery-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 5px 10px;
+  border: 1px solid rgba(216, 107, 57, 0.4);
+  border-radius: 999px;
+  background: rgba(216, 107, 57, 0.08);
+  color: #a04f28;
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.scenery-more:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+
+/* ---------- Landmark photo drawer ----------
+   Slides in from the right when a landmark marker or chip is clicked.
+   Kept as one shared element so only a single card is ever open. */
+.landmark-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(24, 26, 29, 0.34);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.26s ease, visibility 0.26s ease;
+}
+
+.landmark-scrim.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.landmark-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1201;
+  display: flex;
+  flex-direction: column;
+  width: min(400px, 92vw);
+  height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  box-shadow: -18px 0 48px rgba(24, 26, 29, 0.22);
+  transform: translateX(102%);
+  visibility: hidden;
+  transition: transform 0.32s cubic-bezier(0.22, 0.68, 0.32, 1), visibility 0.32s;
+}
+
+.landmark-drawer.is-open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.landmark-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(24, 26, 29, 0.2);
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.landmark-close:hover {
+  background: #fff;
+  transform: scale(1.06);
+}
+
+.landmark-photo {
+  position: relative;
+  flex-shrink: 0;
+  height: 210px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #e8e2da;
+}
+
+.landmark-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(24, 26, 29, 0.42), transparent 58%);
+}
+
+.landmark-photo-tag {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  z-index: 1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #a04f28;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.landmark-content {
+  padding: 20px 22px 28px;
+}
+
+.landmark-eyebrow {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(216, 107, 57, 0.12);
+  color: #a04f28;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.landmark-content h2 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-size: 1.32rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.landmark-lede {
+  margin: 0 0 16px;
+  color: var(--ink);
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.landmark-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.landmark-fact {
+  padding: 9px 11px;
+  border: 1px solid rgba(35, 38, 42, 0.1);
+  border-radius: 10px;
+  background: rgba(35, 38, 42, 0.025);
+}
+
+.landmark-fact small {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.landmark-fact strong {
+  display: block;
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.landmark-detail {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.landmark-tip {
+  padding: 12px 14px;
+  border-left: 3px solid var(--orange);
+  border-radius: 0 10px 10px 0;
+  background: rgba(216, 107, 57, 0.07);
+}
+
+.landmark-tip span {
+  display: block;
+  margin-bottom: 4px;
+  color: #a04f28;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.landmark-tip p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 560px) {
+  .landmark-drawer {
+    width: 100%;
+  }
+
+  .landmark-photo {
+    height: 180px;
+  }
+
+  .landmark-content {
+    padding: 18px 18px 24px;
+  }
+}
+
 .map-overlay-bar {
   display: flex;
   flex-wrap: wrap;
@@ -2549,7 +2778,9 @@ img {
   border: 1px solid rgba(35, 38, 42, 0.12);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.3);
-  overflow: hidden;
+  /* No overflow clipping: the group must grow with its content, otherwise
+     tall panels (route detail card) get cut off mid-way. */
+  overflow: visible;
 }
 
 .side-group + .side-group {
@@ -3404,16 +3635,16 @@ img {
 .route-breakdown {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 6px;
+  gap: 6px;
+  margin-top: 4px;
 }
 
 .route-analysis-box {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 8px;
-  padding: 10px;
+  gap: 6px 10px;
+  margin-top: 6px;
+  padding: 8px 10px;
   border-radius: 12px;
   background: rgba(255,255,255,0.52);
   border: 1px solid rgba(35, 38, 42, 0.08);
@@ -3422,7 +3653,7 @@ img {
 .analysis-row {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0;
   min-width: 0;
 }
 
@@ -3432,23 +3663,24 @@ img {
 
 .analysis-row span {
   color: #7b7f86;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
+  line-height: 1.3;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .analysis-row strong {
   color: #1b1f24;
-  font-size: 0.82rem;
-  line-height: 1.5;
+  font-size: 0.8rem;
+  line-height: 1.35;
 }
 
 .breakdown-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
-  gap: 2px 10px;
-  padding: 8px 10px;
+  gap: 1px 10px;
+  padding: 6px 10px;
   border-radius: 10px;
   background: rgba(255,255,255,0.5);
   border: 1px solid rgba(35, 38, 42, 0.08);
@@ -3891,18 +4123,20 @@ img {
 }
 
 /* ---------- Map page: full-width band below the map ---------- */
+/* Panels stack vertically and each one spans the full row, so a tall panel
+   (Training) never leaves a dead column next to a short one (Compare). */
 .map-wide-band {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 24px;
   margin-top: 24px;
-  align-items: start;
 }
 
 .map-wide-panel {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;
   padding: 20px 22px 22px;
   border: 1px solid rgba(35, 38, 42, 0.12);
   border-radius: 20px;
@@ -3933,6 +4167,7 @@ img {
 }
 
 .comparison-scroll {
+  min-width: 0;
   overflow-x: auto;
 }
 
@@ -3952,20 +4187,22 @@ img {
 
 .training-columns {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+  min-width: 0;
 }
 
 .training-columns-side {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 @media (max-width: 1100px) {
-  .map-wide-band {
-    grid-template-columns: 1fr;
+  .training-columns {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
@@ -4319,16 +4556,15 @@ img {
   gap: 20px;
 }
 
-/* The sidebar is much taller than the sticky map stage, so give it its own
-   scroll area that matches the viewport instead of letting it run off-page. */
+/* The sidebar is taller than the sticky map stage. Let it scroll with the page
+   instead of trapping it in a viewport-height box, so nothing is squeezed. */
 .map-sidebar {
   position: sticky;
   top: 20px;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  align-self: start;
+  max-height: none;
+  overflow: visible;
   padding-right: 4px;
-  scrollbar-width: thin;
 }
 
 .map-sidebar::-webkit-scrollbar {

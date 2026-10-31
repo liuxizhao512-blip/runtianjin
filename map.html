@@ -162,7 +162,7 @@
                 <div class="mini-map-info">
                   <div class="mini-map-head">
                     <h3>Haihe Riverside</h3>
-                    <span class="mini-map-badge">8.0 km</span>
+                    <span class="mini-map-badge">7.7 km</span>
                   </div>
                   <p class="mini-map-summary">Flat city waterfront route great for dusk runs and easy mileage.</p>
                   <div class="mini-map-stats">
@@ -213,7 +213,7 @@
                 <div class="mini-map-info">
                   <div class="mini-map-head">
                     <h3>Binhai TEDA Coastal</h3>
-                    <span class="mini-map-badge">7.0 km</span>
+                    <span class="mini-map-badge">6.7 km</span>
                   </div>
                   <p class="mini-map-summary">Long and steady coastal route for aerobic work and weekend mileage.</p>
                   <div class="mini-map-stats">
@@ -257,7 +257,7 @@
                 <div id="active-route-card" class="route-detail-card">
                   <h3>Haihe Riverside</h3>
                   <div class="detail-metrics">
-                    <span>8 km</span>
+                    <span>7.7 km</span>
                     <span>City center</span>
                   </div>
                   <p>Flat city waterfront route great for dusk runs and easy mileage.</p>
@@ -395,10 +395,8 @@
             </div>
             <div class="training-columns">
               <div id="training-suggestion-card" class="training-suggestion-card"></div>
-              <div class="training-columns-side">
-                <div id="training-plan-card" class="training-plan-card"></div>
-                <div id="weekly-plan" class="weekly-plan"></div>
-              </div>
+              <div id="training-plan-card" class="training-plan-card"></div>
+              <div id="weekly-plan" class="weekly-plan"></div>
             </div>
           </section>
         </div>
@@ -433,7 +431,7 @@
           name: 'Haihe Riverside',
           color: '#2d76d7',
           tags: ['night', 'river'],
-          distance: 8,
+          distance: 7.7,
           nearCenter: true,
           bestTime: 'dusk',
           score: 92,
@@ -505,7 +503,7 @@
           name: 'Binhai TEDA Coastal',
           color: '#8f5edc',
           tags: ['distance', 'river'],
-          distance: 7,
+          distance: 6.7,
           nearCenter: false,
           bestTime: 'weekend',
           score: 90,
@@ -539,7 +537,17 @@
             kind: 'Landmark',
             when: 'After dark',
             note: 'A 120 m Ferris wheel built over the Yongle Bridge. The loop starts right under it — the wheel is lit after dark, which is why this route is the night-run pick.',
-            art: 'ferris'
+            art: 'ferris',
+            photo: 'imagestianjin-night.jpg.jpg',
+            photoPos: 'center 42%',
+            facts: [
+              ['Built', '2008'],
+              ['Height', '120 m'],
+              ['Spans', 'Yongle Bridge'],
+              ['Ride time', '~28 min']
+            ],
+            detail: 'The only Ferris wheel in the world built on top of a bridge. It carries 48 passenger capsules over the Haihe, and the crossing traffic runs underneath you. At night the rim is lit in a rotating colour cycle, which is why the riverside path fills up after 19:00.',
+            runTip: 'Start here and head south — you get the lit wheel behind you and the quieter stretch of the river ahead.'
           },
           {
             name: 'Jiefang Bridge',
@@ -547,7 +555,17 @@
             kind: 'Bridge',
             when: 'Any time',
             note: 'A 1927 steel truss bridge that opens to let boats through. Flat deck, wide footway — the smoothest crossing on the whole riverside.',
-            art: 'bridge'
+            art: 'bridge',
+            photo: 'haihe-riverside-run.jpg',
+            photoPos: 'center 55%',
+            facts: [
+              ['Opened', '1927'],
+              ['Type', 'Steel truss'],
+              ['Feature', 'Opens for boats'],
+              ['Deck', 'Flat, wide footway']
+            ],
+            detail: 'One of the oldest surviving bridges over the Haihe, and still a working bascule bridge — the deck splits and lifts to let taller boats pass. The steel trusses are painted a deep grey-green, and the footway is separated from traffic, so you never break stride crossing it.',
+            runTip: 'The smoothest river crossing on the route. Use it to switch banks without losing rhythm.'
           },
           {
             name: 'Jinwan Plaza riverbank',
@@ -555,7 +573,17 @@
             kind: 'City view',
             when: 'Sunset −30 min',
             note: 'The far bank opens up here: skyline on one side, water on the other. Best light is roughly 30 minutes before sunset.',
-            art: 'skyline'
+            art: 'skyline',
+            photo: 'imagestianjin-day.jpg.jpg',
+            photoPos: 'center 38%',
+            facts: [
+              ['Best light', 'Sunset −30 min'],
+              ['View', 'Skyline + water'],
+              ['Bank', 'South / far side'],
+              ['Surface', 'Paved promenade']
+            ],
+            detail: 'The river bends here, so the far bank opens into a long skyline view instead of the close-in buildings you get further north. The promenade is wide and paved, with low steps down to the water on the plaza side.',
+            runTip: 'Time your finish for golden hour. The last kilometre faces west, so you run into the light rather than away from it.'
           }
         ],
         park: [
@@ -565,7 +593,17 @@
             kind: 'Hill',
             when: 'Morning shade',
             note: 'The park is built around a low wooded hill, so the loop rolls gently instead of staying dead flat. Shaded almost the whole way in summer.',
-            art: 'hill'
+            art: 'hill',
+            photo: 'south-cuiping-park-loop.jpg',
+            photoPos: 'center 45%',
+            facts: [
+              ['Terrain', 'Low wooded hill'],
+              ['Profile', 'Rolling, not flat'],
+              ['Shade', 'Most of the loop'],
+              ['Best season', 'Summer']
+            ],
+            detail: 'The whole park is arranged around this hill, which is why the loop is never quite flat — there are gentle rises rather than one climb. Mature trees cover most of the path, so it stays noticeably cooler than the open riverside in July and August.',
+            runTip: 'The shade makes this the best summer option. Expect a few short rises; shorten your stride rather than pushing uphill.'
           },
           {
             name: 'Ski slope',
@@ -573,7 +611,17 @@
             kind: 'Landmark',
             when: 'Winter',
             note: 'A dry ski slope sits inside the park. In winter it is the busiest corner; the rest of the year it is a quiet landmark to run past.',
-            art: 'slope'
+            art: 'slope',
+            photo: 'south-cuiping-park-loop.jpg',
+            photoPos: 'center 70%',
+            facts: [
+              ['Type', 'Dry ski slope'],
+              ['Busiest', 'Winter'],
+              ['Position', 'Inside the park'],
+              ['Rest of year', 'Quiet']
+            ],
+            detail: 'An artificial surface slope built inside the park boundary, so you run past it rather than around it. In winter it draws a crowd and the surrounding paths get busy; from spring to autumn it is just a landmark on the loop.',
+            runTip: 'A good mental marker — once you pass the slope you are roughly two-thirds through the loop.'
           }
         ],
         water: [
@@ -583,7 +631,17 @@
             kind: 'Water',
             when: 'Early morning',
             note: 'The calmer of the two lakes. The path hugs the shore, so you get a continuous water line on your left for most of this stretch.',
-            art: 'lake'
+            art: 'lake',
+            photo: 'water-park-lakeside-loop.jpg',
+            photoPos: 'center 40%',
+            facts: [
+              ['Water', 'Calm, sheltered'],
+              ['Path', 'Hugs the shore'],
+              ['Water side', 'Left'],
+              ['Best time', 'Early morning']
+            ],
+            detail: 'The western of the two lakes in the park, and the quieter one — the shoreline is more sheltered, so the surface stays flat even when it is windy elsewhere. The path runs directly along the water for most of this stretch.',
+            runTip: 'Use this section to settle into an easy cadence. Flat, shaded, and the water line gives you a natural sense of pace.'
           },
           {
             name: 'Tianjin Zoo',
@@ -591,7 +649,17 @@
             kind: 'Landmark',
             when: 'Weekday mornings',
             note: 'The zoo entrance sits at the south end of the loop. Expect families and strollers here on weekends — the one section worth slowing down for.',
-            art: 'zoo'
+            art: 'zoo',
+            photo: 'water-park-lakeside-loop.jpg',
+            photoPos: 'center 62%',
+            facts: [
+              ['Position', 'South end of loop'],
+              ['Busiest', 'Weekends'],
+              ['Hazard', 'Strollers, families'],
+              ['Best time', 'Weekday AM']
+            ],
+            detail: 'The zoo entrance opens directly onto the lakeside path, which makes this the one genuinely congested point on an otherwise quiet loop. Weekday mornings are close to empty; weekend afternoons are not.',
+            runTip: 'Slow down here rather than weaving. It is a 200 m stretch — losing five seconds is cheaper than clipping a stroller.'
           },
           {
             name: 'East Lake dock',
@@ -599,7 +667,17 @@
             kind: 'Water',
             when: 'Golden hour',
             note: 'Small boat dock on the east lake. Open sight lines and a wide paved apron make it a natural turnaround point.',
-            art: 'dock'
+            art: 'dock',
+            photo: 'water-park-lakeside-loop.jpg',
+            photoPos: 'center 25%',
+            facts: [
+              ['Type', 'Small boat dock'],
+              ['Surface', 'Wide paved apron'],
+              ['View', 'Open sight lines'],
+              ['Best light', 'Golden hour']
+            ],
+            detail: 'A small dock on the eastern lake where rowing boats are hired out. The paved apron around it is wide and open, with clear sight lines across the water — the most photogenic point on the loop.',
+            runTip: 'Natural turnaround. If you are extending the run, this is where to add an extra lap rather than doubling back early.'
           }
         ],
         coastal: [
@@ -609,7 +687,17 @@
             kind: 'Landmark',
             when: 'Match days',
             note: 'Home ground of Tianjin Jinmen Tiger. On match days the surrounding roads close to traffic, which turns the approach into a wide open running lane.',
-            art: 'stadium'
+            art: 'stadium',
+            photo: 'binhai-teda-coastal-path.jpg',
+            photoPos: 'center 45%',
+            facts: [
+              ['Home of', 'Tianjin Jinmen Tiger'],
+              ['Match days', 'Roads close'],
+              ['Approach', 'Wide open lane'],
+              ['Position', 'Route start']
+            ],
+            detail: 'The stadium anchors the start of the coastal route. On match days the surrounding roads are closed to traffic, which turns the approach into an unusually wide, car-free running lane — the best surface on the whole route.',
+            runTip: 'Check the fixture list. A match day gives you a closed road; a normal day gives you a quiet pavement.'
           },
           {
             name: 'TEDA MSD circle',
@@ -617,7 +705,17 @@
             kind: 'City view',
             when: 'Weekends',
             note: 'The modern business district: glass towers, wide empty pavements, and almost no pedestrians at weekends. This is where the route feels fastest.',
-            art: 'towers'
+            art: 'towers',
+            photo: 'binhai-teda-coastal-path.jpg',
+            photoPos: 'center 30%',
+            facts: [
+              ['Type', 'Business district'],
+              ['Pavements', 'Wide, empty'],
+              ['Weekends', 'Almost no foot traffic'],
+              ['Feel', 'Fastest section']
+            ],
+            detail: 'The modern business core of TEDA: glass towers, broad granite pavements, and almost nobody around at weekends. The long straight past the towers is flat and uninterrupted, which makes it the easiest place on the route to hold a target pace.',
+            runTip: 'This is the block to hold goal pace. Flat, uninterrupted, and easy to measure against the buildings.'
           },
           {
             name: 'Beihai Road interchange',
@@ -625,7 +723,17 @@
             kind: 'Waypoint',
             when: 'Any time',
             note: 'The one real junction on the route. Cross under the flyover rather than over it — the underpass keeps you off the traffic lights.',
-            art: 'road'
+            art: 'road',
+            photo: 'binhai-teda-coastal-path.jpg',
+            photoPos: 'center 60%',
+            facts: [
+              ['Type', 'Flyover junction'],
+              ['Crossing', 'Underpass'],
+              ['Traffic lights', 'Avoidable'],
+              ['Position', 'Mid route']
+            ],
+            detail: 'The only real junction on an otherwise continuous route. The flyover carries the main road overhead, and the pedestrian underpass runs beneath it — taking the underpass keeps you off the traffic lights entirely.',
+            runTip: 'Take the underpass, not the surface crossing. It costs nothing in time and keeps your rhythm intact.'
           }
         ]
       };
@@ -669,6 +777,9 @@
                 <strong>${spot.name}</strong>
                 ${spot.when ? `<span class="scenery-when">Best: ${spot.when}</span>` : ''}
                 <p>${spot.note}</p>
+                <button class="scenery-more" type="button" data-route="${route.id}" data-index="${index}">
+                  Open photo card
+                </button>
               </div>
             </div>
           `, { maxWidth: 260, className: 'scenery-popup-wrap' });
@@ -678,6 +789,99 @@
           });
         });
       }
+
+      /* ---------- Landmark drawer ----------
+         Clicking a landmark marker or chip slides a photo card in from the
+         right. The drawer is a single shared element so only one card is ever
+         open, and it is rebuilt from sceneryData on each open.
+         The nodes live after this script tag, so they are looked up lazily. */
+      let lastDrawerTrigger = null;
+
+      function getDrawer() {
+        return document.getElementById('landmark-drawer');
+      }
+
+      function getScrim() {
+        return document.getElementById('landmark-scrim');
+      }
+
+      function openLandmarkDrawer(routeId, index, trigger) {
+        const spots = sceneryData[routeId];
+        const spot = spots && spots[index];
+        const drawer = getDrawer();
+        if (!spot || !drawer) return;
+
+        lastDrawerTrigger = trigger || null;
+
+        const facts = (spot.facts || [])
+          .map(([label, value]) => `
+            <div class="landmark-fact">
+              <small>${label}</small>
+              <strong>${value}</strong>
+            </div>
+          `)
+          .join('');
+
+        drawer.innerHTML = `
+          <button class="landmark-close" type="button" aria-label="Close landmark card">&times;</button>
+          <div class="landmark-photo" style="background-image: url('${spot.photo}'); background-position: ${spot.photoPos || 'center'};">
+            <span class="landmark-photo-tag">${spot.kind}</span>
+          </div>
+          <div class="landmark-content">
+            <span class="landmark-eyebrow">${spot.when ? 'Best: ' + spot.when : 'Along the route'}</span>
+            <h2>${spot.name}</h2>
+            <p class="landmark-lede">${spot.note}</p>
+            ${facts ? `<div class="landmark-facts">${facts}</div>` : ''}
+            <p class="landmark-detail">${spot.detail || ''}</p>
+            ${spot.runTip ? `
+              <div class="landmark-tip">
+                <span>Runner's note</span>
+                <p>${spot.runTip}</p>
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        const scrim = getScrim();
+        if (scrim) scrim.classList.add('is-open');
+
+        const closeBtn = drawer.querySelector('.landmark-close');
+        closeBtn.addEventListener('click', closeLandmarkDrawer);
+        closeBtn.focus();
+      }
+
+      function closeLandmarkDrawer() {
+        const drawer = getDrawer();
+        if (!drawer) return;
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        const scrim = getScrim();
+        if (scrim) scrim.classList.remove('is-open');
+        if (lastDrawerTrigger && typeof lastDrawerTrigger.focus === 'function') {
+          lastDrawerTrigger.focus();
+        }
+        lastDrawerTrigger = null;
+      }
+
+      document.addEventListener('click', (event) => {
+        if (event.target.closest('#landmark-scrim')) {
+          closeLandmarkDrawer();
+          return;
+        }
+        const btn = event.target.closest('.scenery-more');
+        if (btn) {
+          openLandmarkDrawer(btn.dataset.route, Number(btn.dataset.index), btn);
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        const drawer = getDrawer();
+        if (event.key === 'Escape' && drawer && drawer.classList.contains('is-open')) {
+          closeLandmarkDrawer();
+        }
+      });
 
       function highlightSceneryCard(routeId, index) {
         const card = document.querySelector(`.mini-map-card[data-route-id="${routeId}"]`);
@@ -716,6 +920,7 @@
             if (!map || !spot) return;
             map.setView([spot.lat, spot.lon], Math.max(map.getZoom(), 15), { animate: true });
             highlightSceneryCard(route.id, index);
+            openLandmarkDrawer(route.id, index, chip);
           });
         });
       }
@@ -2442,7 +2647,9 @@
       renderComparisonTable();
       renderTrainingSuggestion(routeConfigs[0]);
       renderWeeklyPlan(routeConfigs[0]);
-      renderRouteBreakdown(routeConfigs[0]);
+      // Build the full detail card first so #route-difficulty / #route-audience /
+      // #route-risk exist before renderRouteBreakdown writes into them.
+      updateSelectedRoute(routeConfigs[0]);
       updateDashboardSummary(routeConfigs[0].name);
       renderHistoryOverlay();
       loadWeather();
@@ -2468,5 +2675,8 @@
       }
       setTimeout(refreshMiniMaps, 400);
     </script>
+
+    <div class="landmark-scrim" id="landmark-scrim"></div>
+    <aside class="landmark-drawer" id="landmark-drawer" aria-hidden="true" aria-label="Landmark photo card"></aside>
   </body>
 </html>

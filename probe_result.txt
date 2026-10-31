@@ -1,0 +1,7 @@
+openverse      ERR  URLError: <urlopen error timed out>
+pixabay        ERR  HTTPError: HTTP Error 400: Bad Request
+wikidata       ERR  URLError: <urlopen error _ssl.c:990: The handshake operation timed out>
+dbpedia        OK   11511 bytes
+unsplash_img   OK   17239 bytes
+pexels_img     OK   8831 bytes
+pixabay_img    OK   135586 bytes
