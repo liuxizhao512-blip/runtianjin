@@ -31,9 +31,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header id="site-header"></header>
 
-    <main class="page-shell">
+    <main id="main" class="page-shell">
       <section class="section-block tips-shell">
         <div class="tip-summary">
           <div class="tip-summary-copy">
@@ -84,7 +85,7 @@
             <span class="run-flow-index">3</span>
             <h3>After the run</h3>
             <ul>
-              <li>Walk 5–8 minutes to lower your heart rate gradually.</li>
+              <li>Walk 5–10 minutes to lower your heart rate gradually.</li>
               <li>Stretch calves, glutes, and hamstrings, then rehydrate.</li>
             </ul>
           </li>
@@ -181,7 +182,7 @@
           <article class="local-card">
             <p class="local-tag">Summer</p>
             <h3>Heat and humidity</h3>
-            <p>Tianjin summers drain energy fast. Run early morning or late evening, avoid noon exposure, and keep water on hand. Slow your pace by 15–30 seconds per kilometre in high humidity.</p>
+            <p>Tianjin summers drain energy fast. Run early morning or late evening, avoid noon exposure, and keep water on hand. Slow your pace by 15–20 seconds per kilometre in high humidity.</p>
             <a class="local-link" href="detail.html?route=nancui">South Cuiping Park Loop →</a>
           </article>
         </div>
@@ -210,31 +211,32 @@
             <h2>Questions and answers</h2>
           </div>
 
-          <div class="ai-ask" id="ai-ask">
-            <div class="ai-ask-head">
-              <p class="eyebrow">Ask the guide</p>
-              <h3>Ask anything about running in Tianjin.</h3>
-              <p class="ai-ask-lead">
-                Routes, pacing, gear, or local conditions — answers are based on this site's route
-                guide. Common questions are listed below.
+          <div class="qa" id="qa">
+            <div class="qa-head">
+              <p class="eyebrow">Route Q&amp;A</p>
+              <h3>Search the route guide.</h3>
+              <p class="qa-lead">
+                Routes, pacing, gear, or local conditions — answers are retrieved from this site's
+                route guide by keyword matching. No AI model is involved, so answers are limited to
+                what the guide actually covers. Common questions are listed below.
               </p>
             </div>
 
-            <form class="ai-ask-form" autocomplete="off">
-              <label class="ai-ask-label" for="ai-ask-input">Your question</label>
-              <div class="ai-ask-row">
+            <form class="qa-form" autocomplete="off">
+              <label class="qa-label" for="qa-input">Your question</label>
+              <div class="qa-row">
                 <input
-                  class="ai-ask-input"
-                  id="ai-ask-input"
+                  class="qa-input"
+                  id="qa-input"
                   type="text"
                   placeholder="e.g. Is the Haihe route safe after dark?"
                   maxlength="300"
                 />
-                <button class="ai-ask-submit" type="submit">Ask</button>
+                <button class="qa-submit" type="submit">Search</button>
               </div>
             </form>
 
-            <div class="ai-ask-chips" aria-label="Example questions">
+            <div class="qa-chips" aria-label="Example questions">
               <button class="ai-chip" type="button" data-question="Which route should I pick for my first run?">
                 First run
               </button>
@@ -249,9 +251,9 @@
               </button>
             </div>
 
-            <div class="ai-ask-answer" hidden>
-              <p class="ai-ask-answer-meta"></p>
-              <p class="ai-ask-answer-body"></p>
+            <div class="qa-answer" hidden>
+              <p class="qa-answer-meta"></p>
+              <p class="qa-answer-body"></p>
             </div>
           </div>
 
@@ -296,11 +298,11 @@
     </main>
 
     <footer class="site-footer">
-      <p>© 2026 Run Tianjin · Tianjin running route guide</p>
+      <p>漏 2026 Run Tianjin 路 Tianjin running route guide</p>
     </footer>
 
     <script src="nav.js"></script>
     <script src="knowledge.js"></script>
-    <script src="ai-ask.js"></script>
+    <script src="qa.js"></script>
   </body>
 </html>

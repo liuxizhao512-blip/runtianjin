@@ -31,9 +31,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header id="site-header"></header>
 
-    <main class="page-shell detail-page">
+    <main id="main" class="page-shell detail-page">
       <article id="route-detail" class="detail-card" aria-live="polite"></article>
     </main>
 
@@ -213,7 +214,7 @@
       detailRoot.innerHTML = `
         <div class="detail-visual">
           <div class="route-visual" role="button" tabindex="0" aria-label="View ${route.name} image">
-            <img src="${route.image || ''}" alt="${route.name}" class="route-photo" />
+            <img src="${route.image || ''}" alt="${route.name}" class="route-photo" loading="lazy" decoding="async" />
           </div>
 
           <div class="route-visual-card">
@@ -329,7 +330,7 @@
         const openModal = () => {
           modal.classList.add('show');
           modal.setAttribute('aria-hidden', 'false');
-          modalImage.innerHTML = `<img src="${route.image || ''}" alt="${route.name}" />`;
+          modalImage.innerHTML = `<img src="${route.image || ''}" alt="${route.name}" decoding="async" />`;
         };
 
         visual.addEventListener('click', openModal);

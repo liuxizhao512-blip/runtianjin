@@ -1,16 +1,16 @@
-// Local running assistant for the Tips page.
-// Runs entirely in the browser — no API key, no network request.
+﻿// Local running assistant for the Tips page.
+// Runs entirely in the browser —no API key, no network request.
 // Answers are matched against knowledge.js (window.RUN_TIANJIN_KNOWLEDGE).
 (function () {
-  const root = document.getElementById('ai-ask');
+  const root = document.getElementById('qa');
   if (!root) return;
 
-  const form = root.querySelector('.ai-ask-form');
-  const input = root.querySelector('.ai-ask-input');
-  const submit = root.querySelector('.ai-ask-submit');
-  const answerBox = root.querySelector('.ai-ask-answer');
-  const answerBody = root.querySelector('.ai-ask-answer-body');
-  const answerMeta = root.querySelector('.ai-ask-answer-meta');
+  const form = root.querySelector('.qa-form');
+  const input = root.querySelector('.qa-input');
+  const submit = root.querySelector('.qa-submit');
+  const answerBox = root.querySelector('.qa-answer');
+  const answerBody = root.querySelector('.qa-answer-body');
+  const answerMeta = root.querySelector('.qa-answer-meta');
   const chips = root.querySelectorAll('.ai-chip');
 
   const knowledge = window.RUN_TIANJIN_KNOWLEDGE || '';
@@ -327,7 +327,7 @@
     const bestSection = rankedSections[0];
     const sectionScore = bestSection ? bestSection.score : 0;
 
-    // A strong topic match (gear, weather, pacing, plan…) wins over a route card.
+    // A strong topic match (gear, weather, pacing, plan— wins over a route card.
     if (bestSection && sectionScore >= 4) {
       const body = answerFromSection(bestSection.section, tokens);
       return routeAnswer ? routeAnswer + '\n\n' + body : body;

@@ -31,9 +31,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header id="site-header"></header>
 
-    <main class="page-shell editorial-page">
+    <main id="main" class="page-shell editorial-page">
       <section class="hero brand-hero editorial-hero">
         <div class="hero-copy">
           <p class="eyebrow">Tianjin running guide</p>
@@ -64,10 +65,15 @@
         </div>
 
         <div class="hero-map" aria-label="Tianjin route overview">
-          <div class="map-point p1">Haihe</div>
-          <div class="map-point p2">Cuiping</div>
-          <div class="map-point p3">Water Park</div>
-          <div class="map-point p4">TEDA</div>
+          <img
+            class="hero-map-img"
+            src="tianjin-routes-map.jpg"
+            alt="Map of the four Run Tianjin routes across the Haihe riverside, South Cuiping Park, Water Park, and Binhai TEDA"
+            width="990"
+            height="413"
+            loading="eager"
+            decoding="async"
+          />
         </div>
       </section>
 
@@ -115,8 +121,8 @@
           </p>
         </div>
         <div class="story-visual">
-          <img class="story-photo" src="imagestianjin-night.jpg.jpg" alt="Tianjin riverside at night" />
-          <img class="story-photo" src="imagestianjin-day.jpg.jpg" alt="Tianjin riverside in daytime" />
+          <img class="story-photo" src="images/tianjin-night.jpg" alt="Tianjin riverside at night" loading="lazy" decoding="async" width="1200" height="800" />
+          <img class="story-photo" src="images/tianjin-day.jpg" alt="Tianjin riverside in daytime" loading="lazy" decoding="async" width="1200" height="800" />
         </div>
       </section>
 
