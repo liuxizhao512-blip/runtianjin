@@ -2135,6 +2135,11 @@ img {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* Leaflet's internal panes use z-index up to 700. Without a stacking context
+     here those panes escape the map box and paint over the filter chips and
+     ranking list below. z-index: 0 creates the context and traps them inside. */
+  z-index: 0;
+  isolation: isolate;
 }
 
 /* Map page: 2x2 mini map grid */
@@ -2211,6 +2216,12 @@ img {
   height: 250px;
   min-height: 250px;
   background: #e8eef4;
+  /* Leaflet's map pane is absolutely positioned AND transformed, which makes it
+     a containing block that ignores the parent's overflow: hidden. Tiles then
+     paint outside the 250px box and cover the chips and ranking list below.
+     contain: paint forces the clip regardless of the transformed descendant. */
+  contain: paint;
+  overflow: hidden;
 }
 
 .mini-map .leaflet-container {
@@ -3124,12 +3135,24 @@ img {
   border-radius: 20px;
   background: linear-gradient(135deg, rgba(255,255,255,0.52), rgba(222,236,255,0.28));
   box-shadow: 0 12px 22px rgba(16, 43, 82, 0.05);
+  /* The map stage below is position: sticky, so it slides up over this panel
+     while scrolling and hides the filter chips. Lift the panel above it. */
+  position: relative;
+  z-index: 2;
 }
 
 /* Collapsed by default so the route maps stay above the fold. */
 .recommendation-panel:not([open]) {
   gap: 0;
   padding: 14px 18px;
+}
+
+/* display: flex on the panel overrides the browser's default rule that hides
+   the contents of a closed <details>. Without this the chips, ranking board and
+   insight blocks stay laid out below the summary, spill outside the panel box,
+   and get covered by the sticky map stage underneath. */
+.recommendation-panel:not([open]) > *:not(summary) {
+  display: none;
 }
 
 .recommendation-summary {
