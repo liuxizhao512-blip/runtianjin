@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://liuxizhao512-blip.github.io/runtianjin/sitemap.xml
