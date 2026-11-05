@@ -13,9 +13,6 @@ const fallbackNav = `
       <a href="tips.html">Tips</a>
       <a href="about.html">About</a>
     </div>
-    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to dark theme" title="Switch to dark theme">
-      <span class="theme-toggle-icon" aria-hidden="true">☾</span>
-    </button>
   </nav>
 `;
 
@@ -40,19 +37,8 @@ function markCurrentPage(scope) {
   });
 }
 
-/* The theme button lives inside the injected markup, so re-sync its state
-   after every injection. theme.js exposes the API and handles the click. */
-function syncThemeButton(scope) {
-  const api = window.RunTianjinTheme;
-  if (api) api.apply(api.effective());
-  scope.querySelectorAll('[data-theme-toggle]').forEach(button => {
-    button.dataset.bound = 'true';
-  });
-}
-
 function enhance(scope) {
   markCurrentPage(scope);
-  syncThemeButton(scope);
 }
 
 if (target) {

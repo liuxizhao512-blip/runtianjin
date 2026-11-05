@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -31,19 +31,9 @@
     <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png" />
     <link rel="manifest" href="site.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20260819" />
-    <script>
-      (function () {
-        try {
-          var t = localStorage.getItem('run-tianjin-theme');
-          if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-          document.documentElement.setAttribute('data-theme', t);
-          document.documentElement.style.colorScheme = t;
-        } catch (e) {}
-      })();
-    </script>
-    <link rel="stylesheet" href="styles-extra.css?v=20260819" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="styles-extra.css?v=20260819" /></noscript>
+    <link rel="stylesheet" href="styles.css?v=20261108" />
+    <link rel="stylesheet" href="styles-extra.css?v=20261108" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="styles-extra.css?v=20261108" /></noscript>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -52,10 +42,8 @@
     <main id="main" class="page-shell editorial-page">
       <section class="hero brand-hero editorial-hero">
         <div class="hero-copy">
-          <p class="eyebrow">Tianjin running guide</p>
-          <h1>Run Tianjin.</h1>
           <p class="hero-text">
-            Thoughtful routes across the Haihe riverside, city parks, and coastal paths—designed for daily movement,
+            Thoughtful routes across the Haihe riverside, city parks, and coastal paths — designed for daily movement,
             relaxed training, and city-night runs that feel genuinely local.
           </p>
           <div class="hero-actions">
@@ -77,26 +65,6 @@
               <span>easy access</span>
             </div>
           </div>
-        </div>
-
-        <div class="hero-map" aria-label="Tianjin route overview">
-          <picture>
-            <source
-              type="image/webp"
-              srcset="tianjin-routes-map-480.webp 480w, tianjin-routes-map-960.webp 960w"
-              sizes="(max-width: 900px) 92vw, 990px"
-            />
-            <img
-              class="hero-map-img"
-              src="tianjin-routes-map.jpg"
-              alt="Map of the four Run Tianjin routes across the Haihe riverside, South Cuiping Park, Water Park, and Binhai TEDA"
-              width="990"
-              height="413"
-              loading="eager"
-              fetchpriority="high"
-              decoding="async"
-            />
-          </picture>
         </div>
       </section>
 
@@ -283,7 +251,6 @@
     </script>
 
     <script src="analytics.js"></script>
-    <script src="theme.js"></script>
     <script src="nav.js"></script>
   </body>
 </html>

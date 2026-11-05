@@ -18,7 +18,6 @@ A static running-route guide for Tianjin. No build step, no framework, no server
 
 - Every page has a skip link, a single `<h1>`, and labelled landmarks.
 - The current page is marked with `aria-current="page"` in the shared nav.
-- The theme toggle is a real `<button>` with `aria-pressed` and a live `aria-label`.
 - `index.html` carries JSON-LD (`WebSite` + `ItemList` of the four routes) so search
   engines can read the route list without scraping.
 - `map.html` carries Open Graph and Twitter card tags pointing at
@@ -47,7 +46,7 @@ the stats.
 ```
 index.html  ─┐
 routes.html ─┼─ nav.html / nav.js      shared navigation (injected at runtime)
-map.html    ─┤  theme.js              light/dark toggle, persisted in localStorage
+
 tips.html   ─┤  styles.css            critical styling (design tokens in :root)
 about.html  ─┘  styles-extra.css      deferred: touch targets, content-visibility, print
                 analytics.js          GoatCounter loader (no-op until a site code is set)
@@ -66,14 +65,6 @@ needed for the initial render:
 - larger touch targets for `.match-chip` on coarse pointers
 - `content-visibility: auto` on long lists (route cards, FAQ entries, landmark cards)
 - the full `@media print` ruleset
-
-### Theming
-
-`theme.js` exposes `window.RunTianjinTheme = { apply, toggle, effective }` and stores
-the choice under the `run-tianjin-theme` localStorage key. Each page also carries a
-tiny inline script in `<head>` that applies the stored theme before first paint, so
-there is no flash of the wrong colour scheme. With no stored value the site follows
-`prefers-color-scheme` and keeps following it if the OS setting changes.
 
 ### Images
 

@@ -1,4 +1,4 @@
-// Interactive logic for map.html: Leaflet mini maps, weather, route
+﻿// Interactive logic for map.html: Leaflet mini maps, weather, route
 // analysis, training plans, and the share card. Depends on the globals
 // declared in map-data.js.
 
@@ -616,6 +616,10 @@
         }
       }
 
+      /* Same stack as --font-sans in styles.css, so the exported PNG matches
+         the page instead of falling back to a bare Arial. */
+      const SHARE_FONT = '"Segoe UI", "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif';
+
       function downloadShareCard() {
         const card = buildShareCard();
         const canvas = document.createElement('canvas');
@@ -629,15 +633,15 @@
         ctx.fillRect(60, 60, 960, 960);
 
         ctx.fillStyle = '#d86b39';
-        ctx.font = 'bold 30px Arial';
+        ctx.font = "bold 30px ${SHARE_FONT}";
         ctx.fillText('RUN TIANJIN', 120, 170);
 
         ctx.fillStyle = '#1f2429';
-        ctx.font = 'bold 64px Arial';
+        ctx.font = "bold 64px ${SHARE_FONT}";
         ctx.fillText(card.route.name.slice(0, 22), 120, 280);
 
         ctx.fillStyle = '#5d6570';
-        ctx.font = '30px Arial';
+        ctx.font = "30px ${SHARE_FONT}";
         const words = card.route.summary.split(' ');
         let line = '';
         let y = 350;
@@ -654,12 +658,12 @@
         ctx.fillText(line, 120, y);
 
         ctx.fillStyle = '#102b52';
-        ctx.font = 'bold 46px Arial';
+        ctx.font = "bold 46px ${SHARE_FONT}";
         ctx.fillText(`${card.route.analysis.distance.toFixed(1)} km`, 120, 620);
         ctx.fillText(card.route.analysis.bestTime, 120, 700);
 
         ctx.fillStyle = '#5d6570';
-        ctx.font = '26px Arial';
+        ctx.font = "26px ${SHARE_FONT}";
         ctx.fillText(`${card.route.surface} · ${card.route.analysis.difficulty}`, 120, 780);
 
         ctx.fillStyle = '#d86b39';
