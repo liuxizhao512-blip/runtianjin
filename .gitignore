@@ -5,3 +5,10 @@ config.js
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Image backups — duplicate originals, never deployed
+_image-backup/
+
+# Python caches
+__pycache__/
+*.pyc

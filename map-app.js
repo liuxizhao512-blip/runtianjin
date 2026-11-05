@@ -48,6 +48,17 @@
          The nodes live after this script tag, so they are looked up lazily. */
       let lastDrawerTrigger = null;
 
+      /* Landmark photos are CSS backgrounds, so they cannot use <picture>.
+         image-set() lets the browser pick the WebP variant and fall back to
+         the original JPEG/PNG when WebP is unsupported. */
+      function landmarkPhotoCss(spot) {
+        const base = spot.photo;
+        const stem = base.replace(/\.(jpe?g|png)$/i, '');
+        const webp = `${stem}-960.webp`;
+        const fallbackType = /\.png$/i.test(base) ? 'image/png' : 'image/jpeg';
+        return `image-set(url('${webp}') type('image/webp'), url('${base}') type('${fallbackType}'))`;
+      }
+
       function getDrawer() {
         return document.getElementById('landmark-drawer');
       }
@@ -75,7 +86,7 @@
 
         drawer.innerHTML = `
           <button class="landmark-close" type="button" aria-label="Close landmark card">&times;</button>
-          <div class="landmark-photo" style="background-image: url('${spot.photo}'); background-position: ${spot.photoPos || 'center'};">
+          <div class="landmark-photo" style="background-image: ${landmarkPhotoCss(spot)}; background-position: ${spot.photoPos || 'center'};">
             <span class="landmark-photo-tag">${spot.kind}</span>
           </div>
           <div class="landmark-content">

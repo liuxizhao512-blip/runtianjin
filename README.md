@@ -14,16 +14,54 @@ A static running-route guide for Tianjin. No build step, no framework, no server
 | `tips.html` | Practical running tips + keyword-based route Q&A |
 | `about.html` | Project background and data sources |
 
+## Accessibility and metadata
+
+- Every page has a skip link, a single `<h1>`, and labelled landmarks.
+- The current page is marked with `aria-current="page"` in the shared nav.
+- The theme toggle is a real `<button>` with `aria-pressed` and a live `aria-label`.
+- `index.html` carries JSON-LD (`WebSite` + `ItemList` of the four routes) so search
+  engines can read the route list without scraping.
+- `map.html` carries Open Graph and Twitter card tags pointing at
+  `run-tianjin-share-card.jpg`.
+
 ## Architecture
 
 ```
 index.html  ─┐
-routes.html ─┼─ nav.html / nav.js      shared navigation
-map.html    ─┤  styles.css            all styling (design tokens in :root)
-tips.html   ─┤  qa.js                 keyword search over knowledge.js
-about.html  ─┘  knowledge.js          the Q&A knowledge base (markdown-ish text)
+routes.html ─┼─ nav.html / nav.js      shared navigation (injected at runtime)
+map.html    ─┤  theme.js              light/dark toggle, persisted in localStorage
+tips.html   ─┤  styles.css            critical styling (design tokens in :root)
+about.html  ─┘  styles-extra.css      deferred: touch targets, content-visibility, print
+                qa.js                 keyword search over knowledge.js
+                knowledge.js          the Q&A knowledge base (markdown-ish text)
                 feedback.js           mailto feedback form
 ```
+
+### Stylesheets
+
+`styles.css` is loaded synchronously because it carries the design tokens and the
+above-the-fold layout. `styles-extra.css` is loaded with `rel="preload"` +
+`onload` swap so it never blocks first paint. It holds three things that are not
+needed for the initial render:
+
+- larger touch targets for `.match-chip` on coarse pointers
+- `content-visibility: auto` on long lists (route cards, FAQ entries, landmark cards)
+- the full `@media print` ruleset
+
+### Theming
+
+`theme.js` exposes `window.RunTianjinTheme = { apply, toggle, effective }` and stores
+the choice under the `run-tianjin-theme` localStorage key. Each page also carries a
+tiny inline script in `<head>` that applies the stored theme before first paint, so
+there is no flash of the wrong colour scheme. With no stored value the site follows
+`prefers-color-scheme` and keeps following it if the OS setting changes.
+
+### Images
+
+Every raster image ships as a WebP pair (`-480.webp` / `-960.webp`) next to the
+original JPEG/PNG. Markup uses `<picture>` with a `srcset`/`sizes` pair so the browser
+picks the right width and format; the original file is the `<img>` fallback. Landmark
+photos are CSS backgrounds, so `map-app.js` builds an `image-set()` value instead.
 
 `map.html` holds the interactive logic in one inline `<script>`. It is organised in
 labelled sections:
@@ -76,7 +114,9 @@ to run the site.
 | `tools/make_poster.py` | Social poster |
 | `tools/resample_gpx.py` | GPX point thinning |
 | `tools/fetch_landmarks.py` | Landmark photos |
+| `tools/compress_images.py` | WebP variants (`-480.webp` / `-960.webp`) for every raster image |
 | `tools/cleanup.py` | Asset cleanup |
+| `tools/check_site.py` | Static self-check: links, assets, meta tags, structure |
 
 ## Local development
 

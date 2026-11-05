@@ -29,6 +29,18 @@
     <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png" />
     <link rel="manifest" href="site.webmanifest" />
     <link rel="stylesheet" href="styles.css?v=20260819" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('run-tianjin-theme');
+          if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', t);
+          document.documentElement.style.colorScheme = t;
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="styles-extra.css?v=20260819" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="styles-extra.css?v=20260819" /></noscript>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -55,7 +67,10 @@
         <div class="route-grid route-list-grid">
           <article class="route-card route-list-card">
             <div class="route-thumb route-photo-card thumb-haihe" data-label="Night run">
-              <img src="haihe-riverside-run.jpg" alt="Haihe riverside running route at night" loading="lazy" decoding="async" width="800" height="500" />
+              <picture>
+                <source type="image/webp" srcset="haihe-riverside-run-480.webp 480w, haihe-riverside-run-960.webp 960w" sizes="(max-width: 720px) 92vw, 420px" />
+                <img src="haihe-riverside-run.jpg" alt="Haihe riverside running route at night" loading="lazy" decoding="async" width="800" height="500" />
+              </picture>
             </div>
             <div class="route-body">
               <div class="meta-row">
@@ -74,7 +89,10 @@
 
           <article class="route-card route-list-card">
             <div class="route-thumb route-photo-card thumb-nancui" data-label="Beginner">
-              <img src="south-cuiping-park-loop.jpg" alt="South Cuiping Park running loop" loading="lazy" decoding="async" width="800" height="500" />
+              <picture>
+                <source type="image/webp" srcset="south-cuiping-park-loop-480.webp 480w, south-cuiping-park-loop-960.webp 960w" sizes="(max-width: 720px) 92vw, 420px" />
+                <img src="south-cuiping-park-loop.jpg" alt="South Cuiping Park running loop" loading="lazy" decoding="async" width="800" height="500" />
+              </picture>
             </div>
             <div class="route-body">
               <div class="meta-row">
@@ -93,7 +111,10 @@
 
           <article class="route-card route-list-card">
             <div class="route-thumb route-photo-card thumb-shuishang" data-label="Daily">
-              <img src="water-park-lakeside-loop.jpg" alt="Water Park lakeside running loop" loading="lazy" decoding="async" width="800" height="500" />
+              <picture>
+                <source type="image/webp" srcset="water-park-lakeside-loop-480.webp 480w, water-park-lakeside-loop-960.webp 960w" sizes="(max-width: 720px) 92vw, 420px" />
+                <img src="water-park-lakeside-loop.jpg" alt="Water Park lakeside running loop" loading="lazy" decoding="async" width="800" height="500" />
+              </picture>
             </div>
             <div class="route-body">
               <div class="meta-row">
@@ -112,7 +133,10 @@
 
           <article class="route-card route-list-card">
             <div class="route-thumb route-photo-card thumb-taida" data-label="Long run">
-              <img src="binhai-teda-coastal-path.jpg" alt="Binhai TEDA coastal running path" loading="lazy" decoding="async" width="800" height="500" />
+              <picture>
+                <source type="image/webp" srcset="binhai-teda-coastal-path-480.webp 480w, binhai-teda-coastal-path-960.webp 960w" sizes="(max-width: 720px) 92vw, 420px" />
+                <img src="binhai-teda-coastal-path.jpg" alt="Binhai TEDA coastal running path" loading="lazy" decoding="async" width="800" height="500" />
+              </picture>
             </div>
             <div class="route-body">
               <div class="meta-row">
@@ -331,6 +355,7 @@
       <p>© 2026 Run Tianjin · Tianjin running route guide</p>
     </footer>
 
+    <script src="theme.js"></script>
     <script src="nav.js"></script>
   </body>
 </html>

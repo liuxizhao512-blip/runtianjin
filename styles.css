@@ -104,6 +104,59 @@ img {
   color: var(--orange);
 }
 
+/* Current page: visible underline plus aria-current for screen readers. */
+.nav-links a[aria-current="page"],
+.nav-links a.is-current {
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--orange);
+}
+
+/* ---------- Theme toggle ---------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--navy);
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  background: var(--mist);
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
+.theme-toggle-icon {
+  display: block;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 .page-shell {
   max-width: 1280px;
   margin: 0 auto;
@@ -381,6 +434,11 @@ img {
   background: rgba(255, 255, 255, 0.06);
 }
 
+.hero-map > picture {
+  display: block;
+  width: 100%;
+}
+
 .map-point {
   font-size: clamp(1.1rem, 1.8vw, 1.7rem);
   line-height: 1.2;
@@ -640,6 +698,12 @@ img {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* <picture> is a transparent wrapper: keep it out of the layout so the
+   absolutely positioned <img> inside still fills the thumb. */
+.route-thumb > picture {
+  display: contents;
 }
 
 .thumb-haihe {
@@ -5163,6 +5227,11 @@ img {
   gap: 16px;
 }
 
+.story-visual > picture {
+  display: block;
+  min-width: 0;
+}
+
 .story-photo {
   width: 100%;
   height: 100%;
@@ -5211,6 +5280,10 @@ img {
   border: none;
   background: transparent;
   cursor: pointer;
+}
+
+.route-visual > picture {
+  display: block;
 }
 
 .route-photo {
@@ -6196,68 +6269,68 @@ img {
 }
 
 /* ============================================================
-   Dark mode — driven by the OS preference.
+   Dark mode — driven by [data-theme="dark"] on <html>.
+   theme.js sets that attribute from localStorage, falling back to
+   the OS preference, so the toggle and the system setting agree.
    Only the design tokens are overridden so every component
    inherits the palette without per-component rules.
    ============================================================ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #10151b;
-    --paper: #182029;
-    --ink: #e8edf3;
-    --muted: #9aa7b6;
-    --line: rgba(232, 237, 243, 0.16);
-    --orange: #e8824f;
-    --orange-deep: #f09a6c;
-    --navy: #cfe0f5;
-    --navy-soft: #a9c4e4;
-    --blue: #6aa8f0;
-    --mist: #1c2733;
-  }
+:root[data-theme="dark"] {
+  --bg: #10151b;
+  --paper: #182029;
+  --ink: #e8edf3;
+  --muted: #9aa7b6;
+  --line: rgba(232, 237, 243, 0.16);
+  --orange: #e8824f;
+  --orange-deep: #f09a6c;
+  --navy: #cfe0f5;
+  --navy-soft: #a9c4e4;
+  --blue: #6aa8f0;
+  --mist: #1c2733;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--ink);
-  }
+:root[data-theme="dark"] body {
+  background: var(--bg);
+  color: var(--ink);
+}
 
-  /* Surfaces that hard-code white need to follow the token. */
-  .route-card,
-  .info-card,
-  .mini-map-card,
-  .route-detail-card,
-  .training-suggestion-card,
-  .map-wide-panel,
-  .side-group,
-  .comparison-table,
-  .pace-input-row input {
-    background: var(--paper);
-    color: var(--ink);
-  }
+/* Surfaces that hard-code white need to follow the token. */
+:root[data-theme="dark"] .route-card,
+:root[data-theme="dark"] .info-card,
+:root[data-theme="dark"] .mini-map-card,
+:root[data-theme="dark"] .route-detail-card,
+:root[data-theme="dark"] .training-suggestion-card,
+:root[data-theme="dark"] .map-wide-panel,
+:root[data-theme="dark"] .side-group,
+:root[data-theme="dark"] .comparison-table,
+:root[data-theme="dark"] .pace-input-row input {
+  background: var(--paper);
+  color: var(--ink);
+}
 
-  .pace-input-row input {
-    border-color: var(--line);
-  }
+:root[data-theme="dark"] .pace-input-row input {
+  border-color: var(--line);
+}
 
-  .pace-input-row > span,
-  .pace-input-row small,
-  .heat-disclaimer {
-    color: var(--muted);
-  }
+:root[data-theme="dark"] .pace-input-row > span,
+:root[data-theme="dark"] .pace-input-row small,
+:root[data-theme="dark"] .heat-disclaimer {
+  color: var(--muted);
+}
 
-  .comparison-table th,
-  .comparison-table td {
-    border-color: var(--line);
-  }
+:root[data-theme="dark"] .comparison-table th,
+:root[data-theme="dark"] .comparison-table td {
+  border-color: var(--line);
+}
 
-  .toast {
-    background: #e8edf3;
-    color: #10151b;
-  }
+:root[data-theme="dark"] .toast {
+  background: #e8edf3;
+  color: #10151b;
+}
 
-  .toast--warn {
-    background: #f0b27a;
-    color: #2a1608;
-  }
+:root[data-theme="dark"] .toast--warn {
+  background: #f0b27a;
+  color: #2a1608;
 }
 
 /* ---------- Skip link: keyboard users jump straight to the content ---------- */
@@ -6354,14 +6427,5 @@ img {
 
   .hero-map-img {
     max-height: 180px;
-  }
-}
-
-/* ---------- Touch targets: chips need 44px on touch screens ---------- */
-@media (hover: none) and (pointer: coarse) {
-  .match-chip {
-    min-height: 44px;
-    padding-top: 10px;
-    padding-bottom: 10px;
   }
 }

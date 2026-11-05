@@ -7,12 +7,40 @@
       name="description"
       content="Visualize Tianjin running routes on a city map and compare route zones by location, surface, and best running time."
     />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Map | Run Tianjin" />
+    <meta
+      property="og:description"
+      content="Visualize Tianjin running routes on a city map and compare route zones by location, surface, and best running time."
+    />
+    <meta property="og:image" content="run-tianjin-share-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Map | Run Tianjin" />
+    <meta
+      name="twitter:description"
+      content="Visualize Tianjin running routes on a city map and compare route zones by location, surface, and best running time."
+    />
+    <meta name="twitter:image" content="run-tianjin-share-card.jpg" />
     <title>Map | Run Tianjin</title>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png" />
     <link rel="manifest" href="site.webmanifest" />
     <link rel="stylesheet" href="styles.css?v=20260819" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('run-tianjin-theme');
+          if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', t);
+          document.documentElement.style.colorScheme = t;
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="styles-extra.css?v=20260819" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="styles-extra.css?v=20260819" /></noscript>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -436,6 +464,7 @@
     <div id="toast-host" class="toast-host" aria-live="polite" aria-atomic="true"></div>
 
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+    <script src="theme.js"></script>
     <script src="nav.js"></script>
     <script src="vendor/leaflet/leaflet.js"></script>
     <script src="map-data.js"></script>

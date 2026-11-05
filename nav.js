@@ -13,12 +13,51 @@ const fallbackNav = `
       <a href="tips.html">Tips</a>
       <a href="about.html">About</a>
     </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to dark theme" title="Switch to dark theme">
+      <span class="theme-toggle-icon" aria-hidden="true">☾</span>
+    </button>
   </nav>
 `;
 
 const target = document.getElementById('site-header');
+
+/* Mark the link that points at the page we are on. detail.html is reached from
+   the Routes listing, so it highlights Routes instead of nothing. */
+function markCurrentPage(scope) {
+  const here = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const alias = { 'detail.html': 'routes.html' };
+  const wanted = alias[here] || here;
+
+  scope.querySelectorAll('.nav-links a').forEach(link => {
+    const href = (link.getAttribute('href') || '').toLowerCase();
+    if (href === wanted) {
+      link.setAttribute('aria-current', 'page');
+      link.classList.add('is-current');
+    } else {
+      link.removeAttribute('aria-current');
+      link.classList.remove('is-current');
+    }
+  });
+}
+
+/* The theme button lives inside the injected markup, so re-sync its state
+   after every injection. theme.js exposes the API and handles the click. */
+function syncThemeButton(scope) {
+  const api = window.RunTianjinTheme;
+  if (api) api.apply(api.effective());
+  scope.querySelectorAll('[data-theme-toggle]').forEach(button => {
+    button.dataset.bound = 'true';
+  });
+}
+
+function enhance(scope) {
+  markCurrentPage(scope);
+  syncThemeButton(scope);
+}
+
 if (target) {
   target.innerHTML = fallbackNav;
+  enhance(target);
 }
 
 fetch('nav.html?v=' + Date.now(), { cache: 'no-store' })
@@ -29,6 +68,7 @@ fetch('nav.html?v=' + Date.now(), { cache: 'no-store' })
   .then(html => {
     if (target && html.includes('Map') && html.includes('Routes')) {
       target.innerHTML = html;
+      enhance(target);
     }
   })
   .catch(error => {

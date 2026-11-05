@@ -29,6 +29,18 @@
     <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png" />
     <link rel="manifest" href="site.webmanifest" />
     <link rel="stylesheet" href="styles.css?v=20260819" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('run-tianjin-theme');
+          if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', t);
+          document.documentElement.style.colorScheme = t;
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="styles-extra.css?v=20260819" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="styles-extra.css?v=20260819" /></noscript>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -65,15 +77,23 @@
         </div>
 
         <div class="hero-map" aria-label="Tianjin route overview">
-          <img
-            class="hero-map-img"
-            src="tianjin-routes-map.jpg"
-            alt="Map of the four Run Tianjin routes across the Haihe riverside, South Cuiping Park, Water Park, and Binhai TEDA"
-            width="990"
-            height="413"
-            loading="eager"
-            decoding="async"
-          />
+          <picture>
+            <source
+              type="image/webp"
+              srcset="tianjin-routes-map-480.webp 480w, tianjin-routes-map-960.webp 960w"
+              sizes="(max-width: 900px) 92vw, 990px"
+            />
+            <img
+              class="hero-map-img"
+              src="tianjin-routes-map.jpg"
+              alt="Map of the four Run Tianjin routes across the Haihe riverside, South Cuiping Park, Water Park, and Binhai TEDA"
+              width="990"
+              height="413"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </picture>
         </div>
       </section>
 
@@ -121,8 +141,22 @@
           </p>
         </div>
         <div class="story-visual">
-          <img class="story-photo" src="images/tianjin-night.jpg" alt="Tianjin riverside at night" loading="lazy" decoding="async" width="1200" height="800" />
-          <img class="story-photo" src="images/tianjin-day.jpg" alt="Tianjin riverside in daytime" loading="lazy" decoding="async" width="1200" height="800" />
+          <picture>
+            <source
+              type="image/webp"
+              srcset="images/tianjin-night-480.webp 480w, images/tianjin-night-960.webp 960w"
+              sizes="(max-width: 900px) 92vw, 480px"
+            />
+            <img class="story-photo" src="images/tianjin-night.jpg" alt="Tianjin riverside at night" loading="lazy" decoding="async" width="1200" height="800" />
+          </picture>
+          <picture>
+            <source
+              type="image/webp"
+              srcset="images/tianjin-day-480.webp 480w, images/tianjin-day-960.webp 960w"
+              sizes="(max-width: 900px) 92vw, 480px"
+            />
+            <img class="story-photo" src="images/tianjin-day.jpg" alt="Tianjin riverside in daytime" loading="lazy" decoding="async" width="1200" height="800" />
+          </picture>
         </div>
       </section>
 
@@ -158,6 +192,94 @@
       <p>© 2026 Run Tianjin · Tianjin running route guide</p>
     </footer>
 
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "index.html#website",
+            "name": "Run Tianjin",
+            "alternateName": "Tianjin running route guide",
+            "description": "Discover thoughtful running routes across Tianjin, from riverside paths to park loops and coastal runs.",
+            "inLanguage": "en",
+            "url": "index.html"
+          },
+          {
+            "@type": "ItemList",
+            "@id": "index.html#routes",
+            "name": "Tianjin running routes",
+            "description": "Four running routes across Tianjin, each with distance, surface, and city running notes.",
+            "numberOfItems": 4,
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "SportsActivityLocation",
+                  "name": "Haihe Riverside",
+                  "description": "Flat city waterfront route great for dusk runs and easy mileage.",
+                  "url": "detail.html?route=haihe",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Tianjin",
+                    "addressCountry": "CN"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "SportsActivityLocation",
+                  "name": "South Cuiping Park",
+                  "description": "Short and controlled loop with easy surface and lower stress.",
+                  "url": "detail.html?route=park",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Tianjin",
+                    "addressCountry": "CN"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@type": "SportsActivityLocation",
+                  "name": "Water Park Lakeside",
+                  "description": "Comfortable pace around the lake with shade and calm conditions.",
+                  "url": "detail.html?route=water",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Tianjin",
+                    "addressCountry": "CN"
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "item": {
+                  "@type": "SportsActivityLocation",
+                  "name": "Binhai TEDA Coastal",
+                  "description": "Long and steady coastal route for aerobic work and weekend mileage.",
+                  "url": "detail.html?route=coastal",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Tianjin",
+                    "addressCountry": "CN"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <script src="theme.js"></script>
     <script src="nav.js"></script>
   </body>
 </html>

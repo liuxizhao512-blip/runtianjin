@@ -15,10 +15,22 @@
       "purpose": "any"
     },
     {
+      "src": "favicon-512x512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
       "src": "favicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "favicon-maskable-512x512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "maskable"
     },
     {
       "src": "favicon-maskable-512x512.png",

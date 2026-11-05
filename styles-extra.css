@@ -1,0 +1,114 @@
+/* ============================================================
+   styles-extra.css — deferred stylesheet
+   Loaded non-blocking from every page:
+     <link rel="stylesheet" href="styles-extra.css" media="print" onload="this.media='all'" />
+   Everything here is either below the fold, interaction-only, or a
+   progressive enhancement, so a first paint without it is still correct.
+   ============================================================ */
+
+/* ---------- Touch targets: chips need 44px on touch screens ---------- */
+@media (hover: none) and (pointer: coarse) {
+  .match-chip {
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
+/* ---------- Long lists: skip layout/paint work until scrolled into view ---------- */
+.route-list-card,
+.faq-list details,
+.landmark-card,
+.training-suggestion-card,
+.comparison-table tbody tr {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+/* ---------- Print: route details should survive Ctrl+P ---------- */
+@media print {
+  :root {
+    --bg: #ffffff;
+    --paper: #ffffff;
+    --ink: #111111;
+    --muted: #444444;
+    --line: rgba(0, 0, 0, 0.25);
+  }
+
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #111 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+
+  body {
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+
+  /* Chrome that means nothing on paper. */
+  .site-header,
+  .site-nav,
+  nav,
+  .skip-link,
+  .hero-actions,
+  .map-toolbar,
+  .map-filter-btn,
+  .match-chip,
+  .share-card-actions,
+  .feedback-form,
+  .toast,
+  .landmark-drawer,
+  .landmark-scrim,
+  .image-modal,
+  .modal-close,
+  .leaflet-control-container,
+  .map-zoom-hint,
+  .route-visual {
+    display: none !important;
+  }
+
+  /* Keep the content, drop the decoration. */
+  .page-shell,
+  .section-block,
+  .detail-card,
+  .detail-visual,
+  .route-card,
+  .info-card,
+  .mini-map-card,
+  .route-detail-card {
+    display: block !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 0 10mm !important;
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  a[href^="http"]::after,
+  a[href^="detail.html"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555 !important;
+  }
+
+  .site-footer {
+    border-top: 1px solid #999 !important;
+    padding-top: 4mm;
+    font-size: 9pt;
+  }
+}
