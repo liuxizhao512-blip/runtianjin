@@ -23,6 +23,24 @@ A static running-route guide for Tianjin. No build step, no framework, no server
   engines can read the route list without scraping.
 - `map.html` carries Open Graph and Twitter card tags pointing at
   `run-tianjin-share-card.jpg`.
+- Every page declares a `rel="canonical"` URL and an absolute `og:image`, so shared
+  links resolve correctly from any host.
+- `sitemap.xml` lists all nine indexable URLs (six pages plus the four route
+  variants of `detail.html`); `robots.txt` points crawlers at it.
+
+## Analytics
+
+`analytics.js` loads [GoatCounter](https://www.goatcounter.com/) — cookieless, no
+fingerprinting, so no consent banner is needed. The site code lives in one constant
+at the top of the file:
+
+```js
+var GOATCOUNTER_CODE = '';   // e.g. 'runtianjin' for runtianjin.goatcounter.com
+```
+
+While it is empty nothing loads and no request is made. The loader also skips
+`file://`, `localhost`, and private LAN addresses, so local previews never pollute
+the stats.
 
 ## Architecture
 
@@ -32,6 +50,7 @@ routes.html ─┼─ nav.html / nav.js      shared navigation (injected at runt
 map.html    ─┤  theme.js              light/dark toggle, persisted in localStorage
 tips.html   ─┤  styles.css            critical styling (design tokens in :root)
 about.html  ─┘  styles-extra.css      deferred: touch targets, content-visibility, print
+                analytics.js          GoatCounter loader (no-op until a site code is set)
                 qa.js                 keyword search over knowledge.js
                 knowledge.js          the Q&A knowledge base (markdown-ish text)
                 feedback.js           mailto feedback form
