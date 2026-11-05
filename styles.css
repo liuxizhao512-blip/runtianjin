@@ -4323,7 +4323,7 @@ img {
 .plan-focus strong {
   color: #1b1f24;
   font-size: 0.76rem;
-  letter-spacing: var(--track-label);
+  letter-spacing: var(--track-body);
   text-transform: uppercase;
 }
 
@@ -4433,10 +4433,10 @@ img {
 }
 
 .weekly-mini-item strong {
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-size: 0.85rem;
+  font-weight: 700;
   letter-spacing: var(--track-body);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .weekly-mini-item span {
