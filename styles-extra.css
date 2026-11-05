@@ -111,4 +111,13 @@
     padding-top: 4mm;
     font-size: 9pt;
   }
+
+  /* Tips are collapsed by default; print them so the sheet is complete. */
+  .route-points[hidden] {
+    display: block !important;
+  }
+
+  .route-toggle {
+    display: none !important;
+  }
 }

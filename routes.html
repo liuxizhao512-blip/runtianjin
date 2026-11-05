@@ -68,13 +68,19 @@
         </div>
 
         <div class="route-grid route-list-grid">
-          <article class="route-card route-list-card">
+          <article class="route-card route-list-card" data-route="haihe">
             <div class="route-thumb route-photo-card thumb-haihe" data-label="Night run">
               <picture>
                 <source type="image/webp" srcset="haihe-riverside-run-480.webp 480w, haihe-riverside-run-960.webp 960w" sizes="(max-width: 720px) 92vw, 420px" />
-                <img src="haihe-riverside-run.jpg" alt="Haihe riverside running route at night" loading="lazy" decoding="async" width="800" height="500" />
+                <img src="haihe-riverside-run.jpg" alt="Haihe riverside running route at night" loading="lazy" decoding="async" width="1138" height="1600" />
               </picture>
+              <span class="thumb-badge">Night run</span>
+              <span class="thumb-hint" aria-hidden="true">Tap for tips</span>
             </div>
+            <p class="route-caption">
+              <span class="caption-dot" aria-hidden="true"></span>
+              Lights on the water, a wide promenade, and a skyline that keeps you moving.
+            </p>
             <div class="route-body">
               <div class="meta-row">
                 <span class="tag">Riverside</span>
@@ -86,17 +92,36 @@
                 <li>Best for: relaxed night running</li>
                 <li>Surface: flat asphalt</li>
               </ul>
-              <a href="detail.html?route=haihe">View details</a>
+              <div class="route-points" id="points-haihe" hidden>
+                <ul>
+                  <li>Start at Tianjin Eye, finish at Jinwan Plaza</li>
+                  <li>Bridge lights come on around 19:30</li>
+                  <li>Water fountains near the halfway point</li>
+                </ul>
+              </div>
+              <div class="route-actions">
+                <button class="route-toggle" type="button" aria-expanded="false" aria-controls="points-haihe">
+                  <span class="route-toggle-text">Quick tips</span>
+                  <span class="route-toggle-icon" aria-hidden="true">+</span>
+                </button>
+                <a href="detail.html?route=haihe">View details</a>
+              </div>
             </div>
           </article>
 
-          <article class="route-card route-list-card">
+          <article class="route-card route-list-card" data-route="nancui">
             <div class="route-thumb route-photo-card thumb-nancui" data-label="Beginner">
               <picture>
                 <source type="image/webp" srcset="south-cuiping-park-loop-480.webp 480w, south-cuiping-park-loop-960.webp 960w" sizes="(max-width: 720px) 92vw, 420px" />
-                <img src="south-cuiping-park-loop.jpg" alt="South Cuiping Park running loop" loading="lazy" decoding="async" width="800" height="500" />
+                <img src="south-cuiping-park-loop.jpg" alt="South Cuiping Park running loop" loading="lazy" decoding="async" width="1290" height="939" />
               </picture>
+              <span class="thumb-badge">Beginner</span>
+              <span class="thumb-hint" aria-hidden="true">Tap for tips</span>
             </div>
+            <p class="route-caption">
+              <span class="caption-dot" aria-hidden="true"></span>
+              Soft footing, short laps, and no pressure — the easiest place to start.
+            </p>
             <div class="route-body">
               <div class="meta-row">
                 <span class="tag">Park</span>
@@ -108,17 +133,36 @@
                 <li>Best for: beginners / intervals</li>
                 <li>Surface: rubber track</li>
               </ul>
-              <a href="detail.html?route=nancui">View details</a>
+              <div class="route-points" id="points-nancui" hidden>
+                <ul>
+                  <li>One lap is about 1 km — easy to count</li>
+                  <li>Shaded for most of the loop</li>
+                  <li>Good spot for 200 m repeats</li>
+                </ul>
+              </div>
+              <div class="route-actions">
+                <button class="route-toggle" type="button" aria-expanded="false" aria-controls="points-nancui">
+                  <span class="route-toggle-text">Quick tips</span>
+                  <span class="route-toggle-icon" aria-hidden="true">+</span>
+                </button>
+                <a href="detail.html?route=nancui">View details</a>
+              </div>
             </div>
           </article>
 
-          <article class="route-card route-list-card">
+          <article class="route-card route-list-card" data-route="shuishang">
             <div class="route-thumb route-photo-card thumb-shuishang" data-label="Daily">
               <picture>
                 <source type="image/webp" srcset="water-park-lakeside-loop-480.webp 480w, water-park-lakeside-loop-960.webp 960w" sizes="(max-width: 720px) 92vw, 420px" />
-                <img src="water-park-lakeside-loop.jpg" alt="Water Park lakeside running loop" loading="lazy" decoding="async" width="800" height="500" />
+                <img src="water-park-lakeside-loop.jpg" alt="Water Park lakeside running loop" loading="lazy" decoding="async" width="1290" height="918" />
               </picture>
+              <span class="thumb-badge">Daily</span>
+              <span class="thumb-hint" aria-hidden="true">Tap for tips</span>
             </div>
+            <p class="route-caption">
+              <span class="caption-dot" aria-hidden="true"></span>
+              Calm water, tree cover, and a loop that fits neatly into any weekday.
+            </p>
             <div class="route-body">
               <div class="meta-row">
                 <span class="tag">Lakefront</span>
@@ -130,17 +174,36 @@
                 <li>Best for: everyday running</li>
                 <li>Surface: mixed path</li>
               </ul>
-              <a href="detail.html?route=shuishang">View details</a>
+              <div class="route-points" id="points-shuishang" hidden>
+                <ul>
+                  <li>Quietest before 8 am</li>
+                  <li>Mixed surface — watch the boardwalk</li>
+                  <li>Benches every few hundred metres</li>
+                </ul>
+              </div>
+              <div class="route-actions">
+                <button class="route-toggle" type="button" aria-expanded="false" aria-controls="points-shuishang">
+                  <span class="route-toggle-text">Quick tips</span>
+                  <span class="route-toggle-icon" aria-hidden="true">+</span>
+                </button>
+                <a href="detail.html?route=shuishang">View details</a>
+              </div>
             </div>
           </article>
 
-          <article class="route-card route-list-card">
+          <article class="route-card route-list-card" data-route="taida">
             <div class="route-thumb route-photo-card thumb-taida" data-label="Long run">
               <picture>
                 <source type="image/webp" srcset="binhai-teda-coastal-path-480.webp 480w, binhai-teda-coastal-path-960.webp 960w" sizes="(max-width: 720px) 92vw, 420px" />
-                <img src="binhai-teda-coastal-path.jpg" alt="Binhai TEDA coastal running path" loading="lazy" decoding="async" width="800" height="500" />
+                <img src="binhai-teda-coastal-path.jpg" alt="Binhai TEDA coastal running path" loading="lazy" decoding="async" width="1290" height="933" />
               </picture>
+              <span class="thumb-badge">Long run</span>
+              <span class="thumb-hint" aria-hidden="true">Tap for tips</span>
             </div>
+            <p class="route-caption">
+              <span class="caption-dot" aria-hidden="true"></span>
+              Open sky, sea air, and a long straight line for holding a steady pace.
+            </p>
             <div class="route-body">
               <div class="meta-row">
                 <span class="tag">Distance</span>
@@ -152,7 +215,20 @@
                 <li>Best for: long-distance runners</li>
                 <li>Surface: coastal walkway</li>
               </ul>
-              <a href="detail.html?route=taida">View details</a>
+              <div class="route-points" id="points-taida" hidden>
+                <ul>
+                  <li>Wind picks up after 10 am — start early</li>
+                  <li>Very little shade, bring a cap</li>
+                  <li>Long sightlines make pacing easy</li>
+                </ul>
+              </div>
+              <div class="route-actions">
+                <button class="route-toggle" type="button" aria-expanded="false" aria-controls="points-taida">
+                  <span class="route-toggle-text">Quick tips</span>
+                  <span class="route-toggle-icon" aria-hidden="true">+</span>
+                </button>
+                <a href="detail.html?route=taida">View details</a>
+              </div>
             </div>
           </article>
         </div>
@@ -361,5 +437,69 @@
     <script src="analytics.js"></script>
     <script src="theme.js"></script>
     <script src="nav.js"></script>
+    <script>
+      // Route cards: expandable "Quick tips" + clickable photo.
+      (function () {
+        var cards = Array.prototype.slice.call(document.querySelectorAll('.route-list-card'));
+
+        function setOpen(card, open) {
+          var btn = card.querySelector('.route-toggle');
+          var panel = card.querySelector('.route-points');
+          if (!btn || !panel) return;
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          panel.hidden = !open;
+          card.classList.toggle('is-open', open);
+          var label = btn.querySelector('.route-toggle-text');
+          if (label) label.textContent = open ? 'Hide tips' : 'Quick tips';
+        }
+
+        cards.forEach(function (card) {
+          var btn = card.querySelector('.route-toggle');
+          var thumb = card.querySelector('.route-thumb');
+
+          if (btn) {
+            btn.addEventListener('click', function () {
+              setOpen(card, btn.getAttribute('aria-expanded') !== 'true');
+            });
+          }
+
+          // Clicking the photo toggles the tips, so the image is not a dead end.
+          if (thumb) {
+            thumb.setAttribute('role', 'button');
+            thumb.setAttribute('tabindex', '0');
+            thumb.setAttribute('aria-label', 'Show quick tips for this route');
+
+            function toggleFromPhoto() {
+              var open = card.classList.contains('is-open');
+              setOpen(card, !open);
+              if (!open) {
+                var panel = card.querySelector('.route-points');
+                if (panel) panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+              }
+            }
+
+            thumb.addEventListener('click', toggleFromPhoto);
+            thumb.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleFromPhoto();
+              }
+            });
+          }
+        });
+
+        // Only one card stays open at a time — keeps the list short.
+        cards.forEach(function (card) {
+          var btn = card.querySelector('.route-toggle');
+          if (!btn) return;
+          btn.addEventListener('click', function () {
+            if (btn.getAttribute('aria-expanded') !== 'true') return;
+            cards.forEach(function (other) {
+              if (other !== card) setOpen(other, false);
+            });
+          });
+        });
+      })();
+    </script>
   </body>
 </html>

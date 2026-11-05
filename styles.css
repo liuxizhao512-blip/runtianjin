@@ -608,37 +608,232 @@ img {
   gap: 22px;
 }
 
+/* Compact photo: a fixed-height strip instead of a full-width banner.
+   `flex: none` is required — the card is a column flex container, so without
+   it the thumb would be shrunk below its declared height by the text below. */
 .route-list-card .route-thumb {
+  flex: none;
   min-height: 0;
-  aspect-ratio: 21 / 9;
+  height: 168px;
+  aspect-ratio: auto;
+  overflow: hidden;
+}
+
+.route-list-card .route-thumb > picture > img {
+  transition: transform 0.45s ease, filter 0.25s ease;
+}
+
+/* The Haihe photo is portrait (1138x1600) but the thumb is a wide strip, so
+   `cover` crops it hard. Bias the crop upward to keep the skyline in frame. */
+.route-list-card .thumb-haihe > picture > img {
+  object-position: center 38%;
+}
+
+/* The TEDA photo is 1290x933 with the top ~55% being empty sky. The wide strip
+   only shows ~279px of source height, so default centring lands on sky — push
+   the crop down to the buildings. */
+.route-list-card .thumb-taida > picture > img {
+  object-position: center 100%;
+}
+
+.route-list-card:hover .route-thumb > picture > img,
+.route-list-card:focus-within .route-thumb > picture > img {
+  transform: scale(1.04);
 }
 
 .route-list-card .route-body {
   flex: 1;
-  padding: 18px 20px 20px;
-  gap: 8px;
+  padding: 14px 18px 18px;
+  gap: 7px;
 }
 
 .route-list-card h2 {
-  font-size: clamp(1.3rem, 1.6vw, 1.55rem);
+  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
   letter-spacing: -0.03em;
   line-height: 1.2;
 }
 
 .route-list-card .route-body > p {
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   line-height: 1.5;
 }
 
 .route-list-card .route-meta-list {
-  gap: 3px;
-  font-size: 0.94rem;
+  gap: 2px;
+  font-size: 0.88rem;
   line-height: 1.45;
 }
 
-/* Keep the "View details" link right under the content instead of pinned to the bottom */
-.route-list-card .route-body > a {
+@media (max-width: 720px) {
+  .route-list-card .route-thumb {
+    height: 140px;
+  }
+}
+
+/* ---------- Photo caption: one short line under each route image ---------- */
+.route-caption {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 18px 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.caption-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: 0.5em;
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+/* Badge over the photo, replaces the old unused data-label attribute. */
+.thumb-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(16, 43, 82, 0.78);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+
+/* Hover hint over the photo: "Tap for tips". */
+.thumb-hint {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #102b52;
+  font-size: 0.7rem;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.route-list-card:hover .thumb-hint,
+.route-list-card:focus-within .thumb-hint {
+  opacity: 1;
+  transform: none;
+}
+
+/* Photo dims slightly while its tips are open. */
+.route-list-card.is-open .route-thumb > picture > img {
+  filter: brightness(0.82);
+}
+
+/* ---------- Expandable quick tips ---------- */
+.route-points {
+  margin-top: 2px;
+  padding: 9px 11px;
+  border-left: 3px solid var(--orange);
+  border-radius: 0 10px 10px 0;
+  background: rgba(216, 107, 57, 0.07);
+  animation: route-points-in 0.22s ease;
+}
+
+.route-points[hidden] {
+  display: none;
+}
+
+.route-points ul {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.route-points li + li {
   margin-top: 4px;
+}
+
+@keyframes route-points-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.route-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 4px;
+}
+
+.route-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--navy-soft);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.route-toggle:hover,
+.route-toggle:focus-visible {
+  border-color: var(--orange);
+  color: var(--orange-deep);
+}
+
+.route-toggle:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
+.route-toggle[aria-expanded="true"] {
+  background: rgba(216, 107, 57, 0.12);
+  border-color: rgba(216, 107, 57, 0.4);
+  color: var(--orange-deep);
+}
+
+.route-toggle-icon {
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.route-toggle[aria-expanded="true"] .route-toggle-icon {
+  transform: rotate(45deg);
+}
+
+/* Keep the "View details" link right under the content instead of pinned to the bottom */
+.route-list-card .route-body > a,
+.route-actions > a {
+  margin-top: 0;
   padding-top: 0;
   display: inline-flex;
   align-items: center;
@@ -646,25 +841,68 @@ img {
   align-self: flex-start;
   width: auto;
   color: #b85d39;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 700;
   text-decoration: none;
 }
 
-.route-list-card .route-body > a::after {
+.route-list-card .route-body > a::after,
+.route-actions > a::after {
   content: "→";
   transition: transform 0.18s ease;
 }
 
 .route-list-card .route-body > a:hover::after,
-.route-list-card .route-body > a:focus-visible::after {
+.route-list-card .route-body > a:focus-visible::after,
+.route-actions > a:hover::after,
+.route-actions > a:focus-visible::after {
   transform: translateX(3px);
 }
 
 .route-list-card .route-body > a:hover,
-.route-list-card .route-body > a:focus-visible {
+.route-list-card .route-body > a:focus-visible,
+.route-actions > a:hover,
+.route-actions > a:focus-visible {
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* Subtle lift when a card is hovered or has its tips open. */
+.route-list-card {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.route-list-card:hover,
+.route-list-card:focus-within {
+  border-color: rgba(216, 107, 57, 0.35);
+  box-shadow: 0 10px 26px rgba(16, 43, 82, 0.08);
+  transform: translateY(-2px);
+}
+
+.route-list-card.is-open {
+  border-color: rgba(216, 107, 57, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-list-card,
+  .route-toggle,
+  .route-toggle-icon,
+  .route-points,
+  .route-list-card .route-thumb > picture > img,
+  .thumb-hint {
+    transition: none;
+    animation: none;
+  }
+
+  .route-list-card:hover,
+  .route-list-card:focus-within {
+    transform: none;
+  }
+
+  .route-list-card:hover .route-thumb > picture > img,
+  .route-list-card:focus-within .route-thumb > picture > img {
+    transform: none;
+  }
 }
 
 .route-card {
@@ -687,16 +925,21 @@ img {
   background-size: cover;
   background-position: center;
   position: relative;
+  cursor: pointer;
 }
 
 /* Route thumbnails are real <img> elements so they can lazy-load and be
-   announced by screen readers. The gradient stays as a loading placeholder. */
-.route-thumb > img {
+   announced by screen readers. The gradient stays as a loading placeholder.
+   NOTE: the <img> lives inside a <picture> wrapper, so the selector must go
+   through <picture> — `.route-thumb > img` would never match. */
+.route-thumb > img,
+.route-thumb > picture > img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -6331,6 +6574,15 @@ img {
 :root[data-theme="dark"] .toast--warn {
   background: #f0b27a;
   color: #2a1608;
+}
+
+:root[data-theme="dark"] .route-points {
+  background: rgba(232, 130, 79, 0.12);
+}
+
+:root[data-theme="dark"] .route-list-card:hover,
+:root[data-theme="dark"] .route-list-card:focus-within {
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
 }
 
 /* ---------- Skip link: keyboard users jump straight to the content ---------- */
