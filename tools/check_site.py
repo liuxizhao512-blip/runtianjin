@@ -130,7 +130,9 @@ def check_manifest() -> None:
         src = icon.get("src", "")
         if not src:
             continue
-        if not (ROOT / src).exists():
+        # 去掉 ?v=... 缓存查询串再判断文件是否存在
+        path = src.split("?", 1)[0].split("#", 1)[0]
+        if not (ROOT / path).exists():
             fail(f"site.webmanifest: icon missing -> {src}")
         else:
             ok()
