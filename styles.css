@@ -120,7 +120,7 @@ img {
 .site-nav .brand-mark img {
   width: 38px;
   height: 38px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 8px 18px rgba(16, 43, 82, 0.12);
   border: 1px solid rgba(16, 43, 82, 0.1);
@@ -447,36 +447,6 @@ img {
   position: static;
 }
 
-.brand-band,
-.editorial-band {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-  padding-top: 12px;
-}
-
-.band-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-after-heading);
-  padding: 10px 0 0;
-}
-
-.band-label {
-  font-size: 0.75rem;
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  color: #5f6770;
-  font-weight: 700;
-}
-
-.band-item strong {
-  font-size: clamp(1.3rem, 2vw, 2.2rem);
-  line-height: 1.2;
-  letter-spacing: var(--track-display);
-  color: #1b1f24;
-}
-
 .section-block,
 .editorial-block {
   display: flex;
@@ -496,9 +466,9 @@ img {
 .section-title-row h2 {
   margin: 0;
   color: #1a1d20;
-  font-size: clamp(2.2rem, 4vw, 4rem);
+  font-size: clamp(1.75rem, 3vw, 2.9rem);
   letter-spacing: var(--track-display);
-  line-height: 1;
+  line-height: 1.05;
 }
 
 .section-title-row a {
@@ -1091,8 +1061,8 @@ img {
 }
 
 .goal-card h3 {
-  font-size: clamp(1.5rem, 2vw, 2.1rem);
-  line-height: 1.1;
+  font-size: clamp(1.2rem, 1.6vw, 1.6rem);
+  line-height: 1.15;
 }
 
 .goal-card p,
@@ -1174,8 +1144,8 @@ img {
 }
 
 .tip-card h2 {
-  font-size: clamp(1.5rem, 2vw, 2.2rem);
-  line-height: 1.1;
+  font-size: clamp(1.2rem, 1.6vw, 1.65rem);
+  line-height: 1.15;
 }
 
 .tip-card ul {
@@ -1288,9 +1258,9 @@ img {
 .run-flow-step h3 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.15rem, 1.6vw, 1.5rem);
+  font-size: clamp(1.02rem, 1.3vw, 1.22rem);
   letter-spacing: var(--track-display);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .run-flow-step ul {
@@ -1324,9 +1294,9 @@ img {
 .intensity-note h3 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
   letter-spacing: var(--track-display);
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .intensity-note p {
@@ -1373,9 +1343,9 @@ img {
 .local-card h3 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  font-size: clamp(1.1rem, 1.4vw, 1.32rem);
   letter-spacing: var(--track-display);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .local-card p {
@@ -1477,9 +1447,9 @@ img {
 .qa-head h3 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-size: clamp(1.15rem, 1.6vw, 1.5rem);
   letter-spacing: var(--track-display);
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .qa-lead {
@@ -1685,7 +1655,7 @@ img {
 .about-box h2 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.5rem, 2vw, 2.2rem);
+  font-size: clamp(1.2rem, 1.6vw, 1.65rem);
   letter-spacing: var(--track-display);
 }
 
@@ -1723,7 +1693,7 @@ img {
 .illustration-card h3 {
   margin: 0 0 var(--space-after-heading);
   color: #1b1f24;
-  font-size: clamp(1.3rem, 1.8vw, 1.9rem);
+  font-size: clamp(1.1rem, 1.4vw, 1.45rem);
   letter-spacing: var(--track-display);
 }
 
@@ -2080,9 +2050,9 @@ img {
 .about-map-copy h3 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.3rem, 1.9vw, 1.7rem);
+  font-size: clamp(1.1rem, 1.4vw, 1.32rem);
   letter-spacing: var(--track-display);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .about-map-copy p {
@@ -2255,9 +2225,9 @@ img {
 .about-feedback-head h3 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
   letter-spacing: var(--track-display);
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .about-feedback-head p {
@@ -3520,7 +3490,7 @@ img {
 .recommendation-header h2 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.8rem, 2vw, 2.4rem);
+  font-size: clamp(1.4rem, 1.7vw, 1.8rem);
   letter-spacing: var(--track-display);
 }
 
@@ -3959,7 +3929,7 @@ img {
 .route-detail-card h3 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-size: clamp(1.15rem, 1.6vw, 1.5rem);
   letter-spacing: var(--track-display);
 }
 
@@ -4964,7 +4934,7 @@ img {
 .side-panel h2 {
   margin: 0 0 var(--space-after-heading);
   color: #1b1f24;
-  font-size: clamp(1.6rem, 2vw, 2.4rem);
+  font-size: clamp(1.25rem, 1.6vw, 1.75rem);
   letter-spacing: var(--track-display);
 }
 
@@ -5063,7 +5033,7 @@ img {
 .filter-card h2 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.6rem, 2vw, 2.2rem);
+  font-size: clamp(1.25rem, 1.6vw, 1.65rem);
   letter-spacing: var(--track-display);
 }
 
@@ -5227,7 +5197,7 @@ img {
 .badge-card h2 {
   margin: 0;
   color: #1b1f24;
-  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-size: clamp(1.2rem, 1.6vw, 1.5rem);
   letter-spacing: var(--track-display);
 }
 
@@ -5419,8 +5389,8 @@ img {
 .info-card h3 {
   margin: 0;
   color: #1a1d20;
-  font-size: clamp(1.5rem, 2vw, 2.4rem);
-  line-height: 1.1;
+  font-size: clamp(1.2rem, 1.6vw, 1.75rem);
+  line-height: 1.15;
   letter-spacing: var(--track-display);
 }
 
@@ -5457,7 +5427,7 @@ img {
 }
 
 .info-grid-two .info-card h3 {
-  font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+  font-size: clamp(1.25rem, 1.7vw, 1.6rem);
 }
 
 .info-card {
@@ -5486,7 +5456,7 @@ img {
 }
 
 .story-copy h2 {
-  font-size: clamp(2.3rem, 3.5vw, 4rem);
+  font-size: clamp(1.8rem, 2.7vw, 2.9rem);
 }
 
 .story-visual {
@@ -5580,7 +5550,7 @@ img {
 .route-visual-card h2 {
   margin: 0 0 var(--space-after-heading);
   color: #1b1f24;
-  font-size: clamp(1.25rem, 1.7vw, 1.7rem);
+  font-size: clamp(1.08rem, 1.35vw, 1.32rem);
   letter-spacing: var(--track-display);
 }
 
@@ -5641,7 +5611,7 @@ img {
 .detail-info-box h2 {
   margin: 0 0 var(--space-after-heading);
   color: #1d2128;
-  font-size: clamp(1.25rem, 1.7vw, 1.75rem);
+  font-size: clamp(1.08rem, 1.35vw, 1.35rem);
   letter-spacing: var(--track-display);
 }
 
@@ -5673,7 +5643,7 @@ img {
 .detail-block h2 {
   margin: 2px 0 var(--space-after-heading);
   color: #1d2128;
-  font-size: clamp(1.25rem, 1.7vw, 1.7rem);
+  font-size: clamp(1.08rem, 1.35vw, 1.32rem);
   letter-spacing: var(--track-display);
 }
 
@@ -5867,7 +5837,6 @@ img {
 
 @media (max-width: 900px) {
   .hero,
-  .brand-band,
   .route-grid,
   .info-grid,
   .story-section {
