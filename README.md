@@ -103,6 +103,10 @@ the UI says so instead of showing a plausible-looking fake.
 
 ## Dependencies
 
+- **Inter** — self-hosted in `vendor/fonts/` (latin subset, variable weight 100–900,
+  ~48KB woff2). Loaded via `vendor/fonts/inter.css` with `font-display: swap`. CJK
+  glyphs are intentionally not bundled and fall through to the system stack
+  (`PingFang SC` / `Microsoft YaHei`).
 - **Leaflet 1.9.4** — vendored locally in `vendor/leaflet/` so the map still loads when
   a CDN is blocked.
 - **Map tiles** — three OSM mirrors tried in order; the map degrades to a plain canvas

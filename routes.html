@@ -37,7 +37,9 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#1d3f6d" />
     <link rel="manifest" href="site.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20261106" />
+        <link rel="prefetch" href="vendor/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="stylesheet" href="vendor/fonts/inter.css?v=20261107" />
+<link rel="stylesheet" href="styles.css?v=20261108" />
     <link rel="stylesheet" href="styles-extra.css?v=20261106" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="styles-extra.css?v=20261106" /></noscript>
   </head>
@@ -437,6 +439,29 @@
       (function () {
         var cards = Array.prototype.slice.call(document.querySelectorAll('.route-list-card'));
 
+        // Remember which card was open so returning from detail.html restores it.
+        var STORAGE_KEY = 'runtianjin:open-route';
+
+        function rememberOpen(card) {
+          try {
+            if (card) {
+              sessionStorage.setItem(STORAGE_KEY, card.getAttribute('data-route') || '');
+            } else {
+              sessionStorage.removeItem(STORAGE_KEY);
+            }
+          } catch (error) {
+            /* sessionStorage can be blocked; the page still works without it. */
+          }
+        }
+
+        function readOpen() {
+          try {
+            return sessionStorage.getItem(STORAGE_KEY) || '';
+          } catch (error) {
+            return '';
+          }
+        }
+
         function setOpen(card, open) {
           var btn = card.querySelector('.route-toggle');
           var panel = card.querySelector('.route-points');
@@ -454,7 +479,9 @@
 
           if (btn) {
             btn.addEventListener('click', function () {
-              setOpen(card, btn.getAttribute('aria-expanded') !== 'true');
+              var next = btn.getAttribute('aria-expanded') !== 'true';
+              setOpen(card, next);
+              rememberOpen(next ? card : null);
             });
           }
 
@@ -467,6 +494,7 @@
             function toggleFromPhoto() {
               var open = card.classList.contains('is-open');
               setOpen(card, !open);
+              rememberOpen(!open ? card : null);
               if (!open) {
                 var panel = card.querySelector('.route-points');
                 if (panel) panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -494,6 +522,15 @@
             });
           });
         });
+
+        // Restore the card that was open before the user left for a detail page.
+        var remembered = readOpen();
+        if (remembered) {
+          var target = cards.filter(function (card) {
+            return card.getAttribute('data-route') === remembered;
+          })[0];
+          if (target) setOpen(target, true);
+        }
       })();
     </script>
   </body>

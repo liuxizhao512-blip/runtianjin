@@ -13,7 +13,14 @@
 
   /* ---------- Typography tokens ----------
      One font stack and one letter-spacing scale for the whole site.
-     Use these instead of ad-hoc values so every page stays consistent. */
+     Use these instead of ad-hoc values so every page stays consistent.
+
+     "Inter" is self-hosted from `vendor/fonts/inter.css` (latin subset,
+     variable weight 100–900, ~48KB). Every page preloads the woff2 so the
+     display type renders in Inter on first paint instead of swapping late.
+     CJK glyphs are not in the subset and fall through to PingFang SC /
+     Microsoft YaHei, which is intentional — shipping a CJK webfont would
+     cost megabytes for a site whose copy is English. */
   --font-sans: "Inter", "Segoe UI", "Helvetica Neue", Arial, "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
@@ -143,36 +150,38 @@ img {
 }
 
 /* Nav links: no colour change on hover/press. Emphasis comes from weight and
-   an underline only, so the row stays calm and readable. */
+   an underline only, so the row stays calm and readable.
+
+   The weight is fixed at 600 in every state. Animating `font-weight` reflows
+   the text and nudges neighbouring links sideways, which reads as jitter even
+   with a transition. Hover/active/current are signalled by the underline
+   colour alone — zero layout shift. */
 .nav-links a {
   color: var(--navy);
   font-weight: 600;
-  font-size: 1.32rem;
+  font-size: 1.08rem;
   letter-spacing: var(--track-heading);
   line-height: 1.2;
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
-  transition: font-weight 0.15s ease, border-color 0.15s ease;
+  transition: border-color 0.15s ease;
 }
 
 .nav-links a:hover,
 .nav-links a:focus {
   color: var(--navy);
-  font-weight: 800;
   border-bottom-color: rgba(16, 43, 82, 0.35);
 }
 
 .nav-links a:active {
   color: var(--navy);
-  font-weight: 900;
   border-bottom-color: var(--navy);
 }
 
-/* Current page: bold plus a solid underline, no colour shift. */
+/* Current page: solid underline, no colour shift. */
 .nav-links a[aria-current="page"],
 .nav-links a.is-current {
   color: var(--navy);
-  font-weight: 900;
   border-bottom-color: var(--navy);
 }
 
@@ -519,7 +528,7 @@ img {
   gap: var(--space-after-heading);
   padding: 22px 20px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(35, 38, 42, 0.1);
 }
 
@@ -884,7 +893,7 @@ img {
   flex-direction: column;
   gap: 0;
   border: 1px solid rgba(35, 38, 42, 0.12);
-  background: rgba(255,255,255,0.34);
+  background: rgba(255, 255, 255, 0.72);
   border-radius: 18px;
   overflow: hidden;
 }
@@ -993,7 +1002,7 @@ img {
   border: 1px solid rgba(35, 38, 42, 0.12);
   border-radius: 18px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .comparison-row {
@@ -1034,7 +1043,7 @@ img {
   gap: var(--space-after-heading);
   padding: 20px 18px;
   border: 1px solid rgba(35, 38, 42, 0.12);
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.72);
   border-radius: 18px;
 }
 
@@ -1585,6 +1594,61 @@ img {
   white-space: pre-wrap;
 }
 
+/* Fallback suggestions: shown only when a search matches nothing, so the
+   user always has a clickable next step instead of a dead end. */
+.qa-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(35, 38, 42, 0.1);
+}
+
+.qa-suggestions[hidden] {
+  display: none;
+}
+
+.qa-suggestions-label {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: #5d6570;
+}
+
+.qa-suggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.qa-suggestion {
+  border: 1px solid rgba(35, 38, 42, 0.12);
+  border-radius: 999px;
+  padding: 7px 13px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--navy-soft);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.qa-suggestion:hover,
+.qa-suggestion:focus-visible {
+  background: rgba(45, 118, 215, 0.1);
+  border-color: rgba(45, 118, 215, 0.25);
+}
+
+.qa-suggestion:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
 @media (max-width: 640px) {
   .qa-row {
     flex-direction: column;
@@ -1673,7 +1737,7 @@ img {
   padding: 18px;
   border-radius: 18px;
   border: 1px solid rgba(35, 38, 42, 0.12);
-  background: rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .mini-illustration {
@@ -1972,7 +2036,7 @@ img {
   border: 1px solid rgba(35, 38, 42, 0.12);
   border-radius: 20px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.72);
   text-decoration: none;
   color: inherit;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -2178,7 +2242,7 @@ img {
   border: 1px solid rgba(35, 38, 42, 0.12);
   border-left: 3px solid var(--orange);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .about-story-lead {
@@ -2319,6 +2383,30 @@ img {
 
 .feedback-submit:hover {
   background: var(--navy-soft);
+}
+
+/* Secondary action: the address as copyable text, for phones with no mail app. */
+.feedback-copy {
+  border: 1px solid rgba(35, 38, 42, 0.18);
+  border-radius: 999px;
+  padding: 11px 22px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--navy);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.feedback-copy:hover {
+  background: rgba(45, 118, 215, 0.1);
+  border-color: rgba(45, 118, 215, 0.3);
+}
+
+.feedback-copy:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }
 
 .feedback-hint {
@@ -5544,7 +5632,7 @@ img {
   padding: 14px 16px 12px;
   border: 1px solid rgba(35, 38, 42, 0.12);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .route-visual-card h2 {
@@ -5627,6 +5715,84 @@ img {
 
 .detail-actions {
   margin-top: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 22px;
+}
+
+/* Share button: quiet secondary action next to "Back to routes". */
+.share-route-btn {
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.95rem;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 1px solid var(--line);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.share-route-btn:hover,
+.share-route-btn:focus-visible {
+  color: var(--orange-deep);
+  border-bottom-color: var(--orange-deep);
+}
+
+.share-route-btn:disabled {
+  cursor: default;
+  color: var(--muted);
+  border-bottom-color: transparent;
+}
+
+/* Related routes: keeps the reader moving instead of dead-ending. */
+.detail-block--related {
+  grid-column: 1 / -1;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.related-route-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.related-route-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.related-route-card:hover,
+.related-route-card:focus-visible {
+  border-color: rgba(16, 43, 82, 0.35);
+  transform: translateY(-1px);
+}
+
+.related-route-card strong {
+  font-size: 1rem;
+  letter-spacing: var(--track-heading);
+}
+
+.related-route-card span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  letter-spacing: var(--track-label);
 }
 
 /* ---------- Route detail: extra depth blocks ---------- */

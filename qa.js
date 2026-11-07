@@ -1,9 +1,14 @@
-﻿// Local running assistant for the Tips page.
-// Runs entirely in the browser —no API key, no network request.
-// Answers are matched against knowledge.js (window.RUN_TIANJIN_KNOWLEDGE).
+﻿// Running assistant for the Tips page.
+// Asks the AI proxy (worker/ai-proxy.js) first; if that is unreachable or
+// unconfigured, falls back to keyword matching over knowledge.js so the page
+// still answers offline and from file://.
 (function () {
   const root = document.getElementById('qa');
   if (!root) return;
+
+  // Set this to your deployed Worker URL to turn on AI answers.
+  // Leave empty to stay on local keyword matching only.
+  const AI_ENDPOINT = '';
 
   const form = root.querySelector('.qa-form');
   const input = root.querySelector('.qa-input');
@@ -11,6 +16,8 @@
   const answerBox = root.querySelector('.qa-answer');
   const answerBody = root.querySelector('.qa-answer-body');
   const answerMeta = root.querySelector('.qa-answer-meta');
+  const suggestionsBox = root.querySelector('.qa-suggestions');
+  const suggestionsList = root.querySelector('.qa-suggestions-list');
   const chips = root.querySelectorAll('.ai-chip');
 
   const knowledge = window.RUN_TIANJIN_KNOWLEDGE || '';
@@ -87,49 +94,79 @@
   }
 
   // Topic keywords mapped to the knowledge section that answers them.
+  // Each list carries synonyms, common misspellings, and British/American
+  // variants so a question does not have to use the guide's exact wording.
   const TOPICS = [
     {
       section: /^Routes/i,
       words: ['route', 'routes', 'where', 'path', 'loop', 'distance', 'km', 'kilometre',
-        'kilometer', 'haihe', 'cuiping', 'nancui', 'water', 'park', 'shuishang', 'binhai',
-        'tada', 'taida', 'coastal', 'riverside', 'lake', 'scenic', 'night', 'beginner',
+        'kilometer', 'kms', 'haihe', 'cuiping', 'nancui', 'water', 'park', 'shuishang', 'binhai',
+        'tada', 'taida', 'coastal', 'riverside', 'lake', 'lakeside', 'scenic', 'night', 'beginner',
         'first', 'start', 'long', 'endurance', 'mileage', 'surface', 'asphalt',
-        'rubber', 'track', 'flat', 'hill', 'hilly', 'crowd', 'busy', 'quiet']
+        'rubber', 'track', 'flat', 'hill', 'hilly', 'crowd', 'busy', 'quiet',
+        // synonyms / misspellings
+        'trail', 'course', 'circuit', 'whereto', 'rout', 'routs', 'rute', 'rutes',
+        'hai', 'river', 'seaside', 'beach', 'shore', 'waterfront', 'promenade',
+        'shortest', 'longest', 'easiest', 'hardest', 'flattest', 'hills']
     },
     {
       section: /^Training intensity/i,
       words: ['intensity', 'pace', 'pacing', 'effort', 'rpe', 'heart', 'rate', 'tempo',
         'interval', 'intervals', 'speed', 'fast', 'slow', 'breath', 'breathing', 'talk',
         'zone', 'threshold', 'recovery', 'easy', 'hard', 'fartlek', 'enough', 'know',
-        'feel', 'feels', 'feeling', 'comfortable', 'conversation', 'run', 'running']
+        'feel', 'feels', 'feeling', 'comfortable', 'conversation', 'run', 'running',
+        // synonyms / misspellings
+        'hr', 'bpm', 'cardio', 'aerobic', 'anaerobic', 'sprint', 'sprints', 'splits',
+        'pase', 'pacing', 'intesity', 'intensety', 'tired', 'exhausted', 'breathless',
+        'conversational', 'zone2', 'zone4', 'easyrun']
     },
     {
       section: /^Before \/ during \/ after/i,
       words: ['warm', 'warmup', 'warm-up', 'cool', 'cooldown', 'cool-down', 'stretch',
         'stretching', 'before', 'after', 'during', 'routine', 'prepare', 'rehydrate',
-        'hydrate', 'hydration', 'water', 'drink']
+        'hydrate', 'hydration', 'water', 'drink',
+        // synonyms / misspellings
+        'warmdown', 'warmdown', 'mobility', 'foam', 'roller', 'roll', 'dynamic',
+        'static', 'prep', 'recovery', 'electrolyte', 'electrolytes', 'fluid', 'fluids',
+        'stretches', 'stretchs', 'cooldwn', 'warmp']
     },
     {
       section: /^Running in Tianjin/i,
       words: ['tianjin', 'weather', 'wind', 'windy', 'winter', 'summer', 'spring', 'autumn',
         'fall', 'cold', 'hot', 'heat', 'humidity', 'humid', 'ice', 'icy', 'fog', 'air',
-        'pollution', 'haze', 'smog', 'season', 'temperature', 'local', 'conditions']
+        'pollution', 'haze', 'smog', 'season', 'temperature', 'local', 'conditions',
+        // synonyms / misspellings
+        'aqi', 'pm25', 'pm2', 'smoggy', 'hazy', 'rain', 'rainy', 'snow', 'snowy',
+        'freezing', 'chilly', 'warm', 'muggy', 'sticky', 'breeze', 'breezy', 'gust',
+        'gusty', 'tianjinn', 'tianjing', 'tianjiin', 'tj']
     },
     {
       section: /^Gear checklist/i,
       words: ['gear', 'shoe', 'shoes', 'sneaker', 'sneakers', 'wear', 'clothing', 'clothes',
         'layer', 'layers', 'jacket', 'windbreaker', 'reflective', 'visibility', 'light',
-        'bottle', 'belt', 'glove', 'gloves', 'hat', 'kit', 'equipment']
+        'bottle', 'belt', 'glove', 'gloves', 'hat', 'kit', 'equipment',
+        // synonyms / misspellings
+        'trainers', 'trainer', 'runners', 'footwear', 'apparel', 'outfit', 'tights',
+        'shorts', 'socks', 'cap', 'beanie', 'headlamp', 'vest', 'hydration', 'pack',
+        'geer', 'shoos', 'shose', 'cloths', 'clothing', 'whatwear']
     },
     {
       section: /^7-day running plan/i,
       words: ['plan', 'schedule', 'week', 'weekly', 'day', 'monday', 'tuesday', 'wednesday',
-        'thursday', 'friday', 'saturday', 'sunday', 'rest', 'programme', 'program']
+        'thursday', 'friday', 'saturday', 'sunday', 'rest', 'programme', 'program',
+        // synonyms / misspellings
+        'routine', 'calendar', 'timetable', 'regime', 'regimen', 'training', 'planning',
+        'plans', 'schedul', 'shedule', 'sched', 'week1', 'week2', 'howoften', 'frequency']
     },
     {
       section: /^FAQ/i,
       words: ['faq', 'question', 'increase', 'knee', 'pain', 'hurt', 'injury', 'injured',
-        'shin', 'ankle', 'ache', 'sore', 'soreness', 'begin', 'new']
+        'shin', 'ankle', 'ache', 'sore', 'soreness', 'begin', 'new',
+        // synonyms / misspellings
+        'splints', 'shinsplints', 'itband', 'itb', 'plantar', 'achilles', 'calf',
+        'hamstring', 'quad', 'quads', 'back', 'hip', 'hips', 'foot', 'feet', 'heel',
+        'blister', 'blisters', 'cramp', 'cramps', 'overtraining', 'progress', 'improve',
+        'faster', 'distance', 'mileage', 'injry', 'injur', 'pian', 'knees']
     }
   ];
 
@@ -309,7 +346,7 @@
   function answer(question) {
     const tokens = tokenize(question);
     if (!tokens.length) {
-      return 'Ask me about routes, pacing, gear, or running conditions in Tianjin.';
+      return { text: 'Type a question about routes, pacing, gear, or running conditions in Tianjin.', found: false };
     }
 
     const routeAnswer = answerRouteQuestion(tokens);
@@ -327,31 +364,74 @@
     const bestSection = rankedSections[0];
     const sectionScore = bestSection ? bestSection.score : 0;
 
-    // A strong topic match (gear, weather, pacing, plan— wins over a route card.
+    // A strong topic match (gear, weather, pacing, plan) wins over a route card.
     if (bestSection && sectionScore >= 4) {
       const body = answerFromSection(bestSection.section, tokens);
-      return routeAnswer ? routeAnswer + '\n\n' + body : body;
+      return { text: routeAnswer ? routeAnswer + '\n\n' + body : body, found: true };
     }
 
-    if (routeAnswer) return routeAnswer;
+    if (routeAnswer) return { text: routeAnswer, found: true };
 
     if (bestSection && sectionScore > 0) {
-      return answerFromSection(bestSection.section, tokens);
+      return { text: answerFromSection(bestSection.section, tokens), found: true };
     }
 
-    return (
-      'I could not find that in the site guide. Try asking about one of the four routes ' +
-      '(Haihe Riverside, South Cuiping Park, Water Park Lakeside, Binhai TEDA Coastal), ' +
-      'training intensity, gear, or running conditions in Tianjin.'
-    );
+    return {
+      text:
+        'Nothing in the guide matches that wording. The guide covers four routes ' +
+        '(Haihe Riverside, South Cuiping Park, Water Park Lakeside, Binhai TEDA Coastal), ' +
+        'training intensity, warm-up and recovery, Tianjin conditions, gear, and a 7-day plan.',
+      found: false
+    };
   }
 
   // ---------------------------------------------------------------- rendering
-  function render(text) {
+  // Shown when a search finds nothing, so the user always has a next step
+  // instead of a dead end.
+  const FALLBACK_QUESTIONS = [
+    'Which route should I pick for my first run?',
+    'How do I know if I am running easy enough?',
+    'What should I wear for a winter run in Tianjin?',
+    'Should I warm up even for a short run?',
+    'How do I increase distance without getting injured?'
+  ];
+
+  function renderSuggestions() {
+    if (!suggestionsBox || !suggestionsList) return;
+    suggestionsList.textContent = '';
+    FALLBACK_QUESTIONS.forEach(function (question) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'qa-suggestion';
+      button.textContent = question;
+      button.addEventListener('click', function () {
+        ask(question);
+      });
+      suggestionsList.appendChild(button);
+    });
+    suggestionsBox.hidden = false;
+  }
+
+  function hideSuggestions() {
+    if (suggestionsBox) suggestionsBox.hidden = true;
+  }
+
+  function render(result) {
     answerBox.hidden = false;
     answerBox.classList.remove('is-error');
-    answerMeta.textContent = 'Run Tianjin assistant';
-    answerBody.textContent = text;
+    if (result.source === 'ai') {
+      answerMeta.textContent = 'Answered by AI from the site guide';
+    } else if (result.note) {
+      answerMeta.textContent = result.note;
+    } else {
+      answerMeta.textContent = 'Matched from the site guide';
+    }
+    answerBody.textContent = result.text;
+    if (result.found) {
+      hideSuggestions();
+    } else {
+      renderSuggestions();
+    }
   }
 
   function renderError(text) {
@@ -359,24 +439,87 @@
     answerBox.classList.add('is-error');
     answerMeta.textContent = 'Something went wrong';
     answerBody.textContent = text;
+    hideSuggestions();
+  }
+
+  // ---------------------------------------------------------------- AI answers
+  // The Worker holds the API key; the browser only ever sees this endpoint.
+  function askAI(question) {
+    if (!AI_ENDPOINT) return Promise.reject(new Error('AI endpoint not configured'));
+
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = controller
+      ? window.setTimeout(function () {
+          controller.abort();
+        }, 20000)
+      : null;
+
+    return fetch(AI_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: question, context: knowledge }),
+      signal: controller ? controller.signal : undefined
+    })
+      .then(function (response) {
+        return response.json().then(function (data) {
+          if (!response.ok) {
+            throw new Error(data && data.error ? data.error : 'Request failed');
+          }
+          if (!data || !data.answer) throw new Error('Empty answer');
+          return data.answer;
+        });
+      })
+      .finally(function () {
+        if (timer) window.clearTimeout(timer);
+      });
   }
 
   function ask(question) {
     const trimmed = question.trim();
     if (!trimmed) return;
+
     submit.disabled = true;
-    submit.textContent = 'Thinking…';
-    // Small delay so the button state is visible, then answer locally.
-    window.setTimeout(function () {
-      try {
-        render(answer(trimmed));
-      } catch (error) {
-        renderError('Could not build an answer. (' + error.message + ')');
-      } finally {
-        submit.disabled = false;
-        submit.textContent = 'Ask';
-      }
-    }, 220);
+    submit.textContent = AI_ENDPOINT ? 'Thinking…' : 'Searching…';
+
+    const finish = function () {
+      submit.disabled = false;
+      submit.textContent = 'Ask';
+    };
+
+    if (!AI_ENDPOINT) {
+      // No Worker configured: answer locally, same as before.
+      window.setTimeout(function () {
+        try {
+          render(answer(trimmed));
+        } catch (error) {
+          renderError('Could not build an answer. (' + error.message + ')');
+        } finally {
+          finish();
+        }
+      }, 220);
+      return;
+    }
+
+    askAI(trimmed)
+      .then(function (text) {
+        render({ text: text, found: true, source: 'ai' });
+      })
+      .catch(function (error) {
+        // Network, rate limit, or Worker misconfiguration: fall back to the
+        // local guide so the visitor still gets an answer.
+        const local = answer(trimmed);
+        const note =
+          error && error.name === 'AbortError'
+            ? 'The AI took too long, so this answer comes from the site guide.'
+            : 'The AI is unavailable right now, so this answer comes from the site guide.';
+        render({
+          text: local.text,
+          found: local.found,
+          source: 'local',
+          note: note
+        });
+      })
+      .finally(finish);
   }
 
   form.addEventListener('submit', function (event) {

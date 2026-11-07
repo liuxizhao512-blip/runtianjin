@@ -9,11 +9,53 @@
 
   const status = document.getElementById('feedback-status');
   const message = document.getElementById('feedback-message');
+  const copyButton = document.getElementById('feedback-copy');
 
   function showStatus(text, isError) {
     status.hidden = false;
     status.textContent = text;
     status.classList.toggle('is-error', Boolean(isError));
+  }
+
+  // ---------------------------------------------------------------- copy email
+  // `mailto:` silently does nothing on phones without a configured mail app,
+  // so the address is also offered as plain text the user can copy.
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    // Fallback for `file://` and older browsers where the async clipboard API
+    // is unavailable or blocked.
+    return new Promise(function (resolve, reject) {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.top = '-1000px';
+      document.body.appendChild(area);
+      area.select();
+      try {
+        const ok = document.execCommand('copy');
+        document.body.removeChild(area);
+        ok ? resolve() : reject(new Error('copy command rejected'));
+      } catch (error) {
+        document.body.removeChild(area);
+        reject(error);
+      }
+    });
+  }
+
+  if (copyButton) {
+    copyButton.addEventListener('click', function () {
+      copyText(FEEDBACK_EMAIL).then(
+        function () {
+          showStatus('Copied ' + FEEDBACK_EMAIL + ' to your clipboard.', false);
+        },
+        function () {
+          showStatus('Could not copy automatically. The address is ' + FEEDBACK_EMAIL, true);
+        }
+      );
+    });
   }
 
   form.addEventListener('submit', function (event) {

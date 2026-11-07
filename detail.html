@@ -37,7 +37,9 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#1d3f6d" />
     <link rel="manifest" href="site.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20261106" />
+        <link rel="prefetch" href="vendor/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="stylesheet" href="vendor/fonts/inter.css?v=20261107" />
+<link rel="stylesheet" href="styles.css?v=20261108" />
     <link rel="stylesheet" href="styles-extra.css?v=20261106" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="styles-extra.css?v=20261106" /></noscript>
   </head>
@@ -281,6 +283,7 @@
 
           <div class="detail-actions">
             <a class="primary-btn" href="routes.html">Back to routes</a>
+            <button class="ghost-btn share-route-btn" type="button" id="share-route">Share this route</button>
           </div>
         </div>
       `;
@@ -373,6 +376,66 @@
           closeModal();
         }
       });
+
+      // Share the current route: native share sheet where available, copy-link otherwise.
+      const shareBtn = document.getElementById('share-route');
+      if (shareBtn) {
+        const shareUrl = window.location.href;
+        const shareTitle = route.name + ' | Run Tianjin';
+        const shareText = route.description;
+
+        const flash = (message) => {
+          const original = 'Share this route';
+          shareBtn.textContent = message;
+          shareBtn.disabled = true;
+          window.setTimeout(() => {
+            shareBtn.textContent = original;
+            shareBtn.disabled = false;
+          }, 2000);
+        };
+
+        shareBtn.addEventListener('click', () => {
+          if (navigator.share) {
+            navigator.share({ title: shareTitle, text: shareText, url: shareUrl }).catch(() => {
+              /* User dismissed the share sheet; nothing to report. */
+            });
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+              flash('Link copied');
+            }).catch(() => {
+              flash('Copy failed');
+            });
+            return;
+          }
+          flash('Copy the address bar link');
+        });
+      }
+
+      // Suggest the other routes so a reader always has somewhere to go next.
+      const relatedHost = document.createElement('section');
+      relatedHost.className = 'detail-block detail-block--related';
+      relatedHost.setAttribute('aria-labelledby', 'related-heading');
+      const others = Object.keys(routes).filter((key) => key !== route.id);
+      relatedHost.innerHTML = `
+        <p class="eyebrow">Keep going</p>
+        <h2 id="related-heading">Other routes</h2>
+        <ul class="related-route-list">
+          ${others.map((key) => {
+            const item = routes[key];
+            return `
+              <li>
+                <a class="related-route-card" href="detail.html?route=${key}">
+                  <strong>${item.name}</strong>
+                  <span>${item.distance} · ${item.routeType}</span>
+                </a>
+              </li>
+            `;
+          }).join('')}
+        </ul>
+      `;
+      detailRoot.appendChild(relatedHost);
     </script>
   </body>
 </html>
