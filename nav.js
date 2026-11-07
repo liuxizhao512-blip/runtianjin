@@ -12,6 +12,7 @@ const fallbackNav = `
       <a href="map.html">Map</a>
       <a href="tips.html">Tips</a>
       <a href="about.html">About</a>
+      <a href="account.html" class="nav-account" id="nav-account">Sign in</a>
     </div>
   </nav>
 `;
@@ -39,6 +40,36 @@ function markCurrentPage(scope) {
 
 function enhance(scope) {
   markCurrentPage(scope);
+  reflectAccount(scope);
+}
+
+/* The nav link starts as "Sign in". Once auth.js knows who is signed in, swap
+   it for their display name so the header reflects the session. auth.js is only
+   loaded on account.html, so every other page keeps the plain link. */
+function reflectAccount(scope) {
+  const link = scope.querySelector('#nav-account');
+  if (!link) return;
+
+  const auth = window.RunTianjinAuth;
+  if (!auth || !auth.configured) return;
+
+  const apply = state => {
+    if (state && state.signedIn) {
+      const name = (state.profile && state.profile.display_name) || '';
+      const email = state.user && state.user.email ? state.user.email : '';
+      const label = name || (email ? email.split('@')[0] : 'Account');
+      link.textContent = label;
+      link.classList.add('is-signed-in');
+      link.setAttribute('title', 'Signed in as ' + (email || label));
+    } else {
+      link.textContent = 'Sign in';
+      link.classList.remove('is-signed-in');
+      link.removeAttribute('title');
+    }
+  };
+
+  auth.onChange(apply);
+  auth.ready().then(apply);
 }
 
 if (target) {

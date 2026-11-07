@@ -1,17 +1,15 @@
 ﻿// Running assistant for the Tips page.
-// Asks the AI proxy (worker/ai-proxy.js) first; if that is unreachable or
-// unconfigured, falls back to keyword matching over knowledge.js so the page
-// still answers offline and from file://.
+// Two modes:
+//   1. BYOK — the visitor pastes their own AI key, stored in localStorage and
+//      sent straight to the provider. No backend, works from file://.
+//   2. Fallback — keyword matching over knowledge.js, used when no key is set
+//      or the provider call fails.
 (function () {
   const root = document.getElementById('qa');
   if (!root) return;
 
-  // Set this to your deployed Worker URL to turn on AI answers.
-  // Leave empty to stay on local keyword matching only.
-  const AI_ENDPOINT = '';
-
   const form = root.querySelector('.qa-form');
-  const input = root.querySelector('.qa-input');
+  const input = root.querySelector('#qa-input');
   const submit = root.querySelector('.qa-submit');
   const answerBox = root.querySelector('.qa-answer');
   const answerBody = root.querySelector('.qa-answer-body');
@@ -19,6 +17,14 @@
   const suggestionsBox = root.querySelector('.qa-suggestions');
   const suggestionsList = root.querySelector('.qa-suggestions-list');
   const chips = root.querySelectorAll('.ai-chip');
+
+  const setupBox = document.getElementById('qa-setup');
+  const setupState = document.getElementById('qa-setup-state');
+  const providerSelect = document.getElementById('qa-provider');
+  const keyInput = document.getElementById('qa-key');
+  const saveBtn = document.getElementById('qa-save');
+  const clearBtn = document.getElementById('qa-clear');
+  const setupHelp = document.getElementById('qa-setup-help');
 
   const knowledge = window.RUN_TIANJIN_KNOWLEDGE || '';
 
@@ -442,31 +448,197 @@
     hideSuggestions();
   }
 
-  // ---------------------------------------------------------------- AI answers
-  // The Worker holds the API key; the browser only ever sees this endpoint.
-  function askAI(question) {
-    if (!AI_ENDPOINT) return Promise.reject(new Error('AI endpoint not configured'));
+  // ---------------------------------------------------------------- BYOK setup
+  // The key lives in localStorage on this device only. It is sent directly to
+  // the provider, so no server of ours ever sees it.
+  const STORE_KEY = 'runtianjin:ai';
+  const PROVIDERS = {
+    groq: {
+      label: 'Groq',
+      url: 'https://api.groq.com/openai/v1/chat/completions',
+      model: 'llama-3.3-70b-versatile',
+      style: 'openai',
+      help: 'Get a free key at <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com</a>.'
+    },
+    openai: {
+      label: 'OpenAI',
+      url: 'https://api.openai.com/v1/chat/completions',
+      model: 'gpt-4o-mini',
+      style: 'openai',
+      help: 'Get a key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">platform.openai.com</a>.'
+    },
+    gemini: {
+      label: 'Gemini',
+      url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+      model: 'gemini-2.0-flash',
+      style: 'gemini',
+      help: 'Get a free key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com</a>.'
+    }
+  };
 
+  function readConfig() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || !parsed.key || !PROVIDERS[parsed.provider]) return null;
+      return parsed;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeConfig(config) {
+    try {
+      if (config) {
+        localStorage.setItem(STORE_KEY, JSON.stringify(config));
+      } else {
+        localStorage.removeItem(STORE_KEY);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  let config = readConfig();
+
+  function refreshSetupUI() {
+    if (!setupState) return;
+    if (config) {
+      setupState.textContent = 'On — ' + PROVIDERS[config.provider].label;
+      setupState.classList.add('is-on');
+      if (providerSelect) providerSelect.value = config.provider;
+      if (keyInput) keyInput.value = config.key;
+    } else {
+      setupState.textContent = 'Off — using keyword search';
+      setupState.classList.remove('is-on');
+      if (keyInput) keyInput.value = '';
+    }
+    if (setupHelp && providerSelect) {
+      setupHelp.innerHTML = PROVIDERS[providerSelect.value].help;
+    }
+  }
+
+  if (providerSelect) {
+    providerSelect.addEventListener('change', function () {
+      if (setupHelp) setupHelp.innerHTML = PROVIDERS[providerSelect.value].help;
+    });
+  }
+
+  if (saveBtn) {
+    saveBtn.addEventListener('click', function () {
+      const provider = providerSelect ? providerSelect.value : 'groq';
+      const key = keyInput ? keyInput.value.trim() : '';
+      if (!key) {
+        if (setupHelp) setupHelp.textContent = 'Paste a key first.';
+        return;
+      }
+      config = { provider: provider, key: key };
+      if (!writeConfig(config)) {
+        config = null;
+        if (setupHelp) setupHelp.textContent = 'This browser blocked storage, so the key cannot be saved.';
+        return;
+      }
+      refreshSetupUI();
+      if (setupHelp) setupHelp.textContent = 'Key saved on this device.';
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      config = null;
+      writeConfig(null);
+      refreshSetupUI();
+      if (setupHelp) setupHelp.textContent = 'Key removed.';
+    });
+  }
+
+  refreshSetupUI();
+
+  // ---------------------------------------------------------------- AI answers
+  function buildSystemPrompt() {
+    return [
+      'You are the running assistant for Run Tianjin, a city running guide for Tianjin, China.',
+      'Answer using ONLY the guide below. If the guide does not cover the question, say so plainly',
+      'and suggest what the guide does cover. Never invent routes, distances, or opening hours.',
+      'Keep answers under 120 words. Use short paragraphs or a few bullets. Plain text only.',
+      '',
+      '--- GUIDE START ---',
+      knowledge.slice(0, 12000),
+      '--- GUIDE END ---'
+    ].join('\n');
+  }
+
+  function askAI(question) {
+    if (!config) return Promise.reject(new Error('No key configured'));
+
+    const provider = PROVIDERS[config.provider];
     const controller = typeof AbortController === 'function' ? new AbortController() : null;
     const timer = controller
       ? window.setTimeout(function () {
           controller.abort();
-        }, 20000)
+        }, 25000)
       : null;
 
-    return fetch(AI_ENDPOINT, {
+    let url = provider.url;
+    let headers = { 'Content-Type': 'application/json' };
+    let body;
+
+    if (provider.style === 'gemini') {
+      url = url + '?key=' + encodeURIComponent(config.key);
+      body = {
+        systemInstruction: { parts: [{ text: buildSystemPrompt() }] },
+        contents: [{ role: 'user', parts: [{ text: question }] }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 400 }
+      };
+    } else {
+      headers.Authorization = 'Bearer ' + config.key;
+      body = {
+        model: provider.model,
+        temperature: 0.3,
+        max_tokens: 400,
+        messages: [
+          { role: 'system', content: buildSystemPrompt() },
+          { role: 'user', content: question }
+        ]
+      };
+    }
+
+    return fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: question, context: knowledge }),
+      headers: headers,
+      body: JSON.stringify(body),
       signal: controller ? controller.signal : undefined
     })
       .then(function (response) {
         return response.json().then(function (data) {
           if (!response.ok) {
-            throw new Error(data && data.error ? data.error : 'Request failed');
+            const detail =
+              (data && data.error && (data.error.message || data.error)) || 'Request failed';
+            throw new Error(typeof detail === 'string' ? detail : 'Request failed');
           }
-          if (!data || !data.answer) throw new Error('Empty answer');
-          return data.answer;
+          if (provider.style === 'gemini') {
+            const parts =
+              data && data.candidates && data.candidates[0] && data.candidates[0].content
+                ? data.candidates[0].content.parts
+                : null;
+            const text = parts
+              ? parts
+                  .map(function (part) {
+                    return part.text || '';
+                  })
+                  .join('')
+              : '';
+            if (!text) throw new Error('Empty answer');
+            return text;
+          }
+          const text =
+            data && data.choices && data.choices[0] && data.choices[0].message
+              ? data.choices[0].message.content
+              : '';
+          if (!text) throw new Error('Empty answer');
+          return text;
         });
       })
       .finally(function () {
@@ -479,15 +651,15 @@
     if (!trimmed) return;
 
     submit.disabled = true;
-    submit.textContent = AI_ENDPOINT ? 'Thinking…' : 'Searching…';
+    submit.textContent = config ? 'Thinking…' : 'Searching…';
 
     const finish = function () {
       submit.disabled = false;
       submit.textContent = 'Ask';
     };
 
-    if (!AI_ENDPOINT) {
-      // No Worker configured: answer locally, same as before.
+    if (!config) {
+      // No key: answer locally, same as before.
       window.setTimeout(function () {
         try {
           render(answer(trimmed));
@@ -505,19 +677,18 @@
         render({ text: text, found: true, source: 'ai' });
       })
       .catch(function (error) {
-        // Network, rate limit, or Worker misconfiguration: fall back to the
-        // local guide so the visitor still gets an answer.
+        // Bad key, rate limit, or network: fall back to the local guide so the
+        // visitor still gets an answer.
         const local = answer(trimmed);
-        const note =
-          error && error.name === 'AbortError'
-            ? 'The AI took too long, so this answer comes from the site guide.'
-            : 'The AI is unavailable right now, so this answer comes from the site guide.';
-        render({
-          text: local.text,
-          found: local.found,
-          source: 'local',
-          note: note
-        });
+        let note;
+        if (error && error.name === 'AbortError') {
+          note = 'The AI took too long, so this answer comes from the site guide.';
+        } else if (error && /401|403|invalid|api key|unauthor/i.test(error.message)) {
+          note = 'That key was rejected. Check it in the AI answers panel above.';
+        } else {
+          note = 'The AI is unavailable right now, so this answer comes from the site guide.';
+        }
+        render({ text: local.text, found: local.found, source: 'local', note: note });
       })
       .finally(finish);
   }

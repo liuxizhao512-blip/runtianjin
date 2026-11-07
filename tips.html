@@ -227,13 +227,53 @@
           <div class="qa" id="qa">
             <div class="qa-head">
               <p class="eyebrow">Route Q&amp;A</p>
-              <h3>Search the route guide.</h3>
+              <h3>Ask the route guide.</h3>
               <p class="qa-lead">
-                Routes, pacing, gear, or local conditions — ask in your own words. Answers come
-                from this site's route guide, so they stay accurate to what the guide actually
-                covers. If the assistant is unavailable, the page falls back to keyword search.
+                Routes, pacing, gear, or local conditions — ask in your own words. Add your own
+                AI key below to get real answers; without a key the page falls back to keyword
+                search over this site's guide.
               </p>
             </div>
+
+            <details class="qa-setup" id="qa-setup">
+              <summary class="qa-setup-summary">
+                <span class="qa-setup-title">AI answers</span>
+                <span class="qa-setup-state" id="qa-setup-state">Off — using keyword search</span>
+              </summary>
+              <div class="qa-setup-body">
+                <p class="qa-setup-note">
+                  Your key is stored only in this browser and sent straight to the AI provider.
+                  It never touches this site's server, because there isn't one.
+                </p>
+
+                <label class="qa-label" for="qa-provider">Provider</label>
+                <select class="qa-select" id="qa-provider">
+                  <option value="groq">Groq (free tier, fast)</option>
+                  <option value="openai">OpenAI</option>
+                  <option value="gemini">Google Gemini</option>
+                </select>
+
+                <label class="qa-label" for="qa-key">API key</label>
+                <input
+                  class="qa-key-input"
+                  id="qa-key"
+                  type="password"
+                  autocomplete="off"
+                  spellcheck="false"
+                  placeholder="Paste your key"
+                />
+
+                <div class="qa-setup-actions">
+                  <button class="qa-save" type="button" id="qa-save">Save key</button>
+                  <button class="qa-clear" type="button" id="qa-clear">Remove key</button>
+                </div>
+
+                <p class="qa-setup-help" id="qa-setup-help">
+                  Get a free key at
+                  <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com</a>.
+                </p>
+              </div>
+            </details>
 
             <form class="qa-form" autocomplete="off">
               <label class="qa-label" for="qa-input">Your question</label>
@@ -316,6 +356,7 @@
 
     <script src="analytics.js"></script>
     <script src="nav.js"></script>
+    <script src="auth.js?v=20261109"></script>
     <script src="knowledge.js"></script>
     <script src="qa.js"></script>
   </body>

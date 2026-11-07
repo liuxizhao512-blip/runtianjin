@@ -185,6 +185,31 @@ img {
   border-bottom-color: var(--navy);
 }
 
+/* Account link: set apart from the page links with a pill, so it reads as an
+   action rather than another section. */
+.nav-links a.nav-account {
+  padding: 7px 15px;
+  border: 1px solid rgba(16, 43, 82, 0.22);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  max-width: 14ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-links a.nav-account:hover,
+.nav-links a.nav-account:focus {
+  border-color: rgba(16, 43, 82, 0.5);
+  background: rgba(16, 43, 82, 0.05);
+}
+
+.nav-links a.nav-account.is-signed-in {
+  border-color: rgba(31, 122, 77, 0.35);
+  background: rgba(31, 122, 77, 0.08);
+  color: #1a6641;
+}
+
 .page-shell {
   max-width: 1280px;
   margin: 0 auto;
@@ -1466,6 +1491,150 @@ img {
   color: #4f5961;
   font-size: 1rem;
   line-height: 1.6;
+}
+
+/* BYOK panel: collapsed by default so the question box stays the focus. */
+.qa-setup {
+  border: 1px solid rgba(35, 38, 42, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.qa-setup-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.qa-setup-summary::-webkit-details-marker {
+  display: none;
+}
+
+.qa-setup-summary::before {
+  content: "+";
+  margin-right: 2px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.qa-setup[open] .qa-setup-summary::before {
+  content: "−";
+}
+
+.qa-setup-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.qa-setup-state {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.qa-setup-state.is-on {
+  color: #1f7a4d;
+  font-weight: 700;
+}
+
+.qa-setup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+
+.qa-setup-note {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.qa-select {
+  border: 1px solid rgba(35, 38, 42, 0.14);
+  border-radius: 12px;
+  padding: 11px 13px;
+  font: inherit;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.qa-select:focus {
+  outline: 2px solid rgba(45, 118, 215, 0.35);
+  outline-offset: 1px;
+}
+
+.qa-key-input {
+  border: 1px solid rgba(35, 38, 42, 0.14);
+  border-radius: 12px;
+  padding: 11px 13px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.qa-key-input:focus {
+  outline: 2px solid rgba(45, 118, 215, 0.35);
+  outline-offset: 1px;
+  border-color: rgba(45, 118, 215, 0.4);
+}
+
+.qa-setup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.qa-save,
+.qa-clear {
+  border-radius: 10px;
+  padding: 9px 16px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.qa-save {
+  border: none;
+  background: var(--navy);
+  color: #fff;
+}
+
+.qa-save:hover {
+  opacity: 0.9;
+}
+
+.qa-clear {
+  border: 1px solid rgba(35, 38, 42, 0.16);
+  background: transparent;
+  color: var(--muted);
+}
+
+.qa-clear:hover {
+  border-color: rgba(191, 79, 42, 0.4);
+  color: var(--orange-deep);
+}
+
+.qa-setup-help {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.qa-setup-help a {
+  color: var(--blue);
 }
 
 .qa-form {
@@ -6756,5 +6925,396 @@ img {
   .editorial-hero .stat-pill {
     flex: 1 1 calc(50% - 5px);
     min-width: 0;
+  }
+}
+
+/* ==========================================================================
+   Account page
+   Sign in / sign up, runner profile, and the synced training log.
+   ========================================================================== */
+
+.account-shell {
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.account-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-after-heading);
+}
+
+.account-head h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  letter-spacing: var(--track-display);
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.account-lead {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+/* --- unconfigured notice --- */
+.account-notice {
+  border: 1px solid rgba(191, 79, 42, 0.28);
+  border-radius: 16px;
+  padding: 22px 24px;
+  background: rgba(214, 109, 58, 0.06);
+}
+
+.account-notice h2 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  color: var(--orange-deep);
+}
+
+.account-notice p {
+  margin: 0 0 10px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.account-notice ol {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+.account-notice code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(31, 36, 41, 0.08);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em;
+}
+
+.account-notice-foot {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* --- tabs --- */
+.account-auth,
+.account-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 12px 28px rgba(16, 43, 82, 0.06);
+}
+
+.account-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(16, 43, 82, 0.06);
+}
+
+.account-tab {
+  flex: 1;
+  border: none;
+  border-radius: 9px;
+  padding: 10px 14px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.account-tab.is-active {
+  background: var(--paper);
+  color: var(--navy);
+  box-shadow: 0 1px 3px rgba(16, 43, 82, 0.12);
+}
+
+/* --- forms --- */
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.account-form h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  letter-spacing: var(--track-heading);
+  color: var(--ink);
+}
+
+.account-label {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.account-input {
+  border: 1px solid rgba(35, 38, 42, 0.14);
+  border-radius: 11px;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.account-input:focus {
+  outline: 2px solid rgba(45, 118, 215, 0.35);
+  outline-offset: 1px;
+  border-color: rgba(45, 118, 215, 0.4);
+}
+
+.account-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.account-submit {
+  border: none;
+  border-radius: 11px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--navy), #1d4e96);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.account-submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.account-submit:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.account-link-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.account-link-btn:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.account-status {
+  margin: 4px 0 0;
+  min-height: 1.2em;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.account-status.is-error {
+  color: var(--orange-deep);
+}
+
+.account-status.is-ok {
+  color: #1a6641;
+}
+
+/* --- signed-in panel --- */
+.account-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.account-panel-head h2 {
+  margin: 4px 0 2px;
+  font-size: 1.35rem;
+  letter-spacing: var(--track-heading);
+  color: var(--ink);
+}
+
+.account-email {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.account-signout {
+  border: 1px solid rgba(35, 38, 42, 0.16);
+  border-radius: 10px;
+  padding: 9px 16px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.account-signout:hover:not(:disabled) {
+  border-color: rgba(191, 79, 42, 0.4);
+  color: var(--orange-deep);
+}
+
+.account-profile {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* --- training log --- */
+.account-log {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.account-log-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.account-log-head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: var(--track-heading);
+  color: var(--ink);
+}
+
+.account-log-summary {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.account-log-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.account-log-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.account-run-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.account-run {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.account-run-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.account-run-main strong {
+  font-size: 0.98rem;
+  color: var(--ink);
+}
+
+.account-run-meta {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.account-run-delete {
+  flex-shrink: 0;
+  border: 1px solid rgba(35, 38, 42, 0.14);
+  border-radius: 9px;
+  padding: 7px 13px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.account-run-delete:hover:not(:disabled) {
+  border-color: rgba(191, 79, 42, 0.4);
+  color: var(--orange-deep);
+}
+
+.account-empty {
+  margin: 0;
+  padding: 18px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .account-auth,
+  .account-panel {
+    padding: 18px;
+  }
+
+  .account-run {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .account-run-delete {
+    align-self: flex-end;
   }
 }

@@ -11,7 +11,7 @@ A static running-route guide for Tianjin. No build step, no framework, no server
 | `routes.html` | Route listing, quick comparison table, weekly plan board |
 | `map.html` | Interactive map, route recommendation engine, training dashboard |
 | `detail.html` | Per-route detail page (`detail.html?route=haihe`) |
-| `tips.html` | Practical running tips + keyword-based route Q&A |
+| `tips.html` | Practical running tips + route Q&A (BYOK AI, keyword fallback) |
 | `about.html` | Project background and data sources |
 
 ## Accessibility and metadata
@@ -26,6 +26,26 @@ A static running-route guide for Tianjin. No build step, no framework, no server
   links resolve correctly from any host.
 - `sitemap.xml` lists all nine indexable URLs (six pages plus the four route
   variants of `detail.html`); `robots.txt` points crawlers at it.
+
+## Route Q&A (bring your own key)
+
+`tips.html` has an "Ask the route guide" box. It runs in two modes:
+
+1. **BYOK (bring your own key)** — the visitor opens the *AI answers* panel, picks a
+   provider (Groq / OpenAI / Gemini), and pastes their own API key. The key is kept in
+   `localStorage` under `runtianjin:ai` and sent **directly from the browser to the
+   provider**. There is no backend, so the site works from `file://` and GitHub Pages
+   with no server, no secrets in the repo, and no cost to the site owner.
+2. **Keyword fallback** — with no key set (or if the provider call fails), `qa.js`
+   matches the question against `knowledge.js` and answers from the site guide.
+
+The AI is instructed to answer only from `knowledge.js`, so it will not invent routes
+or distances. A rejected key, a rate limit, or a timeout all fall back to the local
+guide with a short note explaining why.
+
+`worker/ai-proxy.js` is an optional alternative: a Cloudflare Worker that holds one
+shared key so visitors do not need their own. It is **not required** — see
+`worker/README.md` if you want that model instead.
 
 ## Analytics
 
@@ -50,7 +70,7 @@ routes.html ─┼─ nav.html / nav.js      shared navigation (injected at runt
 tips.html   ─┤  styles.css            critical styling (design tokens in :root)
 about.html  ─┘  styles-extra.css      deferred: touch targets, content-visibility, print
                 analytics.js          GoatCounter loader (no-op until a site code is set)
-                qa.js                 keyword search over knowledge.js
+                qa.js                 route Q&A: BYOK AI, keyword fallback
                 knowledge.js          the Q&A knowledge base (markdown-ish text)
                 feedback.js           mailto feedback form
 ```

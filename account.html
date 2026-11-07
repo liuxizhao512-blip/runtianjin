@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Create a Run Tianjin account to save your runner profile, weekly goal, and training log across devices."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Your account | Run Tianjin" />
+    <meta
+      property="og:description"
+      content="Create a Run Tianjin account to save your runner profile, weekly goal, and training log across devices."
+    />
+    <meta property="og:url" content="https://liuxizhao512-blip.github.io/runtianjin/account.html" />
+    <meta property="og:image" content="https://liuxizhao512-blip.github.io/runtianjin/run-tianjin-share-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Your account | Run Tianjin" />
+    <meta
+      name="twitter:description"
+      content="Create a Run Tianjin account to save your runner profile, weekly goal, and training log across devices."
+    />
+    <meta name="twitter:image" content="https://liuxizhao512-blip.github.io/runtianjin/run-tianjin-share-card.jpg" />
+    <title>Your account | Run Tianjin</title>
+    <link rel="canonical" href="https://liuxizhao512-blip.github.io/runtianjin/account.html" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://liuxizhao512-blip.github.io/runtianjin/sitemap.xml" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261106d" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=20261106d" />
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png?v=20261106d" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20261106d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Run Tianjin" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#1d3f6d" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="prefetch" href="vendor/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="stylesheet" href="vendor/fonts/inter.css?v=20261107" />
+    <link rel="stylesheet" href="styles.css?v=20261108" />
+    <link rel="stylesheet" href="styles-extra.css?v=20261106" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="styles-extra.css?v=20261106" /></noscript>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header id="site-header"></header>
+
+    <main id="main" class="page-shell">
+      <section class="section-block account-shell">
+        <div class="account-head">
+          <p class="eyebrow">Your account</p>
+          <h1 id="account-title">Sign in to keep your training log.</h1>
+          <p class="account-lead" id="account-lead">
+            An account saves your runner profile, weekly goal, and run history so they follow you
+            to any device. Everything else on this site works without one.
+          </p>
+        </div>
+
+        <!-- Shown when auth.js has no Supabase URL / key yet. -->
+        <div class="account-notice" id="account-unconfigured" hidden>
+          <h2>Accounts are not switched on yet</h2>
+          <p>
+            This site is static, so accounts run on a free Supabase project. To enable them:
+          </p>
+          <ol>
+            <li>Create a project at <a href="https://supabase.com" target="_blank" rel="noopener noreferrer">supabase.com</a>.</li>
+            <li>Open the SQL editor and run <code>supabase/schema.sql</code> from this repo.</li>
+            <li>Paste your project URL and anon key into <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> at the top of <code>auth.js</code>.</li>
+          </ol>
+          <p class="account-notice-foot">
+            Until then, the training log on the <a href="map.html">map page</a> still works and
+            saves to this browser only.
+          </p>
+        </div>
+
+        <!-- Signed out: sign in / sign up / reset. -->
+        <div class="account-auth" id="account-auth" hidden>
+          <div class="account-tabs" role="tablist" aria-label="Account actions">
+            <button class="account-tab is-active" type="button" role="tab" id="tab-signin" aria-selected="true" aria-controls="panel-signin">
+              Sign in
+            </button>
+            <button class="account-tab" type="button" role="tab" id="tab-signup" aria-selected="false" aria-controls="panel-signup">
+              Create account
+            </button>
+          </div>
+
+          <form class="account-form" id="panel-signin" role="tabpanel" aria-labelledby="tab-signin" autocomplete="on">
+            <label class="account-label" for="signin-email">Email</label>
+            <input class="account-input" id="signin-email" type="email" autocomplete="email" required />
+
+            <label class="account-label" for="signin-password">Password</label>
+            <input class="account-input" id="signin-password" type="password" autocomplete="current-password" required />
+
+            <div class="account-actions">
+              <button class="account-submit" type="submit">Sign in</button>
+              <button class="account-link-btn" type="button" id="forgot-password">Forgot password?</button>
+            </div>
+          </form>
+
+          <form class="account-form" id="panel-signup" role="tabpanel" aria-labelledby="tab-signup" autocomplete="on" hidden>
+            <label class="account-label" for="signup-name">Display name</label>
+            <input class="account-input" id="signup-name" type="text" autocomplete="nickname" maxlength="40" placeholder="How should we greet you?" />
+
+            <label class="account-label" for="signup-email">Email</label>
+            <input class="account-input" id="signup-email" type="email" autocomplete="email" required />
+
+            <label class="account-label" for="signup-password">Password</label>
+            <input class="account-input" id="signup-password" type="password" autocomplete="new-password" minlength="8" required />
+            <p class="account-hint">At least 8 characters.</p>
+
+            <div class="account-actions">
+              <button class="account-submit" type="submit">Create account</button>
+            </div>
+          </form>
+
+          <p class="account-status" id="account-status" role="status" aria-live="polite"></p>
+        </div>
+
+        <!-- Signed in: profile + training log. -->
+        <div class="account-panel" id="account-panel" hidden>
+          <div class="account-panel-head">
+            <div>
+              <p class="eyebrow">Signed in</p>
+              <h2 id="account-greeting">Welcome back.</h2>
+              <p class="account-email" id="account-email"></p>
+            </div>
+            <button class="account-signout" type="button" id="account-signout">Sign out</button>
+          </div>
+
+          <form class="account-form account-profile" id="profile-form">
+            <h3>Runner profile</h3>
+
+            <label class="account-label" for="profile-name">Display name</label>
+            <input class="account-input" id="profile-name" type="text" maxlength="40" />
+
+            <label class="account-label" for="profile-goal">Weekly goal (km)</label>
+            <input class="account-input" id="profile-goal" type="number" min="0" max="500" step="0.5" />
+
+            <label class="account-label" for="profile-route">Home route</label>
+            <select class="account-input" id="profile-route">
+              <option value="haihe">Haihe Riverside Run</option>
+              <option value="nancui">South Cuiping Park Loop</option>
+              <option value="shuishang">Water Park Lakeside Loop</option>
+              <option value="taida">Binhai TEDA Coastal Path</option>
+            </select>
+
+            <label class="account-label" for="profile-level">Running level</label>
+            <select class="account-input" id="profile-level">
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+
+            <div class="account-actions">
+              <button class="account-submit" type="submit">Save profile</button>
+            </div>
+            <p class="account-status" id="profile-status" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="account-log">
+            <div class="account-log-head">
+              <h3>Training log</h3>
+              <p class="account-log-summary" id="log-summary"></p>
+            </div>
+
+            <form class="account-form account-log-form" id="log-form">
+              <div class="account-log-row">
+                <div>
+                  <label class="account-label" for="log-route">Route</label>
+                  <select class="account-input" id="log-route">
+                    <option value="haihe">Haihe Riverside</option>
+                    <option value="nancui">South Cuiping Park</option>
+                    <option value="shuishang">Water Park Lakeside</option>
+                    <option value="taida">Binhai TEDA Coastal</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="account-label" for="log-distance">Distance (km)</label>
+                  <input class="account-input" id="log-distance" type="number" min="0.1" max="200" step="0.1" required />
+                </div>
+                <div>
+                  <label class="account-label" for="log-duration">Duration (min)</label>
+                  <input class="account-input" id="log-duration" type="number" min="1" max="1440" step="1" required />
+                </div>
+                <div>
+                  <label class="account-label" for="log-date">Date</label>
+                  <input class="account-input" id="log-date" type="date" required />
+                </div>
+              </div>
+              <div class="account-actions">
+                <button class="account-submit" type="submit">Add run</button>
+              </div>
+              <p class="account-status" id="log-status" role="status" aria-live="polite"></p>
+            </form>
+
+            <ul class="account-run-list" id="run-list"></ul>
+            <p class="account-empty" id="run-empty" hidden>No runs logged yet. Add your first one above.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Run Tianjin — a city running guide. <a href="about.html">About</a> · <a href="tips.html">Tips</a></p>
+    </footer>
+
+    <script src="nav.js?v=20261106"></script>
+    <script src="auth.js?v=20261109"></script>
+    <script src="account.js?v=20261109"></script>
+  </body>
+</html>
