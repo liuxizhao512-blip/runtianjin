@@ -2,7 +2,7 @@ const fallbackNav = `
   <nav class="site-nav" aria-label="Main navigation">
     <div class="brand">
       <a href="index.html" class="brand-mark" aria-label="Run Tianjin home">
-        <img src="run-tianjin-logo-96.png?v=20261106b" alt="" width="38" height="38" decoding="async" />
+        <img src="favicon.svg?v=20261107a" alt="" width="38" height="38" decoding="async" />
         <span>Run Tianjin</span>
       </a>
     </div>

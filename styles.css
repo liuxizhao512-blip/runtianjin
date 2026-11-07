@@ -133,10 +133,6 @@ img {
   border: 1px solid rgba(16, 43, 82, 0.1);
   background: #fff;
   flex-shrink: 0;
-  /* favicon.svg 内部图形不居中（内容框 819x1240，上边距 124、下边距 15），
-     用 scale + translate 把图形放大并居中到 38x38 的框里 */
-  transform: scale(1.55) translateY(2.2%);
-  transform-origin: center center;
 }
 
 .site-nav .brand-mark span {
