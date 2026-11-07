@@ -5,27 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Reading notes, route planning, and practical running advice for Tianjin runners."
+      content="Create a Run Tianjin account to save your runner profile, weekly goal, and training log across devices."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Running Tips | Run Tianjin" />
+    <meta property="og:title" content="Your account | Run Tianjin" />
     <meta
       property="og:description"
-      content="Reading notes, route planning, and practical running advice for Tianjin runners."
+      content="Create a Run Tianjin account to save your runner profile, weekly goal, and training log across devices."
     />
-    <meta property="og:url" content="https://liuxizhao512-blip.github.io/runtianjin/tips.html" />
+    <meta property="og:url" content="https://liuxizhao512-blip.github.io/runtianjin/account.html" />
     <meta property="og:image" content="https://liuxizhao512-blip.github.io/runtianjin/run-tianjin-share-card.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Running Tips | Run Tianjin" />
+    <meta name="twitter:title" content="Your account | Run Tianjin" />
     <meta
       name="twitter:description"
-      content="Reading notes, route planning, and practical running advice for Tianjin runners."
+      content="Create a Run Tianjin account to save your runner profile, weekly goal, and training log across devices."
     />
     <meta name="twitter:image" content="https://liuxizhao512-blip.github.io/runtianjin/run-tianjin-share-card.jpg" />
-    <title>Running Tips | Run Tianjin</title>
-    <link rel="canonical" href="https://liuxizhao512-blip.github.io/runtianjin/tips.html" />
+    <title>Your account | Run Tianjin</title>
+    <link rel="canonical" href="https://liuxizhao512-blip.github.io/runtianjin/account.html" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://liuxizhao512-blip.github.io/runtianjin/sitemap.xml" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20261107a" />
     <link rel="apple-touch-icon" href="favicon.svg?v=20261107a" />
@@ -35,9 +35,9 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#1d3f6d" />
     <link rel="manifest" href="site.webmanifest" />
-        <link rel="prefetch" href="vendor/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="prefetch" href="vendor/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="stylesheet" href="vendor/fonts/inter.css?v=20261107" />
-<link rel="stylesheet" href="styles.css?v=20261107b" />
+    <link rel="stylesheet" href="styles.css?v=20261108" />
     <link rel="stylesheet" href="styles-extra.css?v=20261106" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="styles-extra.css?v=20261106" /></noscript>
   </head>
@@ -46,316 +46,166 @@
     <header id="site-header"></header>
 
     <main id="main" class="page-shell">
-      <section class="section-block tips-shell">
-        <div class="tip-summary">
-          <div class="tip-summary-copy">
-            <p class="eyebrow">Practical guidance</p>
-            <h1>Make each run safer, smoother, and more enjoyable.</h1>
-          </div>
-
-          <div class="tip-summary-stats">
-            <div class="mini-stat">
-              <strong>5–10 min</strong>
-              <span>warm-up</span>
-            </div>
-            <div class="mini-stat">
-              <strong>8–10 min</strong>
-              <span>cool-down</span>
-            </div>
-            <div class="mini-stat">
-              <strong>Every run</strong>
-              <span>hydrate</span>
-            </div>
-          </div>
+      <section class="section-block account-shell">
+        <div class="account-head">
+          <p class="eyebrow">Your account</p>
+          <h1 id="account-title">Sign in to keep your training log.</h1>
+          <p class="account-lead" id="account-lead">
+            An account saves your runner profile, weekly goal, and run history so they follow you
+            to any device. Everything else on this site works without one.
+          </p>
         </div>
 
-        <div class="section-title-row compact-row">
-          <h2>The shape of a run</h2>
+        <!-- Shown when auth.js has no Supabase URL / key yet. -->
+        <div class="account-notice" id="account-unconfigured" hidden>
+          <h2>Accounts are not switched on yet</h2>
+          <p>
+            This site is static, so accounts run on a free Supabase project. To enable them:
+          </p>
+          <ol>
+            <li>Create a project at <a href="https://supabase.com" target="_blank" rel="noopener noreferrer">supabase.com</a>.</li>
+            <li>Open the SQL editor and run <code>supabase/schema.sql</code> from this repo.</li>
+            <li>Paste your project URL and anon key into <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> at the top of <code>auth.js</code>.</li>
+          </ol>
+          <p class="account-notice-foot">
+            Until then, the training log on the <a href="map.html">map page</a> still works and
+            saves to this browser only.
+          </p>
         </div>
 
-        <ol class="run-flow">
-          <li class="run-flow-step">
-            <span class="run-flow-index">1</span>
-            <h3>Before you run</h3>
-            <ul>
-              <li>Warm up 5–10 minutes with brisk walking and light leg swings.</li>
-              <li>Check the weather, route lighting, and whether you need a light layer.</li>
-            </ul>
-          </li>
+        <!-- Signed out: sign in / sign up / reset. -->
+        <div class="account-auth" id="account-auth" hidden>
+          <div class="account-tabs" role="tablist" aria-label="Account actions">
+            <button class="account-tab is-active" type="button" role="tab" id="tab-signin" aria-selected="true" aria-controls="panel-signin">
+              Sign in
+            </button>
+            <button class="account-tab" type="button" role="tab" id="tab-signup" aria-selected="false" aria-controls="panel-signup">
+              Create account
+            </button>
+          </div>
 
-          <li class="run-flow-step">
-            <span class="run-flow-index">2</span>
-            <h3>During the run</h3>
-            <ul>
-              <li>Start gently for the first 10–15 minutes instead of sprinting.</li>
-              <li>Keep a steady breathing pattern and avoid overstriding on concrete.</li>
-            </ul>
-          </li>
+          <form class="account-form" id="panel-signin" role="tabpanel" aria-labelledby="tab-signin" autocomplete="on">
+            <label class="account-label" for="signin-email">Email</label>
+            <input class="account-input" id="signin-email" type="email" autocomplete="email" required />
 
-          <li class="run-flow-step">
-            <span class="run-flow-index">3</span>
-            <h3>After the run</h3>
-            <ul>
-              <li>Walk 5–10 minutes to lower your heart rate gradually.</li>
-              <li>Stretch calves, glutes, and hamstrings, then rehydrate.</li>
-            </ul>
-          </li>
-        </ol>
+            <label class="account-label" for="signin-password">Password</label>
+            <input class="account-input" id="signin-password" type="password" autocomplete="current-password" required />
 
-        <div class="section-title-row compact-row">
-          <h2>Training intensity</h2>
+            <div class="account-actions">
+              <button class="account-submit" type="submit">Sign in</button>
+              <button class="account-link-btn" type="button" id="forgot-password">Forgot password?</button>
+            </div>
+          </form>
+
+          <form class="account-form" id="panel-signup" role="tabpanel" aria-labelledby="tab-signup" autocomplete="on" hidden>
+            <label class="account-label" for="signup-name">Display name</label>
+            <input class="account-input" id="signup-name" type="text" autocomplete="nickname" maxlength="40" placeholder="How should we greet you?" />
+
+            <label class="account-label" for="signup-email">Email</label>
+            <input class="account-input" id="signup-email" type="email" autocomplete="email" required />
+
+            <label class="account-label" for="signup-password">Password</label>
+            <input class="account-input" id="signup-password" type="password" autocomplete="new-password" minlength="8" required />
+            <p class="account-hint">At least 8 characters.</p>
+
+            <div class="account-actions">
+              <button class="account-submit" type="submit">Create account</button>
+            </div>
+          </form>
+
+          <p class="account-status" id="account-status" role="status" aria-live="polite"></p>
         </div>
 
-        <div class="intensity-layout">
-          <div class="intensity-note">
-            <p class="eyebrow">How hard should it feel?</p>
-            <h3>Most of your running should feel easy.</h3>
-            <p>
-              Use the talk test before you trust a watch. If you can speak in full sentences, you are
-              running easy enough to build aerobic fitness without draining yourself. Save the harder
-              efforts for one or two sessions a week.
-            </p>
-            <p>
-              Heart-rate percentages are rough guides, not targets. Heat, humidity, sleep, and stress
-              all shift your numbers, so let breathing and perceived effort lead.
-            </p>
+        <!-- Signed in: profile + training log. -->
+        <div class="account-panel" id="account-panel" hidden>
+          <div class="account-panel-head">
+            <div>
+              <p class="eyebrow">Signed in</p>
+              <h2 id="account-greeting">Welcome back.</h2>
+              <p class="account-email" id="account-email"></p>
+            </div>
+            <button class="account-signout" type="button" id="account-signout">Sign out</button>
           </div>
 
-          <div class="route-comparison intensity-table" aria-label="Training intensity table">
-            <div class="comparison-row comparison-header">
-              <span>Session</span>
-              <span>Effort</span>
-              <span>Heart rate</span>
-              <span>Talk test</span>
-              <span>Where to run</span>
+          <form class="account-form account-profile" id="profile-form">
+            <h3>Runner profile</h3>
+
+            <label class="account-label" for="profile-name">Display name</label>
+            <input class="account-input" id="profile-name" type="text" maxlength="40" />
+
+            <label class="account-label" for="profile-goal">Weekly goal (km)</label>
+            <input class="account-input" id="profile-goal" type="number" min="0" max="500" step="0.5" />
+
+            <label class="account-label" for="profile-route">Home route</label>
+            <select class="account-input" id="profile-route">
+              <option value="haihe">Haihe Riverside Run</option>
+              <option value="nancui">South Cuiping Park Loop</option>
+              <option value="shuishang">Water Park Lakeside Loop</option>
+              <option value="taida">Binhai TEDA Coastal Path</option>
+            </select>
+
+            <label class="account-label" for="profile-level">Running level</label>
+            <select class="account-input" id="profile-level">
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+
+            <div class="account-actions">
+              <button class="account-submit" type="submit">Save profile</button>
+            </div>
+            <p class="account-status" id="profile-status" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="account-log">
+            <div class="account-log-head">
+              <h3>Training log</h3>
+              <p class="account-log-summary" id="log-summary"></p>
             </div>
 
-            <div class="comparison-row">
-              <strong>Easy run</strong>
-              <span>3–4 / 10</span>
-              <span>60–70% max</span>
-              <span>Full sentences</span>
-              <span><a href="detail.html?route=shuishang">Water Park Lakeside</a></span>
-            </div>
-
-            <div class="comparison-row">
-              <strong>Tempo run</strong>
-              <span>6–7 / 10</span>
-              <span>80–88% max</span>
-              <span>Short phrases</span>
-              <span><a href="detail.html?route=haihe">Haihe Riverside</a></span>
-            </div>
-
-            <div class="comparison-row">
-              <strong>Long run</strong>
-              <span>4–5 / 10</span>
-              <span>65–75% max</span>
-              <span>Short sentences</span>
-              <span><a href="detail.html?route=taida">Binhai TEDA Coastal</a></span>
-            </div>
-
-            <div class="comparison-row">
-              <strong>Intervals</strong>
-              <span>8–9 / 10</span>
-              <span>90%+ max</span>
-              <span>Single words</span>
-              <span><a href="detail.html?route=nancui">South Cuiping Park</a></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-title-row compact-row">
-          <h2>Running in Tianjin</h2>
-        </div>
-
-        <div class="local-grid">
-          <article class="local-card">
-            <p class="local-tag">Riverside</p>
-            <h3>Haihe riverside</h3>
-            <p>Wind picks up along the open river channel, especially in spring and autumn. Run into the wind on the way out so the return leg feels easier, and expect cooler air near the water at night.</p>
-            <a class="local-link" href="detail.html?route=haihe">Haihe Riverside Run →</a>
-          </article>
-
-          <article class="local-card">
-            <p class="local-tag">Coastal</p>
-            <h3>Binhai coastal</h3>
-            <p>Sea breeze is constant and stronger than inland, and humidity is higher in summer. Wear a light wind-resistant layer, and avoid the exposed path when coastal fog or strong wind warnings are active.</p>
-            <a class="local-link" href="detail.html?route=taida">Binhai TEDA Coastal Path →</a>
-          </article>
-
-          <article class="local-card">
-            <p class="local-tag">Winter</p>
-            <h3>Winter lakes and parks</h3>
-            <p>Lakeside paths around Water Park can ice over after cold nights, and shaded park sections stay frozen longer than open roads. Shorten your stride on ice and choose the rubber track at South Cuiping when conditions are uncertain.</p>
-            <a class="local-link" href="detail.html?route=shuishang">Water Park Lakeside Loop →</a>
-          </article>
-
-          <article class="local-card">
-            <p class="local-tag">Summer</p>
-            <h3>Heat and humidity</h3>
-            <p>Tianjin summers drain energy fast. Run early morning or late evening, avoid noon exposure, and keep water on hand. Slow your pace by 15–20 seconds per kilometre in high humidity.</p>
-            <a class="local-link" href="detail.html?route=nancui">South Cuiping Park Loop →</a>
-          </article>
-        </div>
-
-        <div class="section-title-row compact-row">
-          <h2>Gear checklist</h2>
-        </div>
-
-        <dl class="gear-list">
-          <div class="gear-item">
-            <dt>Shoes</dt>
-            <dd>Softer cushioning for the rubber track and park loops; stable, responsive shoes for asphalt and coastal paths. Retire a pair after roughly 600–800 km.</dd>
-          </div>
-          <div class="gear-item">
-            <dt>Visibility</dt>
-            <dd>Reflective strips or a light vest for evening river runs. A small clip-on light makes you visible from behind, and bright colours help in low light and winter haze.</dd>
-          </div>
-          <div class="gear-item">
-            <dt>Water and layers</dt>
-            <dd>A handheld bottle or belt for runs over 45 minutes. A light windproof layer for the coastal path, plus gloves and a hat for cold morning starts.</dd>
-          </div>
-        </dl>
-
-        <div class="faq-wrap">
-          <div class="section-title-row compact-row">
-            <h2>Questions and answers</h2>
-          </div>
-
-          <div class="qa" id="qa">
-            <div class="qa-head">
-              <p class="eyebrow">Route Q&amp;A</p>
-              <h3>Ask the route guide.</h3>
-              <p class="qa-lead">
-                Routes, pacing, gear, or local conditions — ask in your own words. Add your own
-                AI key below to get real answers; without a key the page falls back to keyword
-                search over this site's guide.
-              </p>
-            </div>
-
-            <details class="qa-setup" id="qa-setup">
-              <summary class="qa-setup-summary">
-                <span class="qa-setup-title">AI answers</span>
-                <span class="qa-setup-state" id="qa-setup-state">Off — using keyword search</span>
-              </summary>
-              <div class="qa-setup-body">
-                <p class="qa-setup-note">
-                  Your key is stored only in this browser and sent straight to the AI provider.
-                  It never touches this site's server, because there isn't one.
-                </p>
-
-                <label class="qa-label" for="qa-provider">Provider</label>
-                <select class="qa-select" id="qa-provider">
-                  <option value="groq">Groq (free tier, fast)</option>
-                  <option value="openai">OpenAI</option>
-                  <option value="gemini">Google Gemini</option>
-                </select>
-
-                <label class="qa-label" for="qa-key">API key</label>
-                <input
-                  class="qa-key-input"
-                  id="qa-key"
-                  type="password"
-                  autocomplete="off"
-                  spellcheck="false"
-                  placeholder="Paste your key"
-                />
-
-                <div class="qa-setup-actions">
-                  <button class="qa-save" type="button" id="qa-save">Save key</button>
-                  <button class="qa-clear" type="button" id="qa-clear">Remove key</button>
+            <form class="account-form account-log-form" id="log-form">
+              <div class="account-log-row">
+                <div>
+                  <label class="account-label" for="log-route">Route</label>
+                  <select class="account-input" id="log-route">
+                    <option value="haihe">Haihe Riverside</option>
+                    <option value="nancui">South Cuiping Park</option>
+                    <option value="shuishang">Water Park Lakeside</option>
+                    <option value="taida">Binhai TEDA Coastal</option>
+                  </select>
                 </div>
-
-                <p class="qa-setup-help" id="qa-setup-help">
-                  Get a free key at
-                  <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com</a>.
-                </p>
+                <div>
+                  <label class="account-label" for="log-distance">Distance (km)</label>
+                  <input class="account-input" id="log-distance" type="number" min="0.1" max="200" step="0.1" required />
+                </div>
+                <div>
+                  <label class="account-label" for="log-duration">Duration (min)</label>
+                  <input class="account-input" id="log-duration" type="number" min="1" max="1440" step="1" required />
+                </div>
+                <div>
+                  <label class="account-label" for="log-date">Date</label>
+                  <input class="account-input" id="log-date" type="date" required />
+                </div>
               </div>
-            </details>
-
-            <form class="qa-form" autocomplete="off">
-              <label class="qa-label" for="qa-input">Your question</label>
-              <div class="qa-row">
-                <input
-                  class="qa-input"
-                  id="qa-input"
-                  type="text"
-                  placeholder="e.g. Is the Haihe route safe after dark?"
-                  maxlength="300"
-                />
-                <button class="qa-submit" type="submit">Ask</button>
+              <div class="account-actions">
+                <button class="account-submit" type="submit">Add run</button>
               </div>
+              <p class="account-status" id="log-status" role="status" aria-live="polite"></p>
             </form>
 
-            <div class="qa-chips" aria-label="Example questions">
-              <button class="ai-chip" type="button" data-question="Which route should I pick for my first run?">
-                First run
-              </button>
-              <button class="ai-chip" type="button" data-question="How do I know if I am running easy enough?">
-                Easy pace
-              </button>
-              <button class="ai-chip" type="button" data-question="What should I wear for a winter run in Tianjin?">
-                Winter gear
-              </button>
-              <button class="ai-chip" type="button" data-question="Is the coastal path windy in summer?">
-                Coastal wind
-              </button>
-            </div>
-
-            <div class="qa-answer" hidden>
-              <p class="qa-answer-meta"></p>
-              <p class="qa-answer-body"></p>
-            </div>
-          </div>
-
-          <div class="faq-list faq-two-col">
-            <details open>
-              <summary>Should I warm up even for a short run?</summary>
-              <p>Yes. Even a 5-minute warm-up helps your joints, muscles, and heart rate adapt smoothly before effort increases.</p>
-            </details>
-
-            <details>
-              <summary>Which route is best for beginners?</summary>
-              <p><a href="detail.html?route=nancui">South Cuiping Park Loop</a> is the most beginner-friendly choice because it has a soft surface and a short, easy-to-control distance.</p>
-            </details>
-
-            <details>
-              <summary>When is best for scenic city running?</summary>
-              <p>Late afternoon to evening is usually best for the <a href="detail.html?route=haihe">Haihe route</a>, when the city lights and riverside setting feel strongest.</p>
-            </details>
-
-            <details>
-              <summary>How do I choose running shoes?</summary>
-              <p>Match the shoe to the surface. Park loops benefit from softer cushioning, while asphalt and coastal routes work well with stable, responsive shoes.</p>
-            </details>
-
-            <details>
-              <summary>How often should I increase my distance?</summary>
-              <p>Add roughly 10% to your weekly total at most, and hold that level for two to three weeks before increasing again. If easy runs start feeling hard, stay at the current distance.</p>
-            </details>
-
-            <details>
-              <summary>What should I do if my knee hurts?</summary>
-              <p>Stop the run if the pain changes how you move. Switch to the softer <a href="detail.html?route=nancui">Cuiping track</a>, reduce distance for a week, and strengthen hips and glutes. See a professional if pain persists beyond two weeks.</p>
-            </details>
-
-            <details>
-              <summary>Should I run when the air quality is poor?</summary>
-              <p>Skip hard sessions when pollution or haze is heavy, and avoid running near busy roads at rush hour. Easy runs on quieter riverside or park paths are the better choice on borderline days.</p>
-            </details>
+            <ul class="account-run-list" id="run-list"></ul>
+            <p class="account-empty" id="run-empty" hidden>No runs logged yet. Add your first one above.</p>
           </div>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <p>© 2026 Run Tianjin · Tianjin running route guide</p>
+      <p>Run Tianjin — a city running guide. <a href="about.html">About</a> · <a href="tips.html">Tips</a></p>
     </footer>
 
-    <script src="analytics.js"></script>
-    <script src="nav.js"></script>
+    <script src="nav.js?v=20261106"></script>
     <script src="auth.js?v=20261109"></script>
-    <script src="knowledge.js"></script>
-    <script src="qa.js"></script>
+    <script src="account.js?v=20261109"></script>
   </body>
 </html>
