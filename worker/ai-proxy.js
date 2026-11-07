@@ -12,7 +12,11 @@
  *   4. wrangler secret put GROQ_API_KEY      (paste your gsk_... key)
  *   5. Copy the printed URL into AI_ENDPOINT in qa.js
  *
- * Optional: set ALLOWED_ORIGIN to your site origin to lock down CORS.
+ * CORS: only the origins in ALLOWED_ORIGINS are served. The default below is
+ * this site's GitHub Pages origin, so a fresh deploy is already locked down.
+ * Override with a comma-separated list, e.g.
+ *   wrangler secret put ALLOWED_ORIGINS
+ *   value: https://liuxizhao512-blip.github.io,http://localhost:8000
  */
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -21,6 +25,10 @@ const MODEL = 'llama-3.3-70b-versatile';
 // Requests per IP per hour. Keeps a public endpoint from being drained.
 const RATE_LIMIT = 30;
 const RATE_WINDOW_MS = 60 * 60 * 1000;
+
+// Only these origins may call the Worker. Anything else gets no CORS headers,
+// so the browser blocks the response before the page can read it.
+const DEFAULT_ALLOWED_ORIGINS = ['https://liuxizhao512-blip.github.io'];
 
 // In-memory counter. Resets when the isolate recycles, which is fine for
 // abuse-dampening; use a Durable Object if you need exact accounting.
@@ -37,21 +45,39 @@ function rateLimited(ip) {
   return entry.count > RATE_LIMIT;
 }
 
-function corsHeaders(env) {
-  return {
-    'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN || '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Max-Age': '86400'
-  };
+function allowedOrigins(env) {
+  const configured = env.ALLOWED_ORIGINS || env.ALLOWED_ORIGIN || '';
+  if (!configured.trim()) return DEFAULT_ALLOWED_ORIGINS;
+  return configured
+    .split(',')
+    .map(function (origin) {
+      return origin.trim().replace(/\/$/, '');
+    })
+    .filter(Boolean);
 }
 
-function json(body, status, env) {
+// Echo the caller's origin only when it is on the allow-list. Returning no
+// header at all is what makes the browser reject the response.
+function corsHeaders(request, env) {
+  const origin = (request.headers.get('Origin') || '').replace(/\/$/, '');
+  const headers = {
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '86400',
+    Vary: 'Origin'
+  };
+  if (origin && allowedOrigins(env).indexOf(origin) !== -1) {
+    headers['Access-Control-Allow-Origin'] = origin;
+  }
+  return headers;
+}
+
+function json(body, status, request, env) {
   return new Response(JSON.stringify(body), {
     status: status,
     headers: Object.assign(
       { 'Content-Type': 'application/json; charset=utf-8' },
-      corsHeaders(env)
+      corsHeaders(request, env)
     )
   });
 }
@@ -59,37 +85,37 @@ function json(body, status, env) {
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: corsHeaders(env) });
+      return new Response(null, { status: 204, headers: corsHeaders(request, env) });
     }
 
     if (request.method !== 'POST') {
-      return json({ error: 'Use POST.' }, 405, env);
+      return json({ error: 'Use POST.' }, 405, request, env);
     }
 
     if (!env.GROQ_API_KEY) {
-      return json({ error: 'Server is missing GROQ_API_KEY.' }, 500, env);
+      return json({ error: 'Server is missing GROQ_API_KEY.' }, 500, request, env);
     }
 
     const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
     if (rateLimited(ip)) {
-      return json({ error: 'Too many questions. Try again in a little while.' }, 429, env);
+      return json({ error: 'Too many questions. Try again in a little while.' }, 429, request, env);
     }
 
     let payload;
     try {
       payload = await request.json();
     } catch (error) {
-      return json({ error: 'Body must be JSON.' }, 400, env);
+      return json({ error: 'Body must be JSON.' }, 400, request, env);
     }
 
     const question = typeof payload.question === 'string' ? payload.question.trim() : '';
     const context = typeof payload.context === 'string' ? payload.context : '';
 
     if (!question) {
-      return json({ error: 'Missing question.' }, 400, env);
+      return json({ error: 'Missing question.' }, 400, request, env);
     }
     if (question.length > 500) {
-      return json({ error: 'Question is too long.' }, 400, env);
+      return json({ error: 'Question is too long.' }, 400, request, env);
     }
 
     // The knowledge base is sent from the client so the Worker stays stateless
@@ -124,7 +150,7 @@ export default {
         })
       });
     } catch (error) {
-      return json({ error: 'Could not reach the AI service.' }, 502, env);
+      return json({ error: 'Could not reach the AI service.' }, 502, request, env);
     }
 
     if (!upstream.ok) {
@@ -135,7 +161,7 @@ export default {
         upstream.status === 429
           ? 'The AI service is busy right now. Try again shortly.'
           : 'The AI service returned an error.';
-      return json({ error: message }, 502, env);
+      return json({ error: message }, 502, request, env);
     }
 
     const data = await upstream.json();
@@ -145,9 +171,9 @@ export default {
         : '';
 
     if (!answer) {
-      return json({ error: 'The AI service returned an empty answer.' }, 502, env);
+      return json({ error: 'The AI service returned an empty answer.' }, 502, request, env);
     }
 
-    return json({ answer: answer.trim() }, 200, env);
+    return json({ answer: answer.trim() }, 200, request, env);
   }
 };

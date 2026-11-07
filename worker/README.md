@@ -43,14 +43,32 @@ const AI_ENDPOINT = 'https://run-tianjin-ai.<your-subdomain>.workers.dev';
 
 That is the only front-end change. Leave it as `''` to stay on local search only.
 
-## 4. Lock down CORS (recommended)
+## 4. CORS is locked down by default
 
-By default the Worker accepts any origin. Restrict it to your site:
+The Worker only answers requests from origins on its allow-list. The built-in
+default is this site's GitHub Pages origin:
+
+```
+https://liuxizhao512-blip.github.io
+```
+
+So a fresh deploy is already safe — no extra step needed. Requests from any other
+origin get no `Access-Control-Allow-Origin` header, and the browser blocks them
+before the page can read the response.
+
+To add origins (for example a local dev server), set a comma-separated list:
 
 ```bash
-wrangler secret put ALLOWED_ORIGIN
-# value: https://liuxizhao512-blip.github.io
+wrangler secret put ALLOWED_ORIGINS
+# value: https://liuxizhao512-blip.github.io,http://localhost:8000
 ```
+
+To change the default in code, edit `DEFAULT_ALLOWED_ORIGINS` in
+`worker/ai-proxy.js`.
+
+> Note: CORS is a browser-side control. It stops other websites from calling your
+> Worker, but a script using `curl` ignores it. The per-IP rate limit is what
+> caps that case.
 
 ## What the Worker does
 
@@ -58,6 +76,7 @@ wrangler secret put ALLOWED_ORIGIN
 |---|---|
 | Key exposure | Key lives in a Worker secret, never sent to the browser |
 | Abuse | 30 requests per IP per hour, in-memory |
+| Cross-site use | CORS allow-list, defaults to the GitHub Pages origin |
 | Prompt injection | System prompt pins answers to the guide; `temperature: 0.3` |
 | Hallucination | Model is told to say when the guide does not cover something |
 | Cost | `max_tokens: 400`, context capped at 12k chars |
@@ -73,8 +92,12 @@ python -m http.server 8000
 # then open http://localhost:8000/tips.html
 ```
 
-Add `http://localhost:8000` to `ALLOWED_ORIGIN` while testing, or leave
-`ALLOWED_ORIGIN` unset so any origin is accepted.
+Add `http://localhost:8000` to `ALLOWED_ORIGINS` while testing:
+
+```bash
+wrangler secret put ALLOWED_ORIGINS
+# value: https://liuxizhao512-blip.github.io,http://localhost:8000
+```
 
 ## Cost
 
